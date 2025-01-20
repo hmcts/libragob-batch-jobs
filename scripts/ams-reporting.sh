@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 16/01/2025
-echo "Script Version 20.9 rec met fudge 111"
+echo "Script Version 21.0 rec echos"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -558,6 +558,9 @@ fi
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 error_count=`grep "1$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l`
+
+cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv
+echo "error_count_fines=$error_count"
 
 if [[ $op_env == test ]];then
   recon_threshold_count=1
