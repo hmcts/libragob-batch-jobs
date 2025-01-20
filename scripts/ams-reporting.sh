@@ -500,6 +500,7 @@ line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." |
 good_count=`grep ",0$" ${OPDIR}9bAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
 error_count=$(($line_count-$good_count))
 
+cat ${OPDIR}9bAZUREDB_AMD_confiscation_recon_result.csv
 echo "line_count=$line_count"
 echo "good_count=$good_count"
 echo "confiscation_error_count=$error_count"
