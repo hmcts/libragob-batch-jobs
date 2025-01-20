@@ -497,13 +497,8 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
-good_count=`grep ",0$" ${OPDIR}9bAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
+good_count=`grep ",0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
 error_count=$(($line_count-$good_count))
-
-cat ${OPDIR}9bAZUREDB_AMD_confiscation_recon_result.csv
-echo "line_count=$line_count"
-echo "good_count=$good_count"
-echo "confiscation_error_count=$error_count"
 
 if [[ $op_env == test ]];then
   recon_threshold_count=1
@@ -624,7 +619,7 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
 line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
-good_count=`grep ",0$" ${OPDIR}9bAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
+good_count=`grep ",0$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
 error_count=$(($line_count-$good_count))
 
 if [[ $op_env == test ]];then
