@@ -1180,6 +1180,8 @@ echo "21/01/2025.*fines_recon_status" >> $override_file
 
 echo "27/01/2025.*_recon_status" >> $override_file
 
+echo "29/01/2025.*_recon_status" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
