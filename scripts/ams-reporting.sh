@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 22/01/2025
-echo "Script Version 21.8 Check #3 77 Tier 8"
+echo "Script Version 21.8 77 perm overrides"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1115,40 +1115,6 @@ dummy=0
 
 else
 
-dummy=0
-echo "29/11/2024.*AZDB_msg_backlog77" >> $override_file
-echo "02/12/2024.*AZDB_table_updates_row_count" >> $override_file
-echo "02/12/2024.*AZDB_update_requests_row_count" >> $override_file
-echo "03/12/2024.*recon_status" >> $override_file
-echo "03/12/2024.*AZDB_table_updates_row_count" >> $override_file
-echo "03/12/2024.*AZDB_update_requests_row_count" >> $override_file
-echo "04/12/2024.*fines_recon_status" >> $override_file
-echo "05/12/2024.*fines_recon" >> $override_file
-echo "05/12/2024.*AZDB_msg_backlog77" >> $override_file
-echo "06/12/2024.*so check ORA recon ran" >> $override_file
-echo "06/12/2024.*AZDB_db_message_log_error77.*duplicate" >> $override_file
-echo "07/12/2024.*so check ORA recon ran" >> $override_file
-echo "12/12/2024.*AZDB_update_processing_backlog92" >> $override_file
-echo "12/12/2024.*fines_recon_status" >> $override_file
-echo "13/12/2024.*AZDB_max_updates77" >> $override_file
-echo "17/12/2024.*so check ORA recon ran" >> $override_file
-
-echo "18/12/2024.*AZDB_update_processing_backlog77" >> $override_file
-echo "18/12/2024.*so check ORA recon ran" >> $override_file
-
-echo "19/12/2024.*AZDB_update_processing_backlog130" >> $override_file
-echo "19/12/2024.*so check ORA recon ran" >> $override_file
-
-echo "20/12/2024.*AZDB_update_processing_backlog77" >> $override_file
-echo "20/12/2024.*AZDB_update_processing_backlog82" >> $override_file
-echo "20/12/2024.*so check ORA recon ran" >> $override_file
-
-echo "23/12/2024.*so check ORA recon ran" >> $override_file
-echo "23/12/2024.*AZDB_update_processing_backlog119" >> $override_file
-echo "23/12/2024.*fines_recon_status" >> $override_file
-
-echo "30/12/2024.*confiscation_recon_status" >> $override_file
-
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 echo "03/01/2025.*AZDB_maint.*Recon didn't run" >> $override_file
 
@@ -1182,7 +1148,8 @@ echo "27/01/2025.*_recon_status" >> $override_file
 
 echo "29/01/2025.*_recon_status" >> $override_file
 
-echo "30/01/2025.*AZDB_update_processing_backlog77" >> $override_file
+echo "AZDB_update_processing_backlog77" >> $override_file
+echo "AZDB_msg_backlog77" >> $override_file
 
 fi
 
