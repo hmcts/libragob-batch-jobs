@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.8_MAP.docx" is the latest version as of 22/01/2025
-echo "Script Version 21.8 Check #3 77 Tier 6"
+echo "Script Version 21.8 Check #3 77 Tier 7"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -247,7 +247,7 @@ adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
 if [[ $schema_id == 77 ]];then
-  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*6))
+  backlog_adaptive_threshold=$(($backlog_adaptive_threshold*7))
 elif [[ $schema_id == 38 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
 elif [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]];then
