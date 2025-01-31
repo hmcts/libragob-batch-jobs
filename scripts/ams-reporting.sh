@@ -1148,9 +1148,7 @@ echo "27/01/2025.*_recon_status" >> $override_file
 
 echo "29/01/2025.*_recon_status" >> $override_file
 
-echo "AZDB_update_processing_backlog77" >> $override_file
-echo "AZDB_msg_backlog77" >> $override_file
-
+echo "31/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "31/01/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 fi
