@@ -682,7 +682,7 @@ echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
 if [[ $op_env == test ]];then
 threshold_count_update_requests=14000
-threshold_count_table_updates=120000
+threshold_count_table_updates=500000
 threshold_count_message_log=80000
 threshold_count_dac_audit=55000000
 threshold_count_gateway_audit=50000
