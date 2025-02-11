@@ -512,7 +512,7 @@ if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];
     if [[ $actual_queued_rec_count == $missing_rec_count ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks or JAXB in which case get DBA to regenerate them,warn" >> $OUTFILE
     fi
 
     echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Confiscation is complete" >> $OUTFILE_LOG
