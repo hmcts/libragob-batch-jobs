@@ -472,8 +472,14 @@ for cnt in 1 2 3;do
   fi
 
 echo "$(date "+%d/%m/%Y %T") Connecting to $dbname database" >> $OUTFILE_LOG
-psql "sslmode=require host=${$dbname_host} dbname=${$dbname_db} port=${$dbname_port} user=${$dbname_username} password=${$dbname_password}" --file=/sql/9aAZUREDB_AMD_${dbname}_recon_result.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9 for $dbname has been run" >> $OUTFILE_LOG
+psql "sslmode=require host=${dbname}_host dbname=${dbname}_db port=${dbname}_port user=${dbname}_username password=${dbname}_password" --file=/sql/9aAZUREDB_AMD_${dbname}_recon_result.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #9 for ${dbname} has been run" >> $OUTFILE_LOG
+
+while read -r line;do
+
+echo "test"
+
+done < ${OPDIR}9AZUREDB_AMD_${dbname}_recon_result.csv
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
