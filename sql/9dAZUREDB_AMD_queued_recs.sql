@@ -1,1 +1,0 @@
-\copy (select * from table_updates tu join update_requests uq on tu.update_request_id = uq.update_request_id where tu.table_name='RECONCILIATION_RESULT_XML' and uq.status!='COMPLETE') To '/tmp/ams-reporting/9dAZUREDB_AMD_queued_recs.csv' With CSV DELIMITER ','
