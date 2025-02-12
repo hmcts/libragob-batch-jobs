@@ -479,11 +479,11 @@ for cnt in 1 2 3;do
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
   
-cnt=0
+loopc=0
 
 while read -r line;do
 
-op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
+op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
 rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
@@ -494,7 +494,7 @@ else
   echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
 fi
 
-cnt=$((cnt+1)
+loopc=$((loopc+1))
 
 done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 
