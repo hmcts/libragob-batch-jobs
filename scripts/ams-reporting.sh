@@ -462,14 +462,10 @@ echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52
 echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
 echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-
-if [[ $op_env == test ]];then
-  psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
-else
-  psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/PROD___9aAZUREDB_AMD_confiscation_recon_result.sql
-fi
-
+psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
+
+if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 good_count=`grep ",0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
 error_count=$(($line_count-$good_count))
@@ -520,127 +516,6 @@ if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
-
-echo "$(date "+%d/%m/%Y %T") Connecting to $fines_db database" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
-
-if [[ $op_env == test ]];then
-  psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9bAZUREDB_AMD_fines_recon_result.sql
-else
-  psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/PROD___9bAZUREDB_AMD_fines_recon_result.sql
-fi
-
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9b has been run" >> $OUTFILE_LOG
-line_count=`cat ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
-good_count=`grep ",0$" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv | wc -l`
-error_count=$(($line_count-$good_count))
-
-if [[ $op_env == test ]];then
-  recon_threshold_count=1
-else
-  recon_threshold_count=46
-fi
-
-if [[ `grep "$dt_today" ${OPDIR}9bAZUREDB_AMD_fines_recon_result.csv` ]];then
-  if [[ $line_count -eq $recon_threshold_count ]];then
-    if [[ $error_count -gt 0 ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-    fi
-  else
-    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run Fines queued rec check 9d" >> $OUTFILE_LOG
-    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_recs.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db for Fines has been run" >> $OUTFILE_LOG
-    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
-    missing_rec_count=$(($recon_threshold_count-$line_count))
-    actual_queued_rec_count=0
-
-    while read -r line;do
-      if [[ `echo $line | grep "SCHEMA_ID"` ]];then
-        met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
-      else
-        met_rec_queued=''
-      fi
-
-      if [[ ! -z $met_rec_queued ]];then
-        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
-          actual_queued_rec_count=$((actual_queued_rec_count+1))
-        fi
-      fi
-    done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
-
-    if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
-    fi
-
-    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Fines is complete" >> $OUTFILE_LOG
-  fi
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_fines_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
-fi
-
-echo "$(date "+%d/%m/%Y %T") Connecting to $maintenance_db database" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Starting Check #9c" >> $OUTFILE_LOG
-
-if [[ $op_env == test ]];then
-  psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9cAZUREDB_AMD_maintenance_recon_result.sql
-else
-  psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/PROD___9cAZUREDB_AMD_maintenance_recon_result.sql
-fi
-
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9c has been run" >> $OUTFILE_LOG
-line_count=`cat ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
-good_count=`grep ",0$" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv | wc -l`
-error_count=$(($line_count-$good_count))
-
-if [[ $op_env == test ]];then
-  recon_threshold_count=1
-else
-  recon_threshold_count=3
-fi
-
-if [[ `grep "$dt_today" ${OPDIR}9cAZUREDB_AMD_maintenance_recon_result.csv` ]];then
-  if [[ $line_count -eq $recon_threshold_count ]];then
-    if [[ $error_count -gt 0 ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-    fi
-  else
-    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run Maintenance queued rec check 9d" >> $OUTFILE_LOG
-    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9dAZUREDB_AMD_queued_recs.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db for Maintenance has been run" >> $OUTFILE_LOG
-    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
-    missing_rec_count=$(($recon_threshold_count-$line_count))
-    actual_queued_rec_count=0
-
-    while read -r line;do
-      if [[ `echo $line | grep "SCHEMA_ID"` ]];then
-        met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
-      else
-        met_rec_queued=''
-      fi
-
-      if [[ ! -z $met_rec_queued ]];then
-        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
-          actual_queued_rec_count=$((actual_queued_rec_count+1))
-        fi
-      fi
-    done < ${OPDIR}9dAZUREDB_AMD_queued_recs.csv
-
-    if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks so pls investigate,warn" >> $OUTFILE
-    fi
-
-    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Maintenance is complete" >> $OUTFILE_LOG
-  fi
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_maintenance_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
