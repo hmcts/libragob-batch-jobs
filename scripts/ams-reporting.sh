@@ -483,7 +483,7 @@ cnt=0
 
 while read -r line;do
 
-op_today=`date "+%Y-%m-%d" -d "-${cnt} days"
+op_today=`date "+%Y-%m-%d" -d "-${cnt} days"`
 rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
