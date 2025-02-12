@@ -483,15 +483,15 @@ cnt=0
 
 while read -r line;do
 
-op_today=`date "+%Y-%m-%d" -d "-${cnt} days"`
+op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
 rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
 if [[ `echo $line | grep "$op_date"` ]];then
-  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id || ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing || ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
 fi
 
 cnt=$((cnt+1)
