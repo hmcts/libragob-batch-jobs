@@ -488,7 +488,7 @@ rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
-if [[ `echo $line | grep "$op_date"` ]];then
+if [[ `echo $line | grep $op_date` ]];then
   echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing $rr_id,ok" >> $OUTFILE
