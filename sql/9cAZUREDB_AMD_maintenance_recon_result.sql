@@ -1,1 +1,1 @@
-\copy (select * from RECONCILIATION_RUNS order by RR_ID desc limit 1) To '/tmp/ams-reporting/9cAZUREDB_AMD_maintenance_recon_result.csv' With CSV DELIMITER ','
+\copy (select 'Maintenance' || rr_id,date(completed_date),count(*) from RECONCILIATION_RUNS where error_count = 0 group by rr_id,date(completed_date) order by rr_id desc limit 10) To '/tmp/ams-reporting/9aAZUREDB_AMD_maintenance_recon_result.csv' With CSV DELIMITER ','
