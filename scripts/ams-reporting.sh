@@ -488,6 +488,10 @@ rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
+echo "op_date=$op_date"
+echo "line=$line"
+echo "rr_cnt=$rr_cnt"
+
 if [[ `echo $line | grep $op_date` ]];then
   echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
 else
