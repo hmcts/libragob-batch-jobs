@@ -460,10 +460,20 @@ dt_today=$(date "+%Y-%m-%d")
 echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
 echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
 echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
-echo "$(date "+%d/%m/%Y %T") Starting Check #9a" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $confiscation_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9aAZUREDB_AMD_confiscation_recon_result.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9a has been run" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Starting Check #9" >> $OUTFILE_LOG
+
+for cnt in 1 2 3;do
+  if [[ $cnt == 1 ]];then
+    dbname=confiscation
+  elif [[ $cnt == 2 ]];then
+    dbname=fines
+  else
+    dbname=maintenance
+  fi
+
+echo "$(date "+%d/%m/%Y %T") Connecting to $dbname database" >> $OUTFILE_LOG
+psql "sslmode=require host=${$dbname_host} dbname=${$dbname_db} port=${$dbname_port} user=${$dbname_username} password=${$dbname_password}" --file=/sql/9aAZUREDB_AMD_${dbname}_recon_result.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #9 for $dbname has been run" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
@@ -517,6 +527,8 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
 fi
 fi
+
+done
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
