@@ -486,7 +486,7 @@ rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
-echo "$(date "+%d/%m/%Y %T"),DBNAME_RRID=$rr_id,ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),DBNAME_RRID=$rr_id || ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
 
 done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 
