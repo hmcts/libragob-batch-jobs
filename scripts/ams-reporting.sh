@@ -456,7 +456,6 @@ echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-dt_today=$(date "+%Y-%m-%d")
 echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
 echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
 echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
@@ -479,14 +478,23 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
+  
+cnt=0
 
 while read -r line;do
 
+op_today=`date "+%Y-%m-%d" -d "-${cnt} days"
 rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
-echo "$(date "+%d/%m/%Y %T"),DBNAME_RRID=$rr_id || ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+if [[ `echo $line | grep "$op_date" ]];then
+  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id || ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing || ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+fi
+
+cnt=$((cnt+1)
 
 done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 
