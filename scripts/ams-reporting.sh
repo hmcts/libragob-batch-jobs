@@ -464,22 +464,22 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9" >> $OUTFILE_LOG
 
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
-    dbname=confiscation
+    dbname_str=confiscation
   elif [[ $cnt == 2 ]];then
-    dbname=fines
+    dbname_str=fines
   else
-    dbname=maintenance
+    dbname_str=maintenance
   fi
 
-echo "$(date "+%d/%m/%Y %T") Connecting to $dbname database" >> $OUTFILE_LOG
-psql "sslmode=require host=${dbname}_host dbname=${dbname}_db port=${dbname}_port user=${dbname}_username password=${dbname}_password" --file=/sql/9aAZUREDB_AMD_${dbname}_recon_result.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #9 for ${dbname} has been run" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+psql "sslmode=require host=${${dbname_str}_host} dbname=${${dbname_str}_db} port=${${dbname_str}_port} user=${${dbname_str}_username} password=${${dbname_str}_password}" --file=/sql/9aAZUREDB_AMD_${dbname_str}_recon_result.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #9 for ${dbname_str} has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
 echo "test"
 
-done < ${OPDIR}9AZUREDB_AMD_${dbname}_recon_result.csv
+done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
