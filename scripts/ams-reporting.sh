@@ -511,8 +511,6 @@ for cnt in 1 2 3;do
     fi
   done
 
-cat ${OPDIR}${dbname_str}_rec_status
-
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
 good_count=`grep ",0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
@@ -567,6 +565,31 @@ fi
 fi
 
 done
+
+overall_rec_status=0
+
+for loopc in 1 2 3 4;do
+  confiscation_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
+  fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
+  maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
+
+  if [[ `echo $confiscation_rec | grep -v "missing" | wc -l` == 1 ]] && [[ `echo $fines_rec | grep -v "missing" | wc -l` == 1 ]] && [[ `echo $maintenance_rec | grep -v "missing" | wc -l`== 1 ]]
+    for cnt in 0 1 2 3;do
+      op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
+
+      if [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
+        overall_rec_status="All 3 recs last completed $cnt day(s) ago without errors"
+        break
+      fi
+    done
+  fi
+done
+
+if [[ $overall_rec_status == 0 ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,Recon hasn't completed in the last 4days so pls get DBAs to investigate,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
+fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
