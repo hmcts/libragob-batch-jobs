@@ -490,9 +490,9 @@ for cnt in 1 2 3;do
       rr_cnt=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $3}'`
 
       if [[ `grep -P "$dbname_str.*$op_date.*,${rec_rows}$" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
-        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
       else
-        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
       fi
     else
       echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
