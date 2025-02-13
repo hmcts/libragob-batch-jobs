@@ -510,60 +510,6 @@ for cnt in 1 2 3;do
         fi
     fi
   done
-
-if [[ 0 == 1 ]];then
-line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
-good_count=`grep ",0$" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | wc -l`
-error_count=$(($line_count-$good_count))
-
-if [[ $op_env == test ]];then
-  recon_threshold_count=1
-else
-  recon_threshold_count=8
-fi
-
-if [[ `grep "$dt_today" ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv` ]];then
-  if [[ $line_count -eq $recon_threshold_count ]];then
-    if [[ $error_count -gt 0 ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon,Recon has $error_count error(s) so pls investigate,warn" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,$line_count/$recon_threshold_count Recon METs ran with no errors,ok" >> $OUTFILE
-    fi
-  else
-    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to run Confiscation queued rec check 9d" >> $OUTFILE_LOG
-    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/9AZUREDB_AMD_queued_recs.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9d on $event_db for Confiscation has been run" >> $OUTFILE_LOG
-    queued_rec_count=`cat ${OPDIR}9dAZUREDB_AMD_queued_recs.csv | wc -l`
-    missing_rec_count=$(($recon_threshold_count-$line_count))
-    actual_queued_rec_count=0
-
-    while read -r line;do
-      if [[ `echo $line | grep "SCHEMA_ID"` ]];then
-        met_rec_queued=`echo $line | awk -F"," '{print $8}' | awk -F"SCHEMA_ID" '{print $2}' | awk -F"NewValue>" '{print $2}' | awk -F"<" '{print $1}'`
-      else
-        met_rec_queued=''
-      fi
-
-      if [[ ! -z $met_rec_queued ]];then
-        if [[ `cat ${OPDIR}fines_mets | grep "$met_rec_queued"` ]];then
-          actual_queued_rec_count=$((actual_queued_rec_count+1))
-        fi
-      fi
-    done < ${OPDIR}9AZUREDB_AMD_queued_recs.csv
-
-    if [[ $actual_queued_rec_count == $missing_rec_count ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results but $actual_queued_rec_count rec(s) are queued up due to overnight locks so OK,ok" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon has unexpected $line_count/$recon_threshold_count rows of results and these are not queued up due to overnight locks or JAXB in which case get DBA to regenerate them,warn" >> $OUTFILE
-    fi
-
-    echo "$(date "+%d/%m/%Y %T") Check #9d on $event_db for Confiscation is complete" >> $OUTFILE_LOG
-  fi
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maint_confiscation_recon_status,Recon didn't run today so check ORA recon ran ok,warn" >> $OUTFILE
-fi
-fi
-
 done
 
 overall_rec_status=0
@@ -580,6 +526,8 @@ for loopc in 1 2 3 4;do
       if [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
         overall_rec_status="All 3 recs last completed $cnt day(s) ago without errors"
         break
+      elif [[ $cnt == 3 ]];then
+        overall_rec_status="We have not seen the recs complete in 4days so escalate to mgmt"
       fi
     done
   fi
