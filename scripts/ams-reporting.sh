@@ -488,14 +488,10 @@ rr_id=`echo $line | awk -F"," '{print $1}'`
 rr_date=`echo $line | awk -F"," '{print $2}'`
 rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
-echo "op_date=$op_date"
-echo "line=$line"
-echo "rr_cnt=$rr_cnt"
-
-if [[ `echo $line | grep $op_date` ]];then
+if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
   echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing $rr_id,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
 fi
 
 loopc=$((loopc+1))
