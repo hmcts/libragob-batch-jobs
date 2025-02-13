@@ -479,23 +479,24 @@ for cnt in 1 2 3;do
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
   
-loopc=0
+  loopc=0
 
-while read -r line;do
+  while read -r line;do
+    op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
+    rr_id=`echo $line | awk -F"," '{print $1}'`
+    rr_date=`echo $line | awk -F"," '{print $2}'`
+    rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
-op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
-rr_id=`echo $line | awk -F"," '{print $1}'`
-rr_date=`echo $line | awk -F"," '{print $2}'`
-rr_cnt=`echo $line | awk -F"," '{print $3}'`
+    if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
+      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+    fi
 
-if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
-  echo "$(date "+%d/%m/%Y %T"),dbnameRRID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
-fi
+  loopc=$((loopc+1))
 
-echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
-loopc=$((loopc+1))
-
-done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+  done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
