@@ -491,13 +491,27 @@ for cnt in 1 2 3;do
 
       if [[ `grep -P "$dbname_str.*$op_date.*,${rec_rows}$" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
         echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
+
+        if [[ $loopc < 4 ]];then
+          echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
+        fi
       else
         echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
+
+        if [[ $loopc < 4 ]];then
+         echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
+        fi
       fi
     else
       echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+
+        if [[ $loopc < 4 ]];then
+          echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> ${OPDIR}${dbname_str}_rec_status
+        fi
     fi
   done
+
+cat ${OPDIR}${dbname_str}_rec_status
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
