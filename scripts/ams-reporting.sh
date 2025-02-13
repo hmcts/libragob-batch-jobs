@@ -482,7 +482,7 @@ for cnt in 1 2 3;do
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
 
-  for loopc on 0 1 2 3 4 5 6 7 8 9;do
+  for loopc in 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
 
     if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
