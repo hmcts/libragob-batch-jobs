@@ -464,39 +464,40 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9" >> $OUTFILE_LOG
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
     dbname_str=confiscation
+    rec_rows=7
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   elif [[ $cnt == 2 ]];then
     dbname_str=fines
+    rec_rows=46
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   else
     dbname_str=maintenance
+    rec_rows=3
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
-  
-  loopc=0
 
-  while read -r line;do
+  for loopc on 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
-    rr_id=`echo $line | awk -F"," '{print $1}'`
-    rr_date=`echo $line | awk -F"," '{print $2}'`
-    rr_cnt=`echo $line | awk -F"," '{print $3}'`
 
     if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
-      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
+      rr_id=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $1}'`
+      rr_cnt=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $3}'`
+
+      if [[ `grep -P "$dbname_str.*$op_date.*,${rec_rows}$" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
+        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$op_date,ok" >> $OUTFILE
+      else
+        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
+      fi
     else
-      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt,DATE=$rr_date,ok" >> $OUTFILE
       echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
     fi
-
-  loopc=$((loopc+1))
-
-  done < ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+  done
 
 if [[ 0 == 1 ]];then
 line_count=`cat ${OPDIR}9aAZUREDB_AMD_confiscation_recon_result.csv | grep "." | grep "$dt_today" | wc -l`
