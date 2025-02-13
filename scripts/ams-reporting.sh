@@ -503,10 +503,10 @@ for cnt in 1 2 3;do
         fi
       fi
     else
-      echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
 
         if [[ $loopc < 4 ]];then
-          echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=$op_date missing,ok" >> ${OPDIR}${dbname_str}_rec_status
+          echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
     fi
   done
