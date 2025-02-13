@@ -464,7 +464,7 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9" >> $OUTFILE_LOG
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
     dbname_str=confiscation
-    rec_rows=7
+    rec_rows=8
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
@@ -490,23 +490,23 @@ for cnt in 1 2 3;do
       rr_cnt=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $3}'`
 
       if [[ `grep -P "$dbname_str.*$op_date.*,${rec_rows}$" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
-        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
 
         if [[ $loopc < 4 ]];then
-          echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
+          echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RRID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
       else
-        echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
 
         if [[ $loopc < 4 ]];then
-         echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
+         echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RRID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
       fi
     else
-      echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=$op_date missing,ok" >> $OUTFILE
 
         if [[ $loopc < 4 ]];then
-          echo "$(date "+%d/%m/%Y %T"),dbnameRRID=$dbname_str ROWS=missing,DATE=$op_date missing,ok" >> ${OPDIR}${dbname_str}_rec_status
+          echo "$(date "+%d/%m/%Y %T"),dbname=$dbname_str RR_ID=missing ROWS=missing,DATE=$op_date missing,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
     fi
   done
