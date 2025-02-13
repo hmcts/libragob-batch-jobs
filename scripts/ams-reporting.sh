@@ -573,7 +573,7 @@ for loopc in 1 2 3 4;do
   fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
   maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
 
-  if [[ `echo $confiscation_rec | grep -v "missing" | grep -v "ERRORs" | wc -l` == 1 ]] && [[ `echo $fines_rec | grep -v "missing" | grep -v "ERRORs" | wc -l` == 1 ]] && [[ `echo $maintenance_rec | grep -v "missing" | grep -v "ERRORs" | wc -l`== 1 ]]
+  if [[ `echo $confiscation_rec | grep -v "missing" | grep -v "ERRORs" | wc -l` -eq 1 ]] && [[ `echo $fines_rec | grep -v "missing" | grep -v "ERRORs" | wc -l` -eq 1 ]] && [[ `echo $maintenance_rec | grep -v "missing" | grep -v "ERRORs" | wc -l` -eq 1 ]]
     for cnt in 0 1 2 3;do
       op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
 
