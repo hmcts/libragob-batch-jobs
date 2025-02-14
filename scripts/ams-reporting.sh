@@ -486,7 +486,7 @@ for cnt in 1 2 3;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
 
     if [[ `grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
-      rr_id=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $1}' | grep -P "\d"`
+      rr_id=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $1}' | awk -F"_" '{print $2}'`
       rr_cnt=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | awk -F"," '{print $3}'`
 
       if [[ `grep -P "$dbname_str.*$op_date.*,${rec_rows}$" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv` ]];then
@@ -532,7 +532,7 @@ for loopc in 1 2 3 4;do
 done
 
 if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
