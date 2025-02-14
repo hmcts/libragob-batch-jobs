@@ -537,6 +537,11 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
 
+echo "rr_id=$rr_id"
+cat ${OPDIR}confiscation_rec_status
+cat ${OPDIR}fines_rec_status
+cat ${OPDIR}maintenance_rec_status
+
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
