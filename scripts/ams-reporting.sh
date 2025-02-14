@@ -454,6 +454,7 @@ done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 9
+if [[ $op_env == prod ]];then
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
@@ -554,12 +555,8 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
 
-if [[ $op_env == test ]];then
-echo "cat of maint csv:"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
-fi
-
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
+fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
