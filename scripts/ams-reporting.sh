@@ -478,7 +478,7 @@ for cnt in 1 2 3;do
     dbname_str=fines
 
     if [[ $op_env == test ]];then
-      rec_rows=1
+      rec_rows=2
     else
       rec_rows=46
     fi
