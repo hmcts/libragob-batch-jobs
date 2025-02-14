@@ -464,19 +464,37 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #9" >> $OUTFILE_LOG
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
     dbname_str=confiscation
-    rec_rows=8
+
+    if [[ $op_env == test ]];then
+      rec_rows=1
+    else
+      rec_rows=8
+    fi
+
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   elif [[ $cnt == 2 ]];then
     dbname_str=fines
-    rec_rows=46
+
+    if [[ $op_env == test ]];then
+      rec_rows=1
+    else
+      rec_rows=46
+    fi
+
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   else
     dbname_str=maintenance
-    rec_rows=3
+
+    if [[ $op_env == test ]];then
+      rec_rows=1
+    else
+      rec_rows=3
+    fi
+
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
@@ -496,10 +514,10 @@ for cnt in 1 2 3;do
           echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
       else
-        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has data ERRORs,DATE=$op_date,ok" >> $OUTFILE
 
         if [[ $loopc < 4 ]];then
-         echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows ERRORs so ask the DBA for assistance,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
+         echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has data ERRORs,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
         fi
       fi
     else
@@ -518,14 +536,11 @@ for loopc in 1 2 3 4;do
   confiscation_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
   fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
   maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
-echo "confiscation_rec=$confiscation_rec"
-echo "fines_rec=$fines_rec"
-echo "maintenance_re=$maintenance_rec"
+
   if [[ `echo $confiscation_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $fines_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $maintenance_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]];then
     for cnt in 0 1 2 3;do
       op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
-echo "cnt=$cnt"
-echo "op_date=$op_date"
+
       if [[ $overall_rec_status == 0 ]] && [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
         overall_rec_status="All 3 recs last completed $cnt day(s) ago without errors"
       fi
@@ -534,14 +549,10 @@ echo "op_date=$op_date"
 done
 
 if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
-
-cat ${OPDIR}confiscation_rec_status
-cat ${OPDIR}fines_rec_status
-cat ${OPDIR}maintenance_rec_status
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
