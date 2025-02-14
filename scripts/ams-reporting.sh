@@ -554,6 +554,11 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
 
+if [[ $op_env == test ]];then
+echo "cat of maint csv:"
+cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+fi
+
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
