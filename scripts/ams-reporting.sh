@@ -518,14 +518,16 @@ for loopc in 1 2 3 4;do
   confiscation_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
   fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
   maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
-
+echo "confiscation_rec=$confiscation_rec"
+echo "fines_rec=$fines_rec"
+echo "maintenance_re=$maintenance_rec"
   if [[ `echo $confiscation_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $fines_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $maintenance_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]];then
     for cnt in 0 1 2 3;do
       op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
-
-      if [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
+echo "cnt=$cnt"
+echo "op_date=$op_date"
+      if [[ $overall_rec_status == 0 ]] && [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
         overall_rec_status="All 3 recs last completed $cnt day(s) ago without errors"
-        break
       fi
     done
   fi
@@ -537,7 +539,6 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
 
-echo "rr_id=$rr_id"
 cat ${OPDIR}confiscation_rec_status
 cat ${OPDIR}fines_rec_status
 cat ${OPDIR}maintenance_rec_status
