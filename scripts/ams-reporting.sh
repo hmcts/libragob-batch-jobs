@@ -322,13 +322,7 @@ if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
-echo "to investigate 105"
-echo $error_message | grep "AESD-0004"
-cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
-cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
-echo "schema=${schema_id}"
-cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep "msg_backlog${schema_id}" | awk -F"," '{print $4}'
-    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep "^${schema_id}," | awk -F"," '{print $4}'` < 400 ]];then
+    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 4000 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
