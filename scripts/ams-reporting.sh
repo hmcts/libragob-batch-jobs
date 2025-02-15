@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 still 40K green with echo"
+echo "Script Version 21.9 AESD-0004 5K"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -322,8 +322,7 @@ if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
-cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
-    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 40000 ]];then
+    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
