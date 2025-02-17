@@ -497,12 +497,11 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
-echo "-------------------------------------"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
-echo "-------------SORT--------------------"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
-mv ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+
+  # sort the data desc on date ("k"olumn 2) which necessarily sorts by RR_ID column 1 desc, so that head -1 doesn't cut out any RR_ID as a result
+  cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
+  mv ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+
   for loopc in 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
     rec_line=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | head -1`
@@ -540,8 +539,7 @@ for loopc in 1 2 3 4;do
   confiscation_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
   fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
   maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
-echo "===================================="
-cat ${OPDIR}confiscation_rec_status
+
   if [[ `echo $confiscation_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $fines_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $maintenance_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]];then
     for cnt in 0 1 2 3;do
       op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
