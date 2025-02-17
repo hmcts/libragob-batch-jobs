@@ -322,8 +322,10 @@ if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
+  echo "#########################################
   cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
   cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
+  cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
   echo $schema_id
   echo $error_msg
   cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
