@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 AESD-0004 debug"
+echo "Script Version 21.9 AESD-0004 debug xargs"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -316,7 +316,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
-error_message=`echo $line | awk -F"," '{print $2}'`
+error_message=`echo $line | awk -F":" '{print $1}' | awk -F"," '{print $2}' | xargs`
 
 if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
