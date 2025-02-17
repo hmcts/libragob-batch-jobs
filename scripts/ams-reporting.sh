@@ -327,7 +327,7 @@ if [ ! -z $schema_id ];then
   cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
   cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
   echo $schema_id
-  echo $error_msg
+  echo "error_msg=$error_msg"
   cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
     if [[ `echo $line | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
