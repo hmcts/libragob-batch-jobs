@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 rec sorting"
+echo "Script Version 21.9 test rec re-enabled"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -452,7 +452,6 @@ done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 9
-if [[ $op_env == prod ]];then
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
@@ -560,8 +559,6 @@ else
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
-
-fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
