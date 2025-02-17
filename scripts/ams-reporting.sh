@@ -501,7 +501,7 @@ for cnt in 1 2 3;do
 echo "-------------------------------------"
 cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 echo "-------------SORT--------------------"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -k 2 -t ","
+cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t ","
 
   for loopc in 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
