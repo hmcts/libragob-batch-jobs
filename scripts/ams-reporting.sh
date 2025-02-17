@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 AESD-0004 debug xargs"
+echo "Script Version 21.9 AESD-0004 debug xargs & if removed final"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -316,23 +316,22 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
-error_message=`echo $line | awk -F":" '{print $1}' | awk -F"," '{print $2}' | xargs`
+error_message=`echo $line | awk -F"," '{print $2}'`
 
-if [ ! -z $schema_id ];then
-  if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep "$schema_id"` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+else
+echo "#########################################"
+cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
+cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
+cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
+echo $schema_id
+echo $line | grep "AESD-0004"
+cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
+  if [[ `echo $line | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
   else
-  echo "#########################################"
-  cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
-  cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
-  cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
-  echo $schema_id
-  echo "error_msg=$error_msg"
-  cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
-    if [[ `echo $line | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
     fi
   fi
 fi
