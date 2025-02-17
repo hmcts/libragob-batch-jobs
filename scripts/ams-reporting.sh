@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 test rec_rows echo line #513"
+echo "Script Version 21.9 test new rec sorting"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -500,8 +500,9 @@ for cnt in 1 2 3;do
 echo "-------------------------------------"
 cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
 echo "-------------SORT--------------------"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t ","
-
+cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
+mv ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
   for loopc in 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
     rec_line=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | head -1`
