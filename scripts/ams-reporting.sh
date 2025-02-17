@@ -1047,8 +1047,6 @@ echo "11/02/2025.*_recon_status" >> $override_file
 
 echo "12/02/2025.*_recon_status" >> $override_file
 
-echo "17/02/2025.*AZDB_update_processing_backlog105" >> $override_file
-
 fi
 
 testit=`cat $override_file | wc -l | xargs`
