@@ -316,7 +316,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 while read -r line;do
 
 schema_id=`echo $line | awk -F"," '{print $1}'`
-error_message=`echo $line | awk -F":" '{print $1}' | awk -F"," '{print $2}' | xargs`
+error_message=`echo $line | awk -F"," '{print $2}'`
 
 if [ ! -z $schema_id ];then
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep $schema_id` ]];then
@@ -329,7 +329,7 @@ if [ ! -z $schema_id ];then
   echo $schema_id
   echo $error_msg
   cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'
-    if [[ `echo $error_message | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
+    if [[ `echo $line | grep "AESD-0004"` ]] && [[ `cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}'` < 5000 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
