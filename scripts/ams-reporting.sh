@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 04/02/2025
-echo "Script Version 21.9 test new rec sorting"
+echo "Script Version 22.0 switch checks 13 & 14 in TEST only"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -961,6 +961,7 @@ echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 
 #fi
 ####################################################### CHECK 13
+if [[ $op_env == prod ]];then
 echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
 echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
@@ -991,6 +992,7 @@ count=$((count+1))
 done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
+fi
 ####################
 ### AMD Override ###
 ####################
@@ -1157,6 +1159,7 @@ echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >
 
 fi
 ####################################################### CHECK 14
+if [[ $op_env == prod ]];then
 echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
@@ -1167,6 +1170,51 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
 fi
 echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
+fi
+
+if [[ $op_env == test ]];then
+echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
+echo "DateTime,CheckName,Status,Result" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
+
+if [[ $bais_upload_errors == 1 ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE
+else
+echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
+fi
+echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
+
+echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
+echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
+echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
+echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
+count=1
+
+while read -r line;do
+
+if [[ $count == 1 ]];then
+tablename=DAC
+else
+tablename=Gateway
+fi
+
+max_message_audit_id=`echo $line | awk -F"," '{print $1}'`
+threshold_max_int=2000000000 #2147483647 is max allowable
+
+if [[ $max_message_audit_id -gt $threshold_max_int ]];then
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
+else
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
+fi
+
+count=$((count+1))
+
+done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
+
+echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
+fi
 ############################################################### Script END ###############################################################
 echo "cat of $OUTFILE:"
 cat $OUTFILE
