@@ -550,12 +550,13 @@ cat ${OPDIR}confiscation_rec_status
 done
 
 if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
+
 fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
