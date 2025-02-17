@@ -332,7 +332,6 @@ cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
-    fi
   fi
 fi
 
