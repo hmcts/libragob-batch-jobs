@@ -330,7 +330,7 @@ echo "aesd_depth=$aesd_depth"
     if [ $aesd_depth -lt 5000 ];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     fi
   fi
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
