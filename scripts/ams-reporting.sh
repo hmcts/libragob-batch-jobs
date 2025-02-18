@@ -552,7 +552,7 @@ for loopc in 1 2 3 4;do
 done
 
 if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
@@ -1046,6 +1046,8 @@ echo "01/02/2025.*_recon_status" >> $override_file
 echo "11/02/2025.*_recon_status" >> $override_file
 
 echo "12/02/2025.*_recon_status" >> $override_file
+
+echo "18/02/2025.*AZDB_overall_recon_status" >> $override_file
 
 fi
 
