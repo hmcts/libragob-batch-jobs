@@ -313,15 +313,20 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 
+cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
+cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
+cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
+
 while read -r line;do
   schema_id=`echo $line | awk -F"," '{print $1}'`
   error_message=`echo $line | awk -F"," '{print $2}'`
-
+echo "schema_id=$schema_id"
+echo "error_message=$error_message"
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep "$schema_id"` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
     aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}' | xargs`
-
+echo "aesd_depth=$aesd_depth"
     if [ $aesd_depth -lt 5000 ];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
