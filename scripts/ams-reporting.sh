@@ -545,14 +545,14 @@ for loopc in 1 2 3 4;do
       op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
 
       if [[ $overall_rec_status == 0 ]] && [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
-        overall_rec_status="All 3 recs last completed $cnt day(s) ago without errors"
+        overall_rec_status="All 3 recs last completed $cnt day(s) ago on $op_date without errors"
       fi
     done
   fi
 done
 
 if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt (last completed on $op_date),warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
 fi
