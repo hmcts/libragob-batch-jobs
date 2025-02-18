@@ -325,7 +325,9 @@ echo "error_message=$error_message"
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep "$schema_id"` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
-    aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | awk -F"," '{print $4}' | xargs`
+    aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep -vi "processing" | awk -F"," '{print $4}' | xargs`
+echo "the grep"
+cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id},"
 echo "aesd_depth=$aesd_depth"
     if [ $aesd_depth -lt 5000 ];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
@@ -1053,8 +1055,6 @@ echo "11/02/2025.*_recon_status" >> $override_file
 echo "12/02/2025.*_recon_status" >> $override_file
 
 echo "18/02/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "message_log_error.*AESD-0004" >> $override_file
 
 fi
 
