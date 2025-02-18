@@ -330,7 +330,7 @@ echo "aesd_depth=$aesd_depth"
     if [ $aesd_depth -lt 5000 ];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
     fi
   fi
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
@@ -1053,6 +1053,8 @@ echo "11/02/2025.*_recon_status" >> $override_file
 echo "12/02/2025.*_recon_status" >> $override_file
 
 echo "18/02/2025.*AZDB_overall_recon_status" >> $override_file
+
+echo "message_log_error.*AESD-0004" >> $override_file
 
 fi
 
