@@ -325,7 +325,7 @@ echo "error_message=$error_message"
   if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | grep "$schema_id"` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
-    aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep -i "unprocessed" | awk -F"," '{print $4}' | xargs`
+    aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep "UNPROCESSED" | awk -F"," '{print $4}' | xargs`
 echo "the grep"
 cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id},"
 echo "aesd_depth=$aesd_depth"
