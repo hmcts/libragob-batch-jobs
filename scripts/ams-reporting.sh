@@ -584,7 +584,7 @@ threshold_count_gateway_audit=50000
 else
 threshold_count_update_requests=4000000
 threshold_count_table_updates=8000000
-threshold_count_message_log=10000000
+threshold_count_message_log=11000000
 threshold_count_dac_audit=70000000
 threshold_count_gateway_audit=1500000
 fi
@@ -1063,6 +1063,8 @@ echo "19/02/2025.*AZDB_update_processing_backlog82" >> $override_file
 echo "19/02/2025.*AZDB_db_message_log_error82.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
 echo "20/02/2025.*AZDB_overall_recon_status" >> $override_file
+
+echo "20/02/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 fi
 
