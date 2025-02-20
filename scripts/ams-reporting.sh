@@ -1062,6 +1062,7 @@ echo "19/02/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 echo "19/02/2025.*AZDB_db_message_log_error82.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
+echo "20/02/2025.*AZDB_overall_recon_status" >> $override_file
 fi
 
 testit=`cat $override_file | wc -l | xargs`
