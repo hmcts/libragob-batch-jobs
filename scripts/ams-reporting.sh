@@ -1070,6 +1070,8 @@ echo "21/02/2025.*AZDB_overall_recon_status" >> $override_file
 
 echo "24/02/2025.*AZDB_overall_recon_status" >> $override_file
 
+echo "25/02/2025.*AZDB_overall_recon_status" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
