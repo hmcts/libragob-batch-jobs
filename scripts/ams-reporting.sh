@@ -584,7 +584,7 @@ threshold_count_gateway_audit=50000
 else
 threshold_count_update_requests=4000000
 threshold_count_table_updates=8000000
-threshold_count_message_log=11000000
+threshold_count_message_log=20000000
 threshold_count_dac_audit=70000000
 threshold_count_gateway_audit=1500000
 fi
