@@ -576,10 +576,10 @@ echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
 if [[ $op_env == test ]];then
-threshold_count_update_requests=14000
+threshold_count_update_requests=100000
 threshold_count_table_updates=500000
 threshold_count_message_log=80000
-threshold_count_dac_audit=55000000
+threshold_count_dac_audit=60000000
 threshold_count_gateway_audit=50000
 else
 threshold_count_update_requests=4000000
@@ -936,8 +936,6 @@ done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 12
-#if [[ 0 == 1 ]];then # disabled permanently as it's since been realised its not always a hard break when sequence_number = previous_sequence_number
-
 echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,update_request_id,update_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
@@ -965,10 +963,7 @@ fi
 done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
-
-#fi
 ####################################################### CHECK 13
-if [[ $op_env == prod ]];then
 echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
 echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
@@ -999,7 +994,6 @@ count=$((count+1))
 done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
-fi
 ####################
 ### AMD Override ###
 ####################
@@ -1101,7 +1095,6 @@ done < $OUTFILE.orig
 mv $OUTFILE.temp $OUTFILE
 
 fi
-
 ############################################################################
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
@@ -1185,7 +1178,6 @@ echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >
 
 fi
 ####################################################### CHECK 14
-if [[ $op_env == prod ]];then
 echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
@@ -1196,51 +1188,6 @@ else
 echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
 fi
 echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
-fi
-
-if [[ $op_env == test ]];then
-echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
-echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
-
-if [[ $bais_upload_errors == 1 ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
-fi
-echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
-
-echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
-echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
-count=1
-
-while read -r line;do
-
-if [[ $count == 1 ]];then
-tablename=DAC
-else
-tablename=Gateway
-fi
-
-max_message_audit_id=`echo $line | awk -F"," '{print $1}'`
-threshold_max_int=2000000000 #2147483647 is max allowable
-
-if [[ $max_message_audit_id -gt $threshold_max_int ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
-fi
-
-count=$((count+1))
-
-done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
-
-echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
-fi
 ############################################################### Script END ###############################################################
 echo "cat of $OUTFILE:"
 cat $OUTFILE
