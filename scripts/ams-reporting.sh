@@ -322,7 +322,7 @@ while read -r line;do
   else
     aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep "UNPROCESSED" | awk -F"," '{print $4}' | xargs`
 
-    if [[ $aesd_depth < 5000 ]];then
+    if [[ $aesd_depth < 5000 ]] && [[ `echo $error_message | grep "AESD-0004"` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
