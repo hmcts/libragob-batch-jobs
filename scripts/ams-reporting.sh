@@ -327,6 +327,10 @@ echo "error_message=$error_message"
   else
     aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep "UNPROCESSED" | awk -F"," '{print $4}' | xargs`
 echo "aesd_depth=$aesd_depth"
+echo "the grep"
+echo $error_message | grep "AESD-0004"
+echo "the depth conditional"
+if [[ $aesd_depth < 5000 ]];then echo "true";else echo "false";fi
     if [[ $aesd_depth < 5000 ]] && [[ `echo $error_message | grep "AESD-0004"` ]] || [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
