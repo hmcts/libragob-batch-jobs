@@ -333,12 +333,12 @@ echo "aesd_depth=$aesd_depth"
 echo "the grep"
 echo $error_message | grep "AESD-0004"
 echo "the depth conditional"
-if [[ $aesd_depth -lt 5000 ]];then echo "true";else echo "false";fi
+if [ $aesd_depth -lt 5000 ];then echo "true";else echo "false";fi
 echo "the 0004 error conditional"
 [[ `echo $error_message | grep "AESD-0004"` ]];then echo "true";else echo "false";fi
 echo "the dupe key conditional"
 [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then echo "true";else echo "false";fi
-    if [[ $aesd_depth -lt 5000 ]] && [[ `echo $error_message | grep "AESD-0004"` ]] || [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then
+    if [ $aesd_depth -lt 5000 ] && [[ `echo $error_message | grep "AESD-0004"` ]] || [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
