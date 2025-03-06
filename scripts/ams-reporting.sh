@@ -1086,6 +1086,7 @@ echo "04/03/2025.*AZDB_overall_recon_status" >> $override_file
 echo "05/03/2025.*AZDB_overall_recon_status" >> $override_file
 # AESD-0003 77 & 129 left overnight
 echo "06/03/2025.*AZDB_overall_recon_status" >> $override_file
+echo "06/03/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 fi
 
