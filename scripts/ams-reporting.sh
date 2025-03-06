@@ -226,7 +226,7 @@ elif [[ $schema_id == 38 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
 elif [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 124 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
-elif [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 106 ]];then
+elif [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 61 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
 fi
 
