@@ -1088,6 +1088,8 @@ echo "05/03/2025.*AZDB_overall_recon_status" >> $override_file
 echo "06/03/2025.*AZDB_overall_recon_status" >> $override_file
 # load of schemas locks just after midnight
 echo "07/03/2025.*AZDB_overall_recon_status" >> $override_file
+# updates during ORA rec
+echo "08/03/2025.*AZDB_overall_recon_status" >> $override_file
 
 fi
 
