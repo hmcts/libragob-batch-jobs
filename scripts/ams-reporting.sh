@@ -1092,6 +1092,10 @@ echo "07/03/2025.*AZDB_overall_recon_status" >> $override_file
 echo "08/03/2025.*AZDB_overall_recon_status" >> $override_file
 # updates during ORA rec (and 105, 129 & 47 locked overnight)
 echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
+# updates during ORA rec (and 105, 129 & 47 locked overnight)
+echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
+# 129 data errors, all else complete
+echo "11/03/2025.*AZDB_overall_recon_status" >> $override_file
 
 fi
 
