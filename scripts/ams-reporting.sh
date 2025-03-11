@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 22.5 AESD-0004 debug added LT"
+echo "Script Version 22.6 135 Check #3 Tier 4"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -222,9 +222,9 @@ fi
 
 if [[ $schema_id == 77 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*8))
-elif [[ $schema_id == 38 ]];then
+elif [[ $schema_id == 38 ]] || [[ $schema_id == 135 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
-elif [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 124 ]];then
+elif [[ $schema_id == 105 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 124 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
 elif [[ $schema_id == 99 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 61 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
@@ -1094,7 +1094,7 @@ echo "08/03/2025.*AZDB_overall_recon_status" >> $override_file
 echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
 # updates during ORA rec (and 105, 129 & 47 locked overnight)
 echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
-# 129 data errors, all else complete
+# 129 data errors, all other METs rec completed
 echo "11/03/2025.*AZDB_overall_recon_status" >> $override_file
 
 fi
