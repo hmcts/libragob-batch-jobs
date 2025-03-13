@@ -1088,6 +1088,12 @@ echo "13/03/2025.*AZDB_overall_recon_status" >> $override_file
 
 echo "13/03/2025.*AZDB_update_processing_backlog52" >> $override_file
 
+echo "13/03/2025.*AZDB_db_message_log_error5.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
+
+echo "13/03/2025.*AZDB_db_message_log_error47.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
+
+echo "13/03/2025.*AZDB_db_message_log_error52.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
+
 # 28 & 105 data errors
 echo "03/03/2025.*AZDB_overall_recon_status" >> $override_file
 # 28 & 105 data errors
