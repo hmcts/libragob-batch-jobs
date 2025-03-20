@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 22.6 135 Check #3 Tier 4"
+echo "Script Version 22.7 new rec"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -488,6 +488,7 @@ for cnt in 1 2 3;do
 
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
+    psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   elif [[ $cnt == 2 ]];then
     dbname_str=fines
@@ -500,6 +501,7 @@ for cnt in 1 2 3;do
 
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
+    psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   else
     dbname_str=maintenance
@@ -512,9 +514,12 @@ for cnt in 1 2 3;do
 
     echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
+    psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
-
+cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
+cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv
   # sort the data desc on date ("k"olumn 2) which necessarily sorts by RR_ID column 1 desc, so that head -1 doesn't cut out any RR_ID as a result
   cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
   mv ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
