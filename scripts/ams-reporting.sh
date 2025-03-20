@@ -517,8 +517,11 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
+echo "echo of 9AZUREDB_AMD_confiscation_recon_errors.csv:"
 cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv
+echo "echo of 9AZUREDB_AMD_fines_recon_errors.csv:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
+echo "echo of 9AZUREDB_AMD_maintenance_recon_errors.csv:"
 cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv
   # sort the data desc on date ("k"olumn 2) which necessarily sorts by RR_ID column 1 desc, so that head -1 doesn't cut out any RR_ID as a result
   cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
