@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.2 rec test"
+echo "Script Version 23.2 new ok"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -574,9 +574,9 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -589,9 +589,9 @@ while read -r met;do
 done < ${OPDIR}fines_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,All METs have seen a successful rec in the last 4 days: $met_recon_errors_list,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -604,9 +604,9 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days: $met_recon_errors_list,ok" >> $OUTFILE
 fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
