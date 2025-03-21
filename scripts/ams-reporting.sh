@@ -579,13 +579,6 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 
-echo "echo of 9AZUREDB_AMD_confiscation_recon_errors.csv:"
-cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv
-echo "echo of 9AZUREDB_AMD_fines_recon_errors.csv:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
-echo "echo of 9AZUREDB_AMD_maintenance_recon_errors.csv:"
-cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv
-
 op_date=`date "+%Y-%m-%d"`
 op_date1=`date "+%Y-%m-%d" -d "-1 days"`
 op_date2=`date "+%Y-%m-%d" -d "-2 days"`
