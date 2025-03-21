@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.1 new rec fines fix #2"
+echo "Script Version 23.2 removed overall rec status"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -552,30 +552,6 @@ for cnt in 1 2 3;do
     fi
   done
 done
-
-overall_rec_status=0
-
-for loopc in 1 2 3 4;do
-  confiscation_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
-  fines_rec=`head -${loopc} ${OPDIR}fines_rec_status | tail -1`
-  maintenance_rec=`head -${loopc} ${OPDIR}confiscation_rec_status | tail -1`
-
-  if [[ `echo $confiscation_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $fines_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]] && [[ `echo $maintenance_rec | grep -P "(missing|ERRORs)" | wc -l` == 0 ]];then
-    for cnt in 0 1 2 3;do
-      op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
-
-      if [[ $overall_rec_status == 0 ]] && [[ `echo $confiscation_rec | grep $op_date` ]] && [[ `echo $fines_rec | grep $op_date` ]] && [[ `echo $confiscation_rec | grep $op_date` ]];then
-        overall_rec_status="All 3 recs last completed $cnt day(s) ago on $op_date without errors"
-      fi
-    done
-  fi
-done
-
-if [[ $overall_rec_status == 0 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,We have not seen the recs complete in 4 days so escalate to mgmt,warn" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_recon_status,$overall_rec_status,ok" >> $OUTFILE
-fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 
