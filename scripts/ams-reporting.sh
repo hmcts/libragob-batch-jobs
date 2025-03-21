@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 22.7 new rec catting"
+echo "Script Version 22.8 new confiscation rec"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -585,6 +585,21 @@ echo "echo of 9AZUREDB_AMD_fines_recon_errors.csv:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
 echo "echo of 9AZUREDB_AMD_maintenance_recon_errors.csv:"
 cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv
+
+met_recon_errors_list=''
+
+while read -r met;do
+  for cnt in 0 1 2 3;do
+    op_date=`date "+%Y-%m-%d" -d "-${cnt} days"`
+
+    if [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"` ]];then
+      new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
+      met_recon_errors_list=$new_met_recon_errors_list
+    fi
+  done
+done < ${OPDIR}confiscation_mets
+
+echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
