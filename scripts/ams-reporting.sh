@@ -599,7 +599,11 @@ while read -r met;do
   done
 done < ${OPDIR}confiscation_mets
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+if [[ `echo $met_recon_errors_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+fi
 
 met_recon_errors_list=''
 
@@ -614,7 +618,11 @@ while read -r met;do
   done
 done < ${OPDIR}fines_mets
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+if [[ `echo $met_recon_errors_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+fi
 
 met_recon_errors_list=''
 
@@ -629,7 +637,11 @@ while read -r met;do
   done
 done < ${OPDIR}maintenance_mets
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+if [[ `echo $met_recon_errors_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
+fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
@@ -1073,64 +1085,24 @@ echo "AZDB_overall_recon_status" >> $override_file
 else
 
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
-echo "03/01/2025.*AZDB_maint.*Recon didn't run" >> $override_file
 
-echo "06/01/2025.*AZDB_maint_fines_recon_status*" >> $override_file
 echo "06/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "06/01/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
 
-echo "07/01/2025.*fines_recon_status" >> $override_file
 echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 
-echo "10/01/2025.*so check ORA recon ran" >> $override_file
-
-echo "13/01/2025.*_recon_status" >> $override_file
-
-echo "14/01/2025.*_recon_status" >> $override_file
-
-echo "15/01/2025.*fines_recon_status" >> $override_file
-
-echo "16/01/2025.*_recon_status" >> $override_file
 echo "16/01/2025.*AZDB_db_message_log_error(105|106).*23505.*duplicate key value violates unique constraint.*update_requests_pk" >> $override_file
 
 echo "17/01/2025.*AZDB_update_processing_backlog38" >> $override_file
 
-echo "18/01/2025.*_recon_status" >> $override_file
-
-echo "20/01/2025.*fines_recon_status" >> $override_file
-
-echo "21/01/2025.*fines_recon_status" >> $override_file
-
-echo "27/01/2025.*_recon_status" >> $override_file
-
-echo "29/01/2025.*_recon_status" >> $override_file
-
 echo "31/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "31/01/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "01/02/2025.*_recon_status" >> $override_file
-
-echo "11/02/2025.*_recon_status" >> $override_file
-
-echo "12/02/2025.*_recon_status" >> $override_file
-
-echo "18/02/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "19/02/2025.*AZDB_overall_recon_status" >> $override_file
 
 echo "19/02/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 echo "19/02/2025.*AZDB_db_message_log_error82.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
-echo "20/02/2025.*AZDB_overall_recon_status" >> $override_file
-
 echo "20/02/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "21/02/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "24/02/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "25/02/2025.*AZDB_overall_recon_status" >> $override_file
 
 echo "26/02/2025.*AZDB_update_processing_backlog82" >> $override_file
 
@@ -1139,8 +1111,6 @@ echo "12/03/2025.*AZDB_update_processing_backlog135" >> $override_file
 echo "13/03/2025.*AZDB_update_processing_backlog105" >> $override_file
 
 echo "13/03/2025.*AZDB_update_processing_backlog10" >> $override_file
-
-echo "13/03/2025.*AZDB_overall_recon_status" >> $override_file
 
 echo "13/03/2025.*AZDB_update_processing_backlog52" >> $override_file
 
@@ -1156,33 +1126,7 @@ echo "14/03/2025.*AZDB_update_processing_backlog47" >> $override_file
 
 echo "14/03/2025.*AZDB_update_processing_backlog52" >> $override_file
 
-echo "17/03/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "18/03/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "19/03/2025.*AZDB_overall_recon_status" >> $override_file
-
-# 28 & 105 data errors
-echo "03/03/2025.*AZDB_overall_recon_status" >> $override_file
-# 28 & 105 data errors
-echo "04/03/2025.*AZDB_overall_recon_status" >> $override_file
-# AESD-0003 77 & 129 left overnight
-echo "05/03/2025.*AZDB_overall_recon_status" >> $override_file
-# AESD-0003 77 & 129 left overnight
-echo "06/03/2025.*AZDB_overall_recon_status" >> $override_file
-# load of schemas locks just after midnight
-echo "07/03/2025.*AZDB_overall_recon_status" >> $override_file
-# updates during ORA rec
-echo "08/03/2025.*AZDB_overall_recon_status" >> $override_file
-# updates during ORA rec (and 105, 129 & 47 locked overnight)
-echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
-# updates during ORA rec (and 105, 129 & 47 locked overnight)
-echo "10/03/2025.*AZDB_overall_recon_status" >> $override_file
-# 129 data errors, all other METs rec completed
-echo "11/03/2025.*AZDB_overall_recon_status" >> $override_file
-echo "14/03/2025.*AZDB_overall_recon_status" >> $override_file
-
-echo "AZDB_overall_recon_status" >> $override_file
+echo "recon_status" >> $override_file
 
 fi
 
