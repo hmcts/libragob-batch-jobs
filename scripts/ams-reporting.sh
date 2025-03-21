@@ -600,9 +600,9 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
-else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -619,9 +619,9 @@ while read -r met;do
 done < ${OPDIR}fines_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
-else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -638,9 +638,9 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
-else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,The following METs have not seen a successful rec in 4 days so get DBAs to check for missing data: $met_recon_errors_list,ok" >> $OUTFILE
 fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
