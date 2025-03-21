@@ -1023,6 +1023,7 @@ override_file=${OPDIR}ams-reporting_overrides_list.dat
 if [[ $op_env == test ]];then
 
 dummy=0
+echo "AZDB_overall_recon_status" >> $override_file
 
 else
 
