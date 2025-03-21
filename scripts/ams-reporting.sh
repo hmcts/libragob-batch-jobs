@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.2 removed overall rec status"
+echo "Script Version 23.2 rec test"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -559,6 +559,10 @@ op_date=`date "+%Y-%m-%d"`
 op_date1=`date "+%Y-%m-%d" -d "-1 days"`
 op_date2=`date "+%Y-%m-%d" -d "-2 days"`
 op_date3=`date "+%Y-%m-%d" -d "-3 days"`
+
+op_date1=`date "+%Y-%m-%d"`
+op_date2=`date "+%Y-%m-%d"`
+op_date3=`date "+%Y-%m-%d"`
 
 met_recon_errors_list=''
 
