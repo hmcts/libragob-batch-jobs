@@ -1,0 +1,1 @@
+\copy (select rr_id,schema_id,date(completed_date) from RECONCILIATION_RUNS where error_count = 0 group by rr_id,schema_id,date(completed_date) order by date(completed_date) desc) To '/tmp/ams-reporting/9AZUREDB_AMD_***REMOVED***nes_recon_result_by_met.csv' With CSV DELIMITER ','
