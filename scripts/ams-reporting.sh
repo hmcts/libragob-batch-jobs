@@ -577,7 +577,7 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,No Azure rec results have been found in the last 4 days so check Oracle rec has been runnings,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,No Azure rec results have been found in the last 4 days so check Oracle rec has been running,ok" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
