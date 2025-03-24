@@ -606,7 +606,7 @@ done < ${OPDIR}maintenance_mets
 if [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days: $met_recon_errors_list,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days $met_recon_errors_list,ok" >> $OUTFILE
 fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
