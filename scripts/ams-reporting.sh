@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.4 new AZ rec no results check SQL result fix"
+echo "Script Version 23.5 new AZ rec code block move"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -571,14 +571,14 @@ met_recon_errors_list=''
 
 while read -r met;do
   if [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date3"` ]];then
-    new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
-    met_recon_errors_list=$new_met_recon_errors_list
+    if [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] !! [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] !! [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
+      new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
+      met_recon_errors_list=$new_met_recon_errors_list
+    fi
   fi
 done < ${OPDIR}confiscation_mets
 
-if [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,No Azure rec results have been found in the last 4 days so check Oracle rec has been running,warn" >> $OUTFILE
-elif [[ `echo $met_recon_errors_list` ]];then 
+if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
@@ -588,14 +588,14 @@ met_recon_errors_list=''
 
 while read -r met;do
   if [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"` ]];then
-    new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
-    met_recon_errors_list=$new_met_recon_errors_list
+    if [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
+      new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
+      met_recon_errors_list=$new_met_recon_errors_list
+    fi
   fi
 done < ${OPDIR}fines_mets
 
-if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,No Azure rec results have been found in the last 4 days so check Oracle rec has been running,warn" >> $OUTFILE
-elif [[ `echo $met_recon_errors_list` ]];then 
+if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
@@ -605,14 +605,14 @@ met_recon_errors_list=''
 
 while read -r met;do
   if [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date3"` ]];then
-    new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
-    met_recon_errors_list=$new_met_recon_errors_list
+    if [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] || [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
+      new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
+      met_recon_errors_list=$new_met_recon_errors_list
+    fi
   fi
 done < ${OPDIR}maintenance_mets
 
-if [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,No Azure rec results have been found in the last 4 days so check Oracle rec has been running,warn" >> $OUTFILE
-elif [[ `echo $met_recon_errors_list` ]];then 
+if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
