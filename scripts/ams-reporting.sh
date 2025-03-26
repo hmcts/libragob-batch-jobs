@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.6 rec warn info msg"
+echo "Script Version 23.6 new rec v3 golive"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -561,11 +561,11 @@ echo "$(date "+%d/%m/%Y %T") Check #9 complete" >> $OUTFILE_LOG
 op_date=`date "+%Y-%m-%d"`
 op_date1=`date "+%Y-%m-%d" -d "-1 days"`
 op_date2=`date "+%Y-%m-%d" -d "-2 days"`
-#op_date3=`date "+%Y-%m-%d" -d "-3 days"`
+op_date3=`date "+%Y-%m-%d" -d "-3 days"`
 
 #op_date1=`date "+%Y-%m-%d"`
 #op_date2=`date "+%Y-%m-%d"`
-op_date3=`date "+%Y-%m-%d"`
+#op_date3=`date "+%Y-%m-%d"`
 
 met_recon_errors_list=''
 no_good_result=0
@@ -580,7 +580,7 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Azure rec has not run in last 4 days so get DBAs to check for updates during Oracle rec / data mismatches,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -600,7 +600,7 @@ while read -r met;do
 done < ${OPDIR}fines_mets
 
 if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Azure rec has not run in last 4 days so get DBAs to check for updates during Oracle rec / data mismatches,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -620,7 +620,7 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Azure rec has not run in last 4 days so get DBAs to check for updates during Oracle rec / data mismatches,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
