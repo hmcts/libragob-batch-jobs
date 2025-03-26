@@ -570,6 +570,16 @@ op_date3=`date "+%Y-%m-%d"`
 met_recon_errors_list=''
 
 while read -r met;do
+if [[ $met == 45 ]];then
+echo "cat of ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv:"
+cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv
+echo "cat of ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv:"
+cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv
+echo "cat1:"
+cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"
+echo "cat2:"
+cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"
+fi
   if [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     if [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
       new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
