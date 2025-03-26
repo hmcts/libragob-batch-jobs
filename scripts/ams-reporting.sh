@@ -584,7 +584,7 @@ done < ${OPDIR}confiscation_mets
 if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 elif [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
@@ -606,7 +606,7 @@ done < ${OPDIR}fines_mets
 if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 elif [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
@@ -628,7 +628,7 @@ done < ${OPDIR}maintenance_mets
 if [[ `echo $met_recon_errors_list` ]];then 
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 elif [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Azure rec has not run in last 4 days due to Oracle updates during recon,warn" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
