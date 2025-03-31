@@ -1123,8 +1123,6 @@ echo "31/03/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "31/03/2025.*AZDB_update_processing_backlog124" >> $override_file
 
-echo "31/03/2025.*AZDB_update_processing_backlog82" >> $override_file
-
 echo "recon_status" >> $override_file
 
 fi
