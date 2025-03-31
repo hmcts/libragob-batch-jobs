@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.1 rec debug head"
+echo "Script Version 24.1 rec fudge for 77 4runs"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -565,7 +565,7 @@ op_date=`date "+%Y-%m-%d"`
 op_date1=`date "+%Y-%m-%d" -d "-1 days"`
 op_date2=`date "+%Y-%m-%d" -d "-2 days"`
 op_date3=`date "+%Y-%m-%d" -d "-3 days"`
-
+op_date3=$op_date2
 #op_date1=`date "+%Y-%m-%d"`
 #op_date2=`date "+%Y-%m-%d"`
 #op_date3=`date "+%Y-%m-%d"`
@@ -614,6 +614,8 @@ echo "grep2:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"
 echo "grep3:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"
+echo "fudged date-3 to -2 so as to blank the grep date hit for overlapping RR_ID = 473 (477 currently T-4 to make it -3) which completed 28/03 due to backlogs (T-3 31/03). Should now 77 alert in AMD"
+
 fi
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
