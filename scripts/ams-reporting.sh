@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.7 77 Check #3 override"
+echo "Script Version 23.8 BST Fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -17,6 +17,9 @@ OUTFILE_STATS="${OPDIR}ThemisAZ_stats.csv"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 echo $(date "+%d/%m/%Y %T") > $OUTFILE
 echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
+##### BST Fix
+echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
+echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
@@ -1110,6 +1113,10 @@ echo "14/03/2025.*AZDB_update_processing_backlog47" >> $override_file
 
 echo "14/03/2025.*AZDB_update_processing_backlog52" >> $override_file
 
+# 490K updates 26/03 on 77 but remained locked overnight due to dupe seq num out-of-hours
+echo "27/03/2025.*AZDB_update_processing_backlog77" >> $override_file
+echo "27/03/2025.*AZDB_msg_backlog77" >> $override_file
+
 echo "28/03/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "31/03/2025.*AZDB_update_processing_backlog77" >> $override_file
@@ -1119,11 +1126,6 @@ echo "31/03/2025.*AZDB_update_processing_backlog124" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 echo "recon_status" >> $override_file
-
-# 490K updates 26/03 on 77 but remained locked overnight due to dupe seq num out-of-hours
-echo "27/03/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "27/03/2025.*AZDB_msg_backlog77" >> $override_file
-
 
 fi
 
