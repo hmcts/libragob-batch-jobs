@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.0 table update rows to 8.5M"
+echo "Script Version 24.0 met_no_good_result_list"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -572,20 +572,20 @@ op_date3=`date "+%Y-%m-%d" -d "-3 days"`
 
 met_recon_errors_list=''
 no_good_result=0
-rm ${OPDIR}no_good_result 2>/dev/null
 
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
-    echo "$met" >> ${OPDIR}no_good_result
+    new_met_no_good_result_list=`echo "$met_no_good_result_list $met"`
+    met_no_good_result_list=$new_met_no_good_result_list
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
   fi
 done < ${OPDIR}confiscation_mets
 
-if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
+if [[ `echo $met_no_good_result_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -598,15 +598,16 @@ no_good_result=0
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
-    echo "$met" >> ${OPDIR}no_good_result    
+    new_met_no_good_result_list=`echo "$met_no_good_result_list $met"`
+    met_no_good_result_list=$new_met_no_good_result_list
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
   fi
 done < ${OPDIR}fines_mets
 
-if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
+if [[ `echo $met_no_good_result_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -619,15 +620,16 @@ no_good_result=0
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
-    echo "$met" >> ${OPDIR}no_good_result    
+    new_met_no_good_result_list=`echo "$met_no_good_result_list $met"`
+    met_no_good_result_list=$new_met_no_good_result_list
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
   fi
 done < ${OPDIR}maintenance_mets
 
-if [[ $no_good_result == 1 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Azure rec has not run in last 4 days so check if repeat updates during Oracle rec,warn" >> $OUTFILE
+if [[ `echo $met_no_good_result_list` ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -1124,6 +1126,7 @@ echo "27/03/2025.*AZDB_msg_backlog77" >> $override_file
 echo "28/03/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "31/03/2025.*AZDB_update_processing_backlog77" >> $override_file
+echo "31/03/2025.*AZDB_msg_backlog77" >> $override_file
 
 echo "recon_status" >> $override_file
 
