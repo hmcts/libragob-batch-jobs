@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.0 met_no_good_result_list"
+echo "Script Version 24.1 met_no_good_result_list variable reset fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -571,6 +571,7 @@ op_date3=`date "+%Y-%m-%d" -d "-3 days"`
 #op_date3=`date "+%Y-%m-%d"`
 
 met_recon_errors_list=''
+met_no_good_result_list=''
 no_good_result=0
 
 while read -r met;do
@@ -593,6 +594,7 @@ else
 fi
 
 met_recon_errors_list=''
+met_no_good_result_list=''
 no_good_result=0
 
 while read -r met;do
@@ -615,6 +617,7 @@ else
 fi
 
 met_recon_errors_list=''
+met_no_good_result_list=''
 no_good_result=0
 
 while read -r met;do
