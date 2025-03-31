@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 23.9 Check #3 99 Tier 3"
+echo "Script Version 24.0 table update rows to 8.5M"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -572,10 +572,12 @@ op_date3=`date "+%Y-%m-%d" -d "-3 days"`
 
 met_recon_errors_list=''
 no_good_result=0
+rm ${OPDIR}no_good_result 2>/dev/null
 
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
+    echo "$met" >> ${OPDIR}no_good_result
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
@@ -596,6 +598,7 @@ no_good_result=0
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
+    echo "$met" >> ${OPDIR}no_good_result    
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
@@ -616,6 +619,7 @@ no_good_result=0
 while read -r met;do
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     no_good_result=1
+    echo "$met" >> ${OPDIR}no_good_result    
   elif [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date1"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date2"` ]] && [[ `cat ${OPDIR}9AZUREDB_AMD_maintenance_recon_errors.csv | grep ",$met,$op_date3"` ]];then
     new_met_recon_errors_list=`echo "$met_recon_errors_list $met"`
     met_recon_errors_list=$new_met_recon_errors_list
@@ -647,7 +651,7 @@ threshold_count_dac_audit=80000000
 threshold_count_gateway_audit=50000
 else
 threshold_count_update_requests=4000000
-threshold_count_table_updates=8000000
+threshold_count_table_updates=8500000
 threshold_count_message_log=20000000
 threshold_count_dac_audit=70000000
 threshold_count_gateway_audit=1500000
