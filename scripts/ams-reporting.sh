@@ -1107,6 +1107,8 @@ echo "AZDB_overall_recon_status" >> $override_file
 else
 
 echo "recon_status" >> $override_file
+echo "AZDB_update_processing_backlog77" >> $override_file
+echo "AZDB_msg_backlog77" >> $override_file
 
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 
@@ -1165,8 +1167,6 @@ echo "31/03/2025.*AZDB_update_processing_backlog103" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog12" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog99" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog105" >> $override_file
-
-echo "AZDB_update_processing_backlog77" >> $override_file
 
 echo "01/04/2025.*AZDB_update_processing_backlog130" >> $override_file
 
