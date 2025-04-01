@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.1 rec fudge for 77 4runs"
+echo "Script Version 24.1 more rec debug"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -598,6 +598,8 @@ met_no_good_result_list=''
 no_good_result=0
 echo "cat of 9AZUREDB_AMD_fines_recon_result_by_met.csv:"
 head -1000 ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv
+echo "cat of 9AZUREDB_AMD_fines_recon_errors.csv:"
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
 
 while read -r met;do
 if [[ $met == 77 ]];then
@@ -606,14 +608,22 @@ echo "op_date=$op_date"
 echo "op_date=$op_date1"
 echo "op_date=$op_date2"
 echo "op_date=$op_date3"
-echo "grep0:"
+echo "grep0result:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"
-echo "grep1:"
+echo "grep1result:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"
-echo "grep2:"
+echo "grep2result:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"
-echo "grep3:"
+echo "grep3result:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"
+echo "grep0errors:"
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"
+echo "grep1errors:"
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"
+echo "grep2errors:"
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"
+echo "grep3errors:"
+cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"
 echo "fudged date-3 to -2 so as to blank the grep date hit for overlapping RR_ID = 473 (477 currently T-4 to make it -3) which completed 28/03 due to backlogs (T-3 31/03). Should now 77 alert in AMD"
 
 fi
@@ -1103,6 +1113,8 @@ echo "AZDB_overall_recon_status" >> $override_file
 
 else
 
+echo "recon_status" >> $override_file
+
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 
 echo "06/01/2025.*AZDB_update_processing_backlog77" >> $override_file
@@ -1160,10 +1172,8 @@ echo "31/03/2025.*AZDB_update_processing_backlog103" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog12" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog99" >> $override_file
 echo "31/03/2025.*AZDB_update_processing_backlog105" >> $override_file
+
 echo "01/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-
-echo "recon_status" >> $override_file
 
 fi
 
