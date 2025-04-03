@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.1 old rec debug"
+echo "Script Version 24.1 old missing recs fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -544,23 +544,11 @@ fi
 
       if [[ `echo $rec_line | grep -P ",${rec_rows}$"` ]];then
         echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
-
-        if [[ $loopc < 4 ]];then
-          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
-        fi
       else
-        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has data ERRORs,DATE=$op_date,ok" >> $OUTFILE
-
-        if [[ $loopc < 4 ]];then
-         echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has data ERRORs,DATE=$op_date,ok" >> ${OPDIR}${dbname_str}_rec_status
-        fi
+        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
       fi
     else
       echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
-
-        if [[ $loopc < 4 ]];then
-          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> ${OPDIR}${dbname_str}_rec_status
-        fi
     fi
   done
 done
