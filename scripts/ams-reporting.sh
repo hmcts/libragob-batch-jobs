@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.1 old missing recs fix"
+echo "Script Version 24.1 old missing recs fix debug removed"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -531,13 +531,7 @@ for cnt in 1 2 3;do
   for loopc in 0 1 2 3 4 5 6 7 8 9;do
     op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
     rec_line=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | head -1`
-if [[ $dbname_str == fines ]];then
-echo "cat of ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv:"
-cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
-echo "loopc=$loopc"
-echo "op_date=$op_date"
-echo "rec_line=$rec_line"
-fi
+
     if [[ $rec_line ]];then
       rr_id=`echo $rec_line | awk -F"," '{print $1}' | awk -F"_" '{print $2}'`
       rr_cnt=`echo $rec_line | awk -F"," '{print $3}'`
