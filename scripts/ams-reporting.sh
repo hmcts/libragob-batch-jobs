@@ -431,7 +431,7 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
-bundled_print_threshold=95000 # 92513 seen 12:00 24/10/2024
+bundled_print_threshold=98000 # 92513 seen 12:00 24/10/2024 || 97648 seen 11:13 10/04/2025
 
 head -10 ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv > ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.tmp
 
@@ -1161,7 +1161,6 @@ echo "09/04/2025.*AZDB_update_processing_backlog135" >> $override_file
 echo "09/04/2025.*AZDB_update_processing_backlog103" >> $override_file
 
 echo "10/04/2025.*AZDB_update_processing_backlog135" >> $override_file
-echo "10/04/2025.*AZDB_max_updates112" >> $override_file
 
 fi
 
