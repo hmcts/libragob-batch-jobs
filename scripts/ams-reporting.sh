@@ -1161,6 +1161,7 @@ echo "09/04/2025.*AZDB_update_processing_backlog135" >> $override_file
 echo "09/04/2025.*AZDB_update_processing_backlog103" >> $override_file
 
 echo "10/04/2025.*AZDB_update_processing_backlog135" >> $override_file
+echo "10/04/2025.*AZDB_max_updates112" >> $override_file
 
 fi
 
