@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.4 135 override for Check #6"
+echo "Script Version 24.5 135 Confiscation rec summary code fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -609,7 +609,6 @@ echo "grep2errors:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"
 echo "grep3errors:"
 cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"
-
 fi
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     new_met_no_good_result_list=`echo "$met_no_good_result_list $met"`
@@ -625,7 +624,7 @@ fi
 done < ${OPDIR}fines_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
@@ -646,7 +645,7 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for repeat updates during Oracle rec as these METs have not seen a successful rec in 4 days: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Get DBAs to check for missing data as these METs have not seen a successful rec in 4 days: $met_recon_errors_list,warn" >> $OUTFILE
 else
