@@ -572,11 +572,11 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -624,11 +624,11 @@ fi
 done < ${OPDIR}fines_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_fines_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -645,11 +645,11 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the two last queries of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_overall_maintenance_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 ####################################################### CHECK 10
 echo "[Check #10: Themis WebLogic]" >> $OUTFILE
@@ -1089,7 +1089,6 @@ override_file=${OPDIR}ams-reporting_overrides_list.dat
 if [[ $op_env == test ]];then
 
 dummy=0
-echo "AZDB_overall_recon_status" >> $override_file
 
 else
 
@@ -1161,9 +1160,9 @@ echo "09/04/2025.*AZDB_update_processing_backlog103" >> $override_file
 
 echo "10/04/2025.*AZDB_update_processing_backlog135" >> $override_file
 
-echo "11/04/2025.*AZDB_overall_fines_recon_status" >> $override_file
+echo "11/04/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "14/04/2025.*AZDB_overall_fines_recon_status" >> $override_file
+echo "14/04/2025.*AZDB_fines_recon_status" >> $override_file
 echo "14/04/2025.*AZDB_msg_backlog31" >> $override_file
 
 fi
