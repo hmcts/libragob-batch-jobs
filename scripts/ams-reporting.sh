@@ -262,7 +262,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
-idle_threshold=465
+idle_threshold=485 # tuned from 465 to 485 as uptick ~350 zombied idles: select * from pg_stat_activity where state='idle' and backend_start > '2025-04-22 23:50:37' and backend_start < '2025-04-23 00:21:00' 
 idle_in_trans_threshold=15
 active_threshold=25 # 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25
 null_threshold=15
@@ -1171,8 +1171,6 @@ echo "22/04/2025.*AZDB_fines_recon_status" >> $override_file
 echo "17/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "22/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "23/04/2025.*AZDB_db_threads.*idle" >> $override_file
 
 fi
 
