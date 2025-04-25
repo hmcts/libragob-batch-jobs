@@ -263,7 +263,8 @@ psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} u
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 #idle_threshold=485 # tuned from 465 to 485 as uptick ~350 zombied idles: select * from pg_stat_activity where state='idle' and backend_start > '2025-04-22 23:50:37' and backend_start < '2025-04-23 00:21:00'. POD bounce the next day cleared them so reverted
-idle_threshold=465
+#same thing 25/04 after reboots, 485 seen so upped from 465 to 495
+idle_threshold=495
 idle_in_trans_threshold=15
 active_threshold=25 # 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25
 null_threshold=15
