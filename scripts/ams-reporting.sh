@@ -344,7 +344,7 @@ if [[ `echo $error_message | grep "AESD-0004"` ]];then echo "true";else echo "fa
 echo "the dupe key conditional"
 if [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then echo "true";else echo "false";fi
 #   if [[ $aesd_depth -lt 5000 ]] && [[ `echo $error_message | grep "AESD-0004"` ]] || [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then
-    if [[ ( $aesd_depth -lt 5000 && `echo $error_message | grep "AESD-0003"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0004"` ) || ( $aesd_depth -lt 5000 && `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ) ]];then
+    if [[ ( $aesd_depth -lt 5000 && `echo $error_message | grep "AESD-0003"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0004"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ) ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
