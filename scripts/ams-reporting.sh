@@ -1174,9 +1174,11 @@ echo "17/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "22/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 
-echo "25/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint.*update_requests_pk" >> $override_file
+echo "25/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint." >> $override_file
 echo "25/04/2025.*AZDB_update_processing_backlog77" >> $override_file
+
 echo "29/04/2025.*AZDB_update_processing_backlog30" >> $override_file
+echo "29/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
 
 fi
 
