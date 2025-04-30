@@ -1180,6 +1180,8 @@ echo "25/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "29/04/2025.*AZDB_update_processing_backlog30" >> $override_file
 echo "29/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
 
+echo "30/04/2025.*AZDB_update_processing_backlog77" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
