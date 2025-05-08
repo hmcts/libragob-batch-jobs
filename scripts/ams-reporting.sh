@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.7 dupe key error"
+echo "Script Version 24.8 POD list"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -76,6 +76,16 @@ if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | wc -l` -gt 0 ]];then
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
+
+kubectl config use-context ss-prod-00-aks
+kubectl get pods -n met > ${OPDIR}pod_list00
+kubectl config use-context ss-prod-01-aks
+kubectl get pods -n met > ${OPDIR}pod_list01
+
+echo "cat of pod_list00:"
+cat ${OPDIR}pod_list00
+echo "cat of pod_list01:"
+cat ${OPDIR}pod_list01
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
