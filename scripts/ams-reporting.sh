@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 AZDB_housekeeping_error_check"
+echo "Script Version 25.2 AZDB_housekeeping_error_check completed check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -119,21 +119,23 @@ while read -r line;do
   echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
 done < ${OPDIR}pod_list00
 
-hk_hash=`grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
+hk_hash=`grep -P "housekeeping.*Completed" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
 echo "hk_hash=$hk_hash"
 kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
 echo "cat of hk_log:"
 cat ${OPDIR}hk_log
 
-if [[ `grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1` ]];then
+if [[ `${OPDIR}hk_log` ]];then
   if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Housekeeping logfile errors found,ok" >> $OUTFILE
   fi
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Completed Housekeeping logfile found so pls check,ok" >> $OUTFILE
 fi
 
-cnt_hk_logs=`grep "housekeeping" ${OPDIR}pod_list00 | wc -l`
+cnt_hk_logs=`grep -P "housekeeping.*Completed" ${OPDIR}pod_list00 | wc -l`
 echo "cnt_hk_logs=$cnt_hk_logs"
 
 if [[ $op_env == prod ]];then
