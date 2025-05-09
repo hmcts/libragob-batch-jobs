@@ -132,7 +132,7 @@ if [[ `${OPDIR}hk_log` ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Housekeeping logfile errors found,ok" >> $OUTFILE
   fi
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Completed Housekeeping logfile found so pls check,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
 fi
 
 cnt_hk_logs=`grep -P "housekeeping.*0\/1 Completed" ${OPDIR}pod_list00 | wc -l`
