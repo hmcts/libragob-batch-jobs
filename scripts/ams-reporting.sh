@@ -1312,7 +1312,6 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "09/05/2025.*AZDB_housekeeping_completed_logs_count" >> $override_file
 echo "09/05/2025.*AZDB_pod_bounce_completed_logs_count" >> $override_file
 echo "AZDB_housekeeping_completed_error_check" >> $override_file
 
