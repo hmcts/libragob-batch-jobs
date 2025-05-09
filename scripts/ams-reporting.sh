@@ -116,7 +116,7 @@ while read -r line;do
   status=`echo $line | awk -F" " '{print $3}'`
   restarts=`echo $line | awk -F" " '{print $4}'`
   age=`echo $line | awk -F" " '{print $5}'`
-  echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
 done < ${OPDIR}pod_list00
 
 hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list00 | tail -1 | awk '{print $1}'`
@@ -171,9 +171,9 @@ cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
 cnt_pod_bounce_threshold=3
 
 if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
 cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list00 | wc -l`
@@ -1294,8 +1294,8 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "09/05/2025.*AZDB_housekeeping_logs_count" >> $override_file
-echo "09/05/2025.*AZDB_completed_pod_bounce_logs_count" >> $override_file
+echo "09/05/2025.*AZDB_housekeeping_completed_logs_count" >> $override_file
+echo "09/05/2025.*AZDB_pod_bounce_completed_logs_count" >> $override_file
 
 fi
 
