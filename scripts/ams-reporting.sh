@@ -124,7 +124,7 @@ echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0   
 
 cnt=0
 
-for cnt in 1 2;do
+for loop in 1 2;do
 
 echo ",,," >> $OUTFILE
 echo "POD Status Cluster0${cnt},,," >> $OUTFILE
