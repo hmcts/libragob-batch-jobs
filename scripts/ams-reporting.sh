@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 AZDB_housekeeping_error_check completed check"
+echo "Script Version 25.2 ams-reporting POD check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -119,7 +119,7 @@ while read -r line;do
   echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
 done < ${OPDIR}pod_list00
 
-hk_hash=`grep -P "housekeeping.*Completed" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
+hk_hash=`grep -P "housekeeping.*0\/1 Completed" ${OPDIR}pod_list00 | tail -1 | awk '{print $1}'`
 echo "hk_hash=$hk_hash"
 kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
 echo "cat of hk_log:"
@@ -135,7 +135,7 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Completed Housekeeping logfile found so pls check,ok" >> $OUTFILE
 fi
 
-cnt_hk_logs=`grep -P "housekeeping.*Completed" ${OPDIR}pod_list00 | wc -l`
+cnt_hk_logs=`grep -P "housekeeping.*0\/1 Completed" ${OPDIR}pod_list00 | wc -l`
 echo "cnt_hk_logs=$cnt_hk_logs"
 
 if [[ $op_env == prod ]];then
@@ -145,9 +145,29 @@ else
 fi
 
 if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+fi
+
+cnt_amd_logs_completed=`grep -P "ams-reporting.*0\/1 Completed" ${OPDIR}pod_list00 | wc -l`
+cnt_amd_logs_running=`grep -P "ams-reporting.*1\/1 Running" ${OPDIR}pod_list00 | wc -l`
+cnt_amd_logs_completed_threshold=3
+cnt_amd_logs_running_threshold=1
+
+echo "cnt_amd_logs_completed=$cnt_amd_logs_completed"
+echo "cnt_amd_logs_running=$cnt_amd_logs_running"
+
+if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+fi
+
+if [[ $cnt_amd_logs_running -gt $cnt_amd_logs_running_threshold ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
