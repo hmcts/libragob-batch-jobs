@@ -1257,6 +1257,8 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
+echo "09/05/2025.*AZDB_housekeeping_logs_count" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
