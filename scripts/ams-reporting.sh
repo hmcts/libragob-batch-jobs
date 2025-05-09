@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 cluster01 with fix"
+echo "Script Version 25.2 cluster01 with loop count fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -131,8 +131,6 @@ cnt=0
 
 for cnt in 1 2;do
 
-cnt=$((cnt+1))
-
 echo ",,," >> $OUTFILE
 echo "POD Status Cluster0${cnt},,," >> $OUTFILE
 
@@ -212,6 +210,8 @@ if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
+
+cnt=$((cnt+1))
 
 done
 ####################################################### CHECK 2
