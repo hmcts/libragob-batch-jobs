@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.0 H/K log check"
+echo "Script Version 25.1 H/K log check with env thresholds"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -124,10 +124,16 @@ fi
 cnt_hk_logs=`grep "housekeeping" ${OPDIR}pod_list00 | wc -l`
 echo "cnt_hk_logs=$cnt_hk_logs"
 
-if [[ $cnt_hk_logs == 3 ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/3 Housekeeping logs found,ok" >> $OUTFILE
+if [[ $op_env == prod ]];then
+  hk_logs_threshold=3
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/3 Housekeeping logs found so some missing so raise a DTSPO JIRA and pass across to HMCTS PlatOps,warn" >> $OUTFILE
+  hk_logs_threshold=0
+fi
+
+if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found so some missing so raise a DTSPO JIRA and pass across to HMCTS PlatOps,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
