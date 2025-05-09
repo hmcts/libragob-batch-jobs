@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.8 POD list"
+echo "Script Version 24.8 Check #6 debug"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -345,15 +345,13 @@ echo "error_message=$error_message"
   else
     aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep "UNPROCESSED" | awk -F"," '{print $4}' | xargs`
 echo "aesd_depth=$aesd_depth"
-echo "the grep"
-echo $error_message | grep "AESD-0004"
+echo "the error=$error_message"
 echo "the depth conditional"
-if [[ $aesd_depth -lt 5000 ]];then echo "true";else echo "false";fi
+if [[ $aesd_depth -lt 10000 ]];then echo "true";else echo "false";fi
 echo "the 0004 error conditional"
 if [[ `echo $error_message | grep "AESD-0004"` ]];then echo "true";else echo "false";fi
 echo "the dupe key conditional"
-if [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then echo "true";else echo "false";fi
-#   if [[ $aesd_depth -lt 5000 ]] && [[ `echo $error_message | grep "AESD-0004"` ]] || [[ `echo $error_message | grep -P "23505.*duplicate key value.*update_requests_pk"` ]];then
+if [[ `echo $error_message | grep -P "23505.*duplicate key value"` ]];then echo "true";else echo "false";fi
     if [[ ( $aesd_depth -lt 5000 && `echo $error_message | grep "AESD-0003"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0004"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep -P "23505.*duplicate key value"` ) ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
     else
