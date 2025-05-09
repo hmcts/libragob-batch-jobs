@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 H/K blank line"
+echo "Script Version 25.2 AZDB_housekeeping_error_check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -116,7 +116,7 @@ while read -r line;do
   status=`echo $line | awk -F" " '{print $3}'`
   restarts=`echo $line | awk -F" " '{print $4}'`
   age=`echo $line | awk -F" " '{print $5}'`
-  echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age} ,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
 done < ${OPDIR}pod_list00
 
 hk_hash=`grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
@@ -127,9 +127,9 @@ cat ${OPDIR}hk_log
 
 if [[ `grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1` ]];then
   if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,Errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,No errors found,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_error_check,No Housekeeping logfile errors found,ok" >> $OUTFILE
   fi
 fi
 
@@ -145,7 +145,7 @@ fi
 if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_error_check,${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
