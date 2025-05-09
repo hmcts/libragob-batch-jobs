@@ -164,7 +164,7 @@ else
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
-if [[ $cnt_amd_logs_running -gt $cnt_amd_logs_running_threshold ]];then
+if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
