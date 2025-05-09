@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 ams-reporting slashes"
+echo "Script Version 25.2 ams-reporting running&completed feedback"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -159,15 +159,15 @@ echo "cnt_amd_logs_completed=$cnt_amd_logs_completed"
 echo "cnt_amd_logs_running=$cnt_amd_logs_running"
 
 if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
 if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
