@@ -89,6 +89,7 @@ echo "libragob-batch-ams-reporting-job-29113115-rgn6r   0/1     Completed   0   
 echo "libragob-batch-ams-reporting-job-29113120-srgq2   1/1     Running     0          2m37s" >> ${OPDIR}pod_list00
 echo "libragob-batch-housekeeping-job-29110740-rz5bh    0/1     Completed   0          39h" >> ${OPDIR}pod_list00
 echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0          15h" >> ${OPDIR}pod_list00
+echo "libragob-batch-housekeeping-job-29113620-rrtpg    0/1     Completed   0          62m" >> ${OPDIR}pod_list00
 echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
 echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list00
@@ -103,12 +104,6 @@ echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0   
 echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 
 echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list01
-echo "libragob-batch-ams-reporting-job-29113105-tsb7x   0/1     Completed   0          17m" >> ${OPDIR}pod_list01
-echo "libragob-batch-ams-reporting-job-29113110-k42d6   0/1     Completed   0          12m" >> ${OPDIR}pod_list01
-echo "libragob-batch-ams-reporting-job-29113115-rgn6r   0/1     Completed   0          7m37s" >> ${OPDIR}pod_list01
-echo "libragob-batch-ams-reporting-job-29113120-srgq2   1/1     Running     0          2m37s" >> ${OPDIR}pod_list01
-echo "libragob-batch-housekeeping-job-29110740-rz5bh    0/1     Completed   0          39h" >> ${OPDIR}pod_list01
-echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0          15h" >> ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list01
