@@ -155,9 +155,6 @@ cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list00 |
 cnt_amd_logs_completed_threshold=3
 cnt_amd_logs_running_threshold=1
 
-echo "cnt_amd_logs_completed=$cnt_amd_logs_completed"
-echo "cnt_amd_logs_running=$cnt_amd_logs_running"
-
 if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
 else
@@ -168,6 +165,15 @@ if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+fi
+
+cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
+cnt_pod_bounce_threshold=3
+
+if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce_completed}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce_completed}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
@@ -1280,6 +1286,7 @@ echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "09/05/2025.*AZDB_housekeeping_logs_count" >> $override_file
+echo "09/05/2025.*AZDB_completed_pod_bounce_logs_count" >> $override_file
 
 fi
 
