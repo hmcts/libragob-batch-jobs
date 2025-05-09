@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.1 H/K log check with env thresholds"
+echo "Script Version 25.1 H/K log check DBAs"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -115,7 +115,7 @@ cat ${OPDIR}hk_log
 
 if [[ `grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1` ]];then
   if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,Errors found so check POD logs,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,Errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,No errors found,ok" >> $OUTFILE
   fi
