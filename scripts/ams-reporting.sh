@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.1 H/K log feedback"
+echo "Script Version 25.2 H/K blank line"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -107,8 +107,8 @@ cat ${OPDIR}pod_list00
 echo "cat of pod_list01:"
 cat ${OPDIR}pod_list01
 
-echo -e "\n" >> $OUTFILE
-echo "POD Status Cluster00,,,," >> $OUTFILE
+echo ",,," >> $OUTFILE
+echo "POD Status Cluster00,,," >> $OUTFILE
 
 while read -r line;do
   name_hash=`echo $line | awk -F" " '{print $1}'`
