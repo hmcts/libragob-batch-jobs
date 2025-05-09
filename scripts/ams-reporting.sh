@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 cluster01"
+echo "Script Version 25.2 cluster01 with fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -162,7 +162,7 @@ if [[ $cnt == 0 ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
   fi
   
-  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
+  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
   echo "cnt_hk_logs=$cnt_hk_logs"
 
   if [[ $op_env == prod ]];then
