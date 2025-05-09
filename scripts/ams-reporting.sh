@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 24.9 Check #6 debug"
+echo "Script Version 25.0 H/K log check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -82,10 +82,53 @@ kubectl get pods -n met > ${OPDIR}pod_list00
 kubectl config use-context ss-prod-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
+echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list00
+echo "libragob-batch-ams-reporting-job-29113105-tsb7x   0/1     Completed   0          17m" >> ${OPDIR}pod_list00
+echo "libragob-batch-ams-reporting-job-29113110-k42d6   0/1     Completed   0          12m" >> ${OPDIR}pod_list00
+echo "libragob-batch-ams-reporting-job-29113115-rgn6r   0/1     Completed   0          7m37s" >> ${OPDIR}pod_list00
+echo "libragob-batch-ams-reporting-job-29113120-srgq2   1/1     Running     0          2m37s" >> ${OPDIR}pod_list00
+echo "libragob-batch-housekeeping-job-29110740-rz5bh    0/1     Completed   0          39h" >> ${OPDIR}pod_list00
+echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0          15h" >> ${OPDIR}pod_list00
+echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
+echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-n9jpq              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-swn8k              1/1     Running     0          68m" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-tl7mn              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0          45m" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list00
+
 echo "cat of pod_list00:"
 cat ${OPDIR}pod_list00
 echo "cat of pod_list01:"
 cat ${OPDIR}pod_list01
+
+hk_hash=`grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
+echo "hk_hash=$hk_hash"
+kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
+echo "cat of hk_log:"
+cat ${OPDIR}hk_log
+
+if [[ `grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1` ]];then
+  if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,Errors found so check POD logs,warn" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,No errors found,ok" >> $OUTFILE
+  fi
+fi
+
+cnt_hk_logs=`grep "housekeeping" ${OPDIR}pod_list00 | wc -l`
+echo "cnt_hk_logs=$cnt_hk_logs"
+
+if [[ $cnt_hk_logs == 3 ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/3 Housekeeping logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/3 Housekeeping logs found so some missing so raise a DTSPO JIRA and pass across to HMCTS PlatOps,warn" >> $OUTFILE
+fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
