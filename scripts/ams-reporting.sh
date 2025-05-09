@@ -171,9 +171,9 @@ cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
 cnt_pod_bounce_threshold=3
 
 if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce_completed}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce_completed}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
