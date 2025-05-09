@@ -175,6 +175,15 @@ if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_completed_pod_bounce_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
+
+cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list00 | wc -l`
+cnt_pod_nodejs_threshold=10
+
+if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_running_pod_nodejs_logs_count,${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_running_pod_nodejs_logs_count,${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
