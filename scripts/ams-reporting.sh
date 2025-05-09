@@ -107,6 +107,18 @@ cat ${OPDIR}pod_list00
 echo "cat of pod_list01:"
 cat ${OPDIR}pod_list01
 
+echo -e "\n" >> $OUTFILE
+echo "POD Status Cluster00,,,," >> $OUTFILE
+
+while read -r line;do
+  name_hash=`echo $line | awk -F" " '{print $1}'`
+  ready=`echo $line | awk -F" " '{print $2}'`
+  status=`echo $line | awk -F" " '{print $3}'`
+  restarts=`echo $line | awk -F" " '{print $4}'`
+  age=`echo $line | awk -F" " '{print $5}'`
+  echo "$(date "+%d/%m/%Y %T"),AZDB_cluster_job_status00,${name_hash} ${ready} ${status} ${restarts} ${age} ,ok" >> $OUTFILE
+done < ${OPDIR}pod_list00
+
 hk_hash=`grep "housekeeping" ${OPDIR}pod_list00 | head -3 | tail -1 | awk '{print $1}'`
 echo "hk_hash=$hk_hash"
 kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
@@ -133,7 +145,7 @@ fi
 if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found so some missing so raise a DTSPO JIRA and pass across to HMCTS PlatOps,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping logs found so some missing so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
