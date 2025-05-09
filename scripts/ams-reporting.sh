@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 ams-reporting running&completed feedback"
+echo "Script Version 25.2 cluster01"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -102,13 +102,39 @@ echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0   
 echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 
+echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list01
+echo "libragob-batch-ams-reporting-job-29113105-tsb7x   0/1     Completed   0          17m" >> ${OPDIR}pod_list01
+echo "libragob-batch-ams-reporting-job-29113110-k42d6   0/1     Completed   0          12m" >> ${OPDIR}pod_list01
+echo "libragob-batch-ams-reporting-job-29113115-rgn6r   0/1     Completed   0          7m37s" >> ${OPDIR}pod_list01
+echo "libragob-batch-ams-reporting-job-29113120-srgq2   1/1     Running     0          2m37s" >> ${OPDIR}pod_list01
+echo "libragob-batch-housekeeping-job-29110740-rz5bh    0/1     Completed   0          39h" >> ${OPDIR}pod_list01
+echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0          15h" >> ${OPDIR}pod_list01
+echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
+echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-n9jpq              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-swn8k              1/1     Running     0          68m" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-tl7mn              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0          45m" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+
 echo "cat of pod_list00:"
 cat ${OPDIR}pod_list00
 echo "cat of pod_list01:"
 cat ${OPDIR}pod_list01
 
+cnt=0
+
+for cnt in 1 2;do
+
+cnt=$((cnt+1))
+
 echo ",,," >> $OUTFILE
-echo "POD Status Cluster00,,," >> $OUTFILE
+echo "POD Status Cluster0${cnt},,," >> $OUTFILE
 
 while read -r line;do
   name_hash=`echo $line | awk -F" " '{print $1}'`
@@ -116,74 +142,78 @@ while read -r line;do
   status=`echo $line | awk -F" " '{print $3}'`
   restarts=`echo $line | awk -F" " '{print $4}'`
   age=`echo $line | awk -F" " '{print $5}'`
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster00,${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
-done < ${OPDIR}pod_list00
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster0${cnt},${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
+done < ${OPDIR}pod_list0${cnt}
 
-hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list00 | tail -1 | awk '{print $1}'`
-echo "hk_hash=$hk_hash"
-kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
-echo "cat of hk_log:"
-cat ${OPDIR}hk_log
+if [[ $cnt == 0 ]];then
+  hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
+  echo "hk_hash=$hk_hash"
+  kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
+  echo "cat of hk_log:"
+  cat ${OPDIR}hk_log
 
-if [[ `${OPDIR}hk_log` ]];then
-  if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check,Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+  if [[ `${OPDIR}hk_log` ]];then
+    if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
+      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+    else
+      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
+    fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check,No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
   fi
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check,No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
+  
+  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
+  echo "cnt_hk_logs=$cnt_hk_logs"
+
+  if [[ $op_env == prod ]];then
+    hk_logs_threshold=3
+  else
+    hk_logs_threshold=0
+  fi
+
+  if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  fi
+
+  cnt_amd_logs_completed=`grep -P "ams-reporting.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
+  cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
+  cnt_amd_logs_completed_threshold=3
+  cnt_amd_logs_running_threshold=1
+
+  if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  fi
+
+  if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  fi
 fi
 
-cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
-echo "cnt_hk_logs=$cnt_hk_logs"
-
-if [[ $op_env == prod ]];then
-  hk_logs_threshold=3
-else
-  hk_logs_threshold=0
-fi
-
-if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count,${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-fi
-
-cnt_amd_logs_completed=`grep -P "ams-reporting.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
-cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list00 | wc -l`
-cnt_amd_logs_completed_threshold=3
-cnt_amd_logs_running_threshold=1
-
-if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count,${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-fi
-
-if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count,${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-fi
-
-cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list00 | wc -l`
+cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 cnt_pod_bounce_threshold=3
 
 if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count,${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
-cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list00 | wc -l`
+cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
 cnt_pod_nodejs_threshold=10
 
 if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count,${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count,${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
+
+done
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
