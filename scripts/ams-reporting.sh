@@ -122,11 +122,6 @@ echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0   
 echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 
-echo "cat of pod_list00:"
-cat ${OPDIR}pod_list00
-echo "cat of pod_list01:"
-cat ${OPDIR}pod_list01
-
 cnt=0
 
 for cnt in 1 2;do
@@ -145,13 +140,12 @@ done < ${OPDIR}pod_list0${cnt}
 
 if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
-  echo "hk_hash=$hk_hash"
   kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
   echo "cat of hk_log:"
   cat ${OPDIR}hk_log
 
   if [[ `${OPDIR}hk_log` ]];then
-    if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
+    if [[ `grep -Pi "(DELETE|error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
@@ -161,7 +155,6 @@ if [[ $cnt == 0 ]];then
   fi
   
   cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
-  echo "cnt_hk_logs=$cnt_hk_logs"
 
   if [[ $op_env == prod ]];then
     hk_logs_threshold=3
