@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 cluster01 with loop count fix"
+echo "Script Version 25.2 final cluster logs override"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -141,12 +141,12 @@ if [[ $cnt == 0 ]];then
 
   if [[ `${OPDIR}hk_log` ]];then
     if [[ `grep -Pi "(DELETE|error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
     fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
   fi
   
   cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
@@ -1312,8 +1312,7 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "09/05/2025.*AZDB_pod_bounce_completed_logs_count" >> $override_file
-echo "AZDB_housekeeping_completed_error_check" >> $override_file
+echo "completed_logs" >> $override_file
 
 fi
 
