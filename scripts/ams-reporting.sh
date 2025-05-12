@@ -137,6 +137,7 @@ done < ${OPDIR}pod_list0${cnt}
 if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
   kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
+  echo "pod/libragob-batch-housekeeping-job-29116500-ct994/libragob-batch-housekeeping-job] 2025-05-11T19:20:17.641998692Z DELETE 33280" > ${OPDIR}hk_log
   echo "cat of hk_log:"
   cat ${OPDIR}hk_log
 
@@ -149,7 +150,7 @@ if [[ $cnt == 0 ]];then
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
   fi
-  
+
   cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 
   if [[ $op_env == prod ]];then
@@ -1321,7 +1322,7 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
+echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 fi
 
