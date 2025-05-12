@@ -1324,6 +1324,8 @@ echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
+echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
