@@ -608,9 +608,6 @@ echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
 echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
 echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
-rec_debug=0
-
-if [[ $rec_debug == 1 ]];then
 
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
@@ -626,7 +623,7 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   elif [[ $cnt == 2 ]];then
     dbname_str=fines
 
@@ -640,7 +637,7 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   else
     dbname_str=maintenance
 
@@ -654,43 +651,42 @@ for cnt in 1 2 3;do
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9 ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
 
   # sort the data desc on date ("k"olumn 2) which necessarily sorts by RR_ID column 1 desc, so that head -1 doesn't cut out any RR_ID as a result
   cat ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | sort -r -k 2 -t "," > ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED
   mv ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csvSORTED ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv
+  rec_debug=0
 
-  for loopc in 0 1 2 3 4 5 6 7 8 9;do
-    op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
-    rec_line=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | head -1`
+  if [[ $rec_debug == 1 ]];then
+    for loopc in 0 1 2 3 4 5 6 7 8 9;do
+      op_date=`date "+%Y-%m-%d" -d "-${loopc} days"`
+      rec_line=`grep -P "$dbname_str.*$op_date" ${OPDIR}9AZUREDB_AMD_${dbname_str}_recon_result.csv | head -1`
 
-    if [[ $rec_line ]];then
-      rr_id=`echo $rec_line | awk -F"," '{print $1}' | awk -F"_" '{print $2}'`
-      rr_cnt=`echo $rec_line | awk -F"," '{print $3}'`
+      if [[ $rec_line ]];then
+        rr_id=`echo $rec_line | awk -F"," '{print $1}' | awk -F"_" '{print $2}'`
+        rr_cnt=`echo $rec_line | awk -F"," '{print $3}'`
 
-      if [[ `echo $rec_line | grep -P ",${rec_rows}$"` ]];then
-        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
+        if [[ `echo $rec_line | grep -P ",${rec_rows}$"` ]];then
+          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
+        else
+          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
+        fi
       else
-        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
+        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
       fi
-    else
-      echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
-    fi
-  done
+    done
 echo "$(date "+%d/%m/%Y %T") Check #9b DEBUG for database $dbname_str complete" >> $OUTFILE_LOG
 
-done
-
 fi
+
+done
 
 op_date=`date "+%Y-%m-%d"`
 op_date1=`date "+%Y-%m-%d" -d "-1 days"`
 op_date2=`date "+%Y-%m-%d" -d "-2 days"`
 op_date3=`date "+%Y-%m-%d" -d "-3 days"`
-#op_date1=`date "+%Y-%m-%d"`
-#op_date2=`date "+%Y-%m-%d"`
-#op_date3=`date "+%Y-%m-%d"`
 
 met_recon_errors_list=''
 met_no_good_result_list=''
