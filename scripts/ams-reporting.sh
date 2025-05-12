@@ -123,7 +123,6 @@ cnt=0
 
 for loop in 1 2;do
 
-echo ",,," >> $OUTFILE
 echo "POD Status Cluster0${cnt},,," >> $OUTFILE
 
 while read -r line;do
