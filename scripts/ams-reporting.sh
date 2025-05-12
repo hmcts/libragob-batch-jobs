@@ -712,34 +712,39 @@ fi
 met_recon_errors_list=''
 met_no_good_result_list=''
 
-echo "cat of 9AZUREDB_AMD_fines_recon_result_by_met.csv:"
-head -1000 ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv
-echo "cat of 9AZUREDB_AMD_fines_recon_errors.csv:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
+if [[ $rec_debug == 1 ]];then
+  echo "cat of 9AZUREDB_AMD_fines_recon_result_by_met.csv:"
+  head -1000 ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv
+  echo "cat of 9AZUREDB_AMD_fines_recon_errors.csv:"
+  cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv
+fi
 
 while read -r met;do
-if [[ $met == 77 ]];then
-echo "op_date=$op_date"
-echo "op_date=$op_date1"
-echo "op_date=$op_date2"
-echo "op_date=$op_date3"
-echo "grep0result:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"
-echo "grep1result:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"
-echo "grep2result:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"
-echo "grep3result:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"
-echo "grep0errors:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"
-echo "grep1errors:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"
-echo "grep2errors:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"
-echo "grep3errors:"
-cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"
-fi
+  if [[ $rec_debug == 1 ]];then
+    if [[ $met == 77 ]];then
+      echo "op_date=$op_date"
+      echo "op_date=$op_date1"
+      echo "op_date=$op_date2"
+      echo "op_date=$op_date3"
+      echo "grep0result:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"
+      echo "grep1result:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"
+      echo "grep2result:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"
+      echo "grep3result:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"
+      echo "grep0errors:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date"
+      echo "grep1errors:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date1"
+      echo "grep2errors:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date2"
+      echo "grep3errors:"
+      cat ${OPDIR}9AZUREDB_AMD_fines_recon_errors.csv | grep ",$met,$op_date3"
+    fi
+  fi
+
   if [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date1"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date2"` ]] && [[ ! `cat ${OPDIR}9AZUREDB_AMD_fines_recon_result_by_met.csv | grep ",$met,$op_date3"` ]];then
     new_met_no_good_result_list=`echo "$met_no_good_result_list $met"`
     met_no_good_result_list=$new_met_no_good_result_list
