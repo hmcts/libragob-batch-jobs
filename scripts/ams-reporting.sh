@@ -92,6 +92,7 @@ echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0   
 echo "libragob-batch-housekeeping-job-29113620-rrtpg    0/1     Completed   0          62m" >> ${OPDIR}pod_list00
 echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
 echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list00
+echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list00
@@ -106,6 +107,7 @@ echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0   
 echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list01
+echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list01
@@ -1312,7 +1314,7 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "completed_logs" >> $override_file
+echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 fi
 
