@@ -141,8 +141,8 @@ if [[ $cnt == 0 ]];then
   echo "cat of hk_log:"
   cat ${OPDIR}hk_log
 
-  if [[ `${OPDIR}hk_log` ]];then
-    if [[ `grep -Pi "(DELETE|error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
+  if [[ -f ${OPDIR}hk_log ]];then
+    if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
     else
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
