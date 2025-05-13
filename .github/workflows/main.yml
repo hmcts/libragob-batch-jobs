@@ -22,7 +22,7 @@ jobs:
         run: |
           sha=${GITHUB_SHA::8}
           ts=$(date +%s)
-          echo "::set-output name=BUILD_ID::${sha}-${ts}"
+          echo "name=BUILD_ID::${sha}-${ts}" >> $GITHUB_OUTPUT
 
       - name: 'Docker Login'
         uses: azure/docker-login@v2
