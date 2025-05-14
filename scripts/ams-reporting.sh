@@ -1414,8 +1414,8 @@ echo "$(date "+%d/%m/%Y %T") Uploading the CSVs to BAIS" >> $OUTFILE_LOG
 #traceroute $sftp_endpoint >> $OUTFILE_LOG
 #tracepath $sftp_endpoint >> $OUTFILE_LOG
 echo "Firing off the sftp connection to BAIS..."
-#sftp -vvv -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
-sftp -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+sftp -vvv -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
+#sftp -P ${sftp_port} -oStrictHostKeyChecking=no -oHostKeyAlgorithms=+ssh-rsa -i /tmp/ams-reporting/sftp-pvt-key ${sftp_username}@${sftp_endpoint} << EOF
 put $OUTFILE
 put $OUTFILE_STATS
 quit
