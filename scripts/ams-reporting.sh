@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.2 31 Check #3 Tier3"
+echo "Script Version 25.3 kubectl now installed"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -82,6 +82,7 @@ kubectl get pods -n met > ${OPDIR}pod_list00
 kubectl config use-context ss-prod-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
+if [[ 0 == 1 ]];then
 echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list00
 echo "libragob-batch-ams-reporting-job-29113105-tsb7x   0/1     Completed   0          17m" >> ${OPDIR}pod_list00
 echo "libragob-batch-ams-reporting-job-29113110-k42d6   0/1     Completed   0          12m" >> ${OPDIR}pod_list00
@@ -103,7 +104,6 @@ echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0   
 echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list00
 echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-
 echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
 echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list01
@@ -118,6 +118,7 @@ echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0   
 echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list01
 echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list01
+fi
 
 cnt=0
 
@@ -137,7 +138,7 @@ done < ${OPDIR}pod_list0${cnt}
 if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
   kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
-  echo "pod/libragob-batch-housekeeping-job-29116500-ct994/libragob-batch-housekeeping-job] 2025-05-11T19:20:17.641998692Z DELETE 33280" > ${OPDIR}hk_log
+#  echo "pod/libragob-batch-housekeeping-job-29116500-ct994/libragob-batch-housekeeping-job] 2025-05-11T19:20:17.641998692Z DELETE 33280" > ${OPDIR}hk_log
   echo "cat of hk_log:"
   cat ${OPDIR}hk_log
 
