@@ -82,58 +82,20 @@ kubectl get pods -n met > ${OPDIR}pod_list00
 kubectl config use-context ss-prod-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
-if [[ 0 == 1 ]];then
-echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list00
-echo "libragob-batch-ams-reporting-job-29113105-tsb7x   0/1     Completed   0          17m" >> ${OPDIR}pod_list00
-echo "libragob-batch-ams-reporting-job-29113110-k42d6   0/1     Completed   0          12m" >> ${OPDIR}pod_list00
-echo "libragob-batch-ams-reporting-job-29113115-rgn6r   0/1     Completed   0          7m37s" >> ${OPDIR}pod_list00
-echo "libragob-batch-ams-reporting-job-29113120-srgq2   1/1     Running     0          2m37s" >> ${OPDIR}pod_list00
-echo "libragob-batch-housekeeping-job-29110740-rz5bh    0/1     Completed   0          39h" >> ${OPDIR}pod_list00
-echo "libragob-batch-housekeeping-job-29112180-2f9pk    0/1     Completed   0          15h" >> ${OPDIR}pod_list00
-echo "libragob-batch-housekeeping-job-29113620-rrtpg    0/1     Completed   0          62m" >> ${OPDIR}pod_list00
-echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
-echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list00
-echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-n9jpq              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-swn8k              1/1     Running     0          68m" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-tl7mn              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0          45m" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list00
-echo "NAME                                              READY   STATUS      RESTARTS   AGE" > ${OPDIR}pod_list01
-echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
-echo "libragob-pod-delete-nightly-job-29112410-dxtb6    0/1     Completed   0          11h" >> ${OPDIR}pod_list01
-echo "libragob-pod-delete-nightly-job-29110970-wzwzd    0/1     Completed   0          35h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-bncv8              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-jc8fn              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-knmm9              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-n9jpq              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-swn8k              1/1     Running     0          68m" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-tl7mn              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-tzqxp              1/1     Running     0          45m" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-wd7w5              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-wjv5x              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-echo "met-themis-fe-nodejs-956b545f8-x2pvw              1/1     Running     0          11h" >> ${OPDIR}pod_list01
-fi
-
 cnt=0
 
 for loop in 1 2;do
 
-echo "POD Status Cluster0${cnt},,," >> $OUTFILE
+#echo "POD Status Cluster0${cnt},,," >> $OUTFILE
 
-while read -r line;do
-  name_hash=`echo $line | awk -F" " '{print $1}'`
-  ready=`echo $line | awk -F" " '{print $2}'`
-  status=`echo $line | awk -F" " '{print $3}'`
-  restarts=`echo $line | awk -F" " '{print $4}'`
-  age=`echo $line | awk -F" " '{print $5}'`
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster0${cnt},${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
-done < ${OPDIR}pod_list0${cnt}
+#while read -r line;do
+#  name_hash=`echo $line | awk -F" " '{print $1}'`
+#  ready=`echo $line | awk -F" " '{print $2}'`
+#  status=`echo $line | awk -F" " '{print $3}'`
+#  restarts=`echo $line | awk -F" " '{print $4}'`
+#  age=`echo $line | awk -F" " '{print $5}'`
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster0${cnt},${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
+#done < ${OPDIR}pod_list0${cnt}
 
 if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
@@ -1326,6 +1288,8 @@ echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
+
+echo "completed_logs_count" >> $override_file
 
 fi
 
