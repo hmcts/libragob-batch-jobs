@@ -83,7 +83,7 @@ kubectl config use-context ss-prod-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
 cnt=0
-
+day_today=$(date "+%a")
 for loop in 1 2;do
 
 #echo "POD Status Cluster0${cnt},,," >> $OUTFILE
@@ -124,7 +124,7 @@ if [[ $cnt == 0 ]];then
 
   if [[ $cnt_hk_logs == $hk_logs_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
-  else
+  elif [[ $day_today == Wed ]] || [[ $day_today == Thu ]] || [[ $day_today == Fri ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 
@@ -151,7 +151,7 @@ cnt_pod_bounce_threshold=3
 
 if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
-else
+elif [[ $day_today == Wed ]] || [[ $day_today == Thu ]] || [[ $day_today == Fri ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
@@ -1309,8 +1309,6 @@ echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
-
-echo "completed_logs_count" >> $override_file
 
 fi
 
