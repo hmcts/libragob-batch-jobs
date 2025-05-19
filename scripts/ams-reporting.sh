@@ -123,7 +123,7 @@ if [[ $cnt == 0 ]];then
     hk_logs_threshold=0
   fi
 
-  if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Wed ]] || [[ $day_today == Thu ]] || [[ $day_today == Fri ]];then
+  if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
@@ -150,7 +150,7 @@ fi
 cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 cnt_pod_bounce_threshold=3
 
-if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Wed ]] || [[ $day_today == Thu ]] || [[ $day_today == Fri ]];then
+if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
 else
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
