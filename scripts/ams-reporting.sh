@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.4 H/K fix and dupe seq num if"
+echo "Script Version 25.5 H/K fix and dupe seq num if"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -105,7 +105,7 @@ if [[ $cnt == 0 ]];then
   echo "cat of hk_log:"
   cat ${OPDIR}hk_log
 
-  if [[ `cat ${OPDIR}hk_log | wc -l` ]];then
+  if [[ `cat ${OPDIR}hk_log | wc -l` -gt 0 ]];then
     if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
     else
@@ -1131,7 +1131,7 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 
-#if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` ]];then
+#if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];then
 #  dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
 #  check12_sp_start_time=$(date "+%H:%M:%S %a %b %e %Y")
 #  epoch_secs_check12_sp_start_time=$(date '+%s' -d "$check12_sp_start_time")
