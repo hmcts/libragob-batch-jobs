@@ -112,7 +112,7 @@ if [[ $cnt == 0 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
     fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls check,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 
   cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
