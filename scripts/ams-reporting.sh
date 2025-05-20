@@ -1315,7 +1315,7 @@ echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $ov
 
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
 
-echo "No Completed Housekeeping logfile found so pls check" >> $override_file
+echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 fi
 
