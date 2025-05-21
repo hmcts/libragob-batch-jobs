@@ -1317,6 +1317,9 @@ echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
 
 echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
+echo "AZDB_housekeeping_completed_logs_count"  >> $override_file
+echo "AZDB_pod_bounce_completed_logs_count"  >> $override_file
+
 fi
 
 testit=`cat $override_file | wc -l | xargs`
