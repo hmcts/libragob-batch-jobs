@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.5 H/K fix and dupe seq num if"
+echo "Script Version 25.6 dupe seq num fix"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1131,29 +1131,31 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 
-#if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];then
-#  dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
-#  check12_sp_start_time=$(date "+%H:%M:%S %a %b %e %Y")
-#  epoch_secs_check12_sp_start_time=$(date '+%s' -d "$check12_sp_start_time")
-#  echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
-#  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql
+#if [[ 0 == 1 ]];then
+if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];then
+  dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
+  check12_sp_start_time=$(date "+%H:%M:%S %a %b %e %Y")
+  epoch_secs_check12_sp_start_time=$(date '+%s' -d "$check12_sp_start_time")
+  echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql
 
-#  if [ $? -eq 0 ];then
-#    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
-#    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos(),,,,,,,ok" >> $OUTFILE
-#    check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
-#    epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
-#    check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - epoch_secs_check12_sp_start_time`
-#    echo "$(date "+%d/%m/%Y %T") SP call fix_duplicate_seq_nos(),,,,,RowsCleared=${dupe_seq_nums_linecount},Runtime=${check12_sp_runtime_secs}secs,ok" >> $OUTFILE
-#    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform another check of duplicate sequence numbers" >> $OUTFILE_LOG
-#    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
-#    echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
-#  else
-#    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
-#    echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
-#    cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
-#    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile: call fix_duplicate_seq_nos(),RowsToClear=${dupe_seq_nums_linecount},,,,,,warn" >> $OUTFILE
-#  fi
+  if [ $? -eq 0 ];then
+    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+    check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
+    epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
+    check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
+    echo "$(date "+%d/%m/%Y %T"),SP call fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},Runtime=${check12_sp_runtime_secs}secs,,,,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform another check of duplicate sequence numbers" >> $OUTFILE_LOG
+    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
+    echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
+  else
+    echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
+    cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
+    echo "$(date "+%d/%m/%Y %T"),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,,warn" >> $OUTFILE
+  fi
+else
+  echo "$(date "+%d/%m/%Y %T"),No duplicate sequence numbers found so the fix SP hasn't been run,,,,,,ok" >> $OUTFILE
+fi
 #fi
 
 while read -r line;do
