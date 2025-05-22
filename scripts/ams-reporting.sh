@@ -1162,7 +1162,7 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
-    dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l
+    dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
     echo "$(date "+%d/%m/%Y %T"),SP call fix_duplicate_seq_nos(),NewRowsAfterCleardown=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
   else
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
@@ -1170,7 +1170,7 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     echo "$(date "+%d/%m/%Y %T"),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,,warn" >> $OUTFILE
   fi
 else
-  echo "$(date "+%d/%m/%Y %T"),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=$dupe_seq_nums_linecount,,,,,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
 fi
 #fi
 
