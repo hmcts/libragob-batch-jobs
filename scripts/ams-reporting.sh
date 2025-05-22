@@ -1146,7 +1146,9 @@ if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];t
     epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
     check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
 echo "check12_sp_start_time=$check12_sp_start_time"
+echo "epoch_secs_check12_sp_start_time=$epoch_secs_check12_sp_start_time"
 echo "check12_sp_end_time=$check12_sp_end_time"
+echo "epoch_secs_check12_sp_end_time=$epoch_secs_check12_sp_end_time"
 echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     runtime_threshold=50
     linecount_threshold=500
