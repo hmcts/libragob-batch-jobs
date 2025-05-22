@@ -112,7 +112,7 @@ if [[ $cnt == 0 ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
     fi
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 
   cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
@@ -123,11 +123,11 @@ if [[ $cnt == 0 ]];then
     hk_logs_threshold=0
   fi
 
-  if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
+ # if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
-  else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-  fi
+ # else
+ #   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+ # fi
 
   cnt_amd_logs_completed=`grep -P "ams-reporting.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
   cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
@@ -137,24 +137,24 @@ if [[ $cnt == 0 ]];then
   if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 
   if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 fi
 
 cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 cnt_pod_bounce_threshold=3
 
-if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
+#if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-fi
+#else
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#fi
 
 cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
 cnt_pod_nodejs_threshold=10
@@ -162,7 +162,7 @@ cnt_pod_nodejs_threshold=10
 if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-19198 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 fi
 
 cnt=$((cnt+1))
@@ -1336,9 +1336,6 @@ echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $ov
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
 
 echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
-
-echo "AZDB_housekeeping_completed_logs_count"  >> $override_file
-echo "AZDB_pod_bounce_completed_logs_count"  >> $override_file
 
 fi
 
