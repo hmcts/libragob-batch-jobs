@@ -1154,9 +1154,9 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     linecount_threshold=500
 
     if [[ $check12_sp_runtime_secs -gt $runtime_threshold ]] || [[ $dupe_seq_nums_linecount -gt $linecount_threshold ]];then
-      echo "$(date "+%d/%m/%Y %T"),SP call fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
     else
-      echo "$(date "+%d/%m/%Y %T"),SP call fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,ok" >> $OUTFILE
+      echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,ok" >> $OUTFILE
     fi
 
     echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
@@ -1165,14 +1165,14 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
     dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
-    echo "$(date "+%d/%m/%Y %T"),SP call fix_duplicate_seq_nos(),NewRowsAfterCleardown=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),NewRowsAfterCleardown=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
   else
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
-    echo "$(date "+%d/%m/%Y %T"),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,warn" >> $OUTFILE
   fi
 else
-  echo "$(date "+%d/%m/%Y %T"),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
 fi
 #fi
 
