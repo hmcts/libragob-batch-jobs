@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.7 dupe seq num result ls -altr #2"
+echo "Script Version 25.7 dupe seq num result ls -altr #3"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1140,6 +1140,7 @@ if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];t
   echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
   psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql
 ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
   if [ $? -eq 0 ];then
     echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
     check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
@@ -1167,9 +1168,12 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
     echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),NewRowsAfterCleardown=${dupe_seq_nums_linecount},,,,,ok" >> $OUTFILE
 ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
   else
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
+ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
     echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,warn" >> $OUTFILE
   fi
 else
