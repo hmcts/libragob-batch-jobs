@@ -1,1 +1,1 @@
-call fix_duplicate_seq_nos();
+call fix_duplicate_seq_nos()
