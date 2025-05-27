@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.7 dupe seq num new sql #12"
+echo "Script Version 25.7 dupe seq num new sql #13"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1350,7 +1350,7 @@ echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 echo "23/05/2025.*AZDB_update_processing_backlog77" >> $override_file
 
-echo "AZDB_call_fix_duplicate_seq_nos" >> $override_file
+#echo "AZDB_call_fix_duplicate_seq_nos" >> $override_file
 
 fi
 
