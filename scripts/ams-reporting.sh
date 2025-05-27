@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.7 dupe seq num new sql #10"
+echo "Script Version 25.7 dupe seq num new sql #11"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1138,8 +1138,8 @@ if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];t
   check12_sp_start_time=$(date "+%H:%M:%S %a %b %e %Y")
   epoch_secs_check12_sp_start_time=$(date '+%s' -d "$check12_sp_start_time")
   echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
-#  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql
-  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'CALL fix_duplicate_seq_nos()' -e
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql --echo-queries
+#  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'CALL fix_duplicate_seq_nos()' -e
 ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
 echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv:" >> $OUTFILE_LOG
@@ -1166,8 +1166,8 @@ echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     fi
 
     echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
-#    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
-    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'CALL fix_duplicate_seq_nos()' -e
+    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql --echo-queries
+#    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'CALL fix_duplicate_seq_nos()' -e
     echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
