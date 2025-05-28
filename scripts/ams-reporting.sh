@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.7 dupe seq num new sql #16 check 12 amber"
+echo "Script Version 25.7 dupe seq num new logging"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1183,6 +1183,7 @@ ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
 #    echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,warn" >> $OUTFILE
 #  fi
 else
+  echo "$(date "+%d/%m/%Y %T") No duplicate sequence numbers have been found in Check #12 so the fix SP hasn't been run" >> $OUTFILE_LOG
   echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
 fi
 #fi
