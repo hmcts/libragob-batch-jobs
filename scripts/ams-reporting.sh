@@ -754,11 +754,11 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9b complete" >> $OUTFILE_LOG
 ####################################################### CHECK 10
-echo "[Check #10: Themis WebLogic]" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
-echo "ReminderMessage" >> $OUTFILE
-echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App ADMIN-1 server" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
+#echo "[Check #10: Themis WebLogic]" >> $OUTFILE
+#echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
+#echo "ReminderMessage" >> $OUTFILE
+#echo "Remember to check Themis Process States & WL Backlogs on AMD LIBRA Web App ADMIN-1 server" >> $OUTFILE
+#echo "$(date "+%d/%m/%Y %T") Check #10 has been run" >> $OUTFILE_LOG
 ####################################################### CHECK 11
 echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
