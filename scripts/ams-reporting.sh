@@ -109,8 +109,8 @@ cnt=0
     if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
 #    else
-#      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
-#    fi
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
+    fi
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
