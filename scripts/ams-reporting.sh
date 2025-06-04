@@ -151,7 +151,7 @@ cnt=0
 #cnt_pod_bounce_threshold=3
 
 #if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
 #else
 #  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 #fi
