@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.7 dupe seq num new logging"
+echo "Script Version 25.8 view decomms"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -83,9 +83,9 @@ kubectl config use-context ss-prod-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
 cnt=0
-day_today=$(date "+%a")
+#day_today=$(date "+%a")
 
-for loop in 1 2;do
+#for loop in 1 2;do
 
 #echo "POD Status Cluster0${cnt},,," >> $OUTFILE
 
@@ -98,7 +98,7 @@ for loop in 1 2;do
 #  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_status_cluster0${cnt},${name_hash} ${ready} ${status} ${restarts} ${age},ok" >> $OUTFILE
 #done < ${OPDIR}pod_list0${cnt}
 
-if [[ $cnt == 0 ]];then
+#if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
   kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
 #  echo "pod/libragob-batch-housekeeping-job-29116500-ct994/libragob-batch-housekeeping-job] 2025-05-11T19:20:17.641998692Z DELETE 33280" > ${OPDIR}hk_log
@@ -108,47 +108,47 @@ if [[ $cnt == 0 ]];then
   if [[ `cat ${OPDIR}hk_log | wc -l` -gt 0 ]];then
     if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
-    fi
+#    else
+#      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
+#    fi
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
 
-  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
+#  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 
-  if [[ $op_env == prod ]];then
-    hk_logs_threshold=3
-  else
-    hk_logs_threshold=0
-  fi
+#  if [[ $op_env == prod ]];then
+#    hk_logs_threshold=3
+#  else
+#    hk_logs_threshold=0
+#  fi
 
- # if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
- # else
- #   echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
- # fi
+#  if [[ $cnt_hk_logs == $hk_logs_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Housekeeping Completed logs found,ok" >> $OUTFILE
+#  else
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_count_cluster0${cnt},${cnt_hk_logs}/${hk_logs_threshold} Unexpected number of Housekeeping Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#  fi
 
-  cnt_amd_logs_completed=`grep -P "ams-reporting.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
-  cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
-  cnt_amd_logs_completed_threshold=3
-  cnt_amd_logs_running_threshold=1
+#  cnt_amd_logs_completed=`grep -P "ams-reporting.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
+#  cnt_amd_logs_running=`grep -P "ams-reporting.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
+#  cnt_amd_logs_completed_threshold=3
+#  cnt_amd_logs_running_threshold=1
 
-  if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
-  else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-  fi
+#  if [[ $cnt_amd_logs_completed == $cnt_amd_logs_completed_threshold ]];then
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} AMD Completed logs found,ok" >> $OUTFILE
+#  else
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_completed_logs_count_cluster0${cnt},${cnt_amd_logs_completed}/${cnt_amd_logs_completed_threshold} Unexpected number of AMD Completed logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#  fi
 
-  if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
-  else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-  fi
-fi
+#  if [[ $cnt_amd_logs_running -le $cnt_amd_logs_running_threshold ]];then
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} AMD Running logs found,ok" >> $OUTFILE
+#  else
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_amd_running_logs_count_cluster0${cnt},${cnt_amd_logs_running}/${cnt_amd_logs_running_threshold} Unexpected number of AMD Running logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#  fi
+#fi
 
-cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
-cnt_pod_bounce_threshold=3
+#cnt_pod_bounce=`grep -P "pod-delete.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
+#cnt_pod_bounce_threshold=3
 
 #if [[ $cnt_pod_bounce == $cnt_pod_bounce_threshold ]] || [[ $day_today == Mon ]] || [[ $day_today == Tue ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Completed POD bounce logs found,ok" >> $OUTFILE
@@ -156,18 +156,18 @@ cnt_pod_bounce_threshold=3
 #  echo "$(date "+%d/%m/%Y %T"),AZDB_pod_bounce_completed_logs_count_cluster0${cnt},${cnt_pod_bounce}/${cnt_pod_bounce_threshold} Unexpected number of Completed POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
 #fi
 
-cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
-cnt_pod_nodejs_threshold=10
+#cnt_pod_nodejs=`grep -P "nodejs.*1/1.*Running" ${OPDIR}pod_list0${cnt} | wc -l`
+#cnt_pod_nodejs_threshold=10
 
-if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
-fi
+#if [[ $cnt_pod_nodejs == $cnt_pod_nodejs_threshold ]];then
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Running NodeJS POD logs found,ok" >> $OUTFILE
+#else
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_nodejs_running_logs_count_cluster0${cnt},${cnt_pod_nodejs}/${cnt_pod_nodejs_threshold} Unexpected number of Running NodeJS POD bounce logs found so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#fi
 
-cnt=$((cnt+1))
+#cnt=$((cnt+1))
 
-done
+#done
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
@@ -1184,7 +1184,7 @@ ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
 #  fi
 else
   echo "$(date "+%d/%m/%Y %T") No duplicate sequence numbers have been found in Check #12 so the fix SP hasn't been run" >> $OUTFILE_LOG
-  echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
+#  echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
 fi
 #fi
 
