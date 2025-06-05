@@ -1327,6 +1327,7 @@ echo "15/04/2025.*AZDB_fines_recon_status" >> $override_file
 echo "16/04/2025.*AZDB_fines_recon_status" >> $override_file
 echo "22/04/2025.*AZDB_fines_recon_status" >> $override_file
 echo "04/06/2025.*AZDB_fines_recon_status" >> $override_file
+echo "05/06/2025.*AZDB_fines_recon_status" >> $override_file
 
 
 echo "17/04/2025.*AZDB_update_processing_backlog77" >> $override_file
