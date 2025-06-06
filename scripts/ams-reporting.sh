@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.9 dup seq num before & after csv #2"
+echo "Script Version 25.9 dup seq num before & after csv #3"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1160,7 +1160,7 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
       echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
 #    else
 #      echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,ok" >> $OUTFILE
-#    fi
+    fi
 
     echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
 #    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql --echo-queries
