@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.9 dup seq num alerting test reversal"
+echo "Script Version 25.9 dup seq num before & after csv"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1130,6 +1130,8 @@ echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
 echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
+echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv BEFORE SP:" >> $OUTFILE_LOG
+cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
 
 #if [[ 0 == 1 ]];then
 dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
@@ -1140,22 +1142,17 @@ if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];t
   echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
 #  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql --echo-queries
   psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'call fix_duplicate_seq_nos()' -e
-ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
-ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
-echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv:" >> $OUTFILE_LOG
+#ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
+#ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
+echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv AFTER SP:" >> $OUTFILE_LOG
 cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
-echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
-cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
+#echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
+#cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
 #  if [ $? -eq 0 ];then
     echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
     check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
     epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
     check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
-echo "check12_sp_start_time=$check12_sp_start_time"
-echo "epoch_secs_check12_sp_start_time=$epoch_secs_check12_sp_start_time"
-echo "check12_sp_end_time=$check12_sp_end_time"
-echo "epoch_secs_check12_sp_end_time=$epoch_secs_check12_sp_end_time"
-echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
     runtime_threshold=50
     linecount_threshold=500
 
