@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 25.9 dup seq num alerting test"
+echo "Script Version 25.9 dup seq num alerting test reversal"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1156,8 +1156,8 @@ echo "epoch_secs_check12_sp_start_time=$epoch_secs_check12_sp_start_time"
 echo "check12_sp_end_time=$check12_sp_end_time"
 echo "epoch_secs_check12_sp_end_time=$epoch_secs_check12_sp_end_time"
 echo "check12_sp_runtime_secs=$check12_sp_runtime_secs"
-    runtime_threshold=0 # 50
-    linecount_threshold=0 # 500
+    runtime_threshold=50
+    linecount_threshold=500
 
     if [[ $check12_sp_runtime_secs -gt $runtime_threshold ]] || [[ $dupe_seq_nums_linecount -gt $linecount_threshold ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
