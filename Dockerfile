@@ -9,7 +9,7 @@ RUN apt-get update -y && apt-get upgrade -y
 
 RUN apt-get install -y --no-install-recommends \
   apt-transport-https \
-  ca-certi***REMOVED***cates \
+  ca-certificates \
   curl \
   gnupg
 

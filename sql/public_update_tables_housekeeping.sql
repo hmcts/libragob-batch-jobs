@@ -11,7 +11,7 @@ WITH xml_data AS (
     WHERE 
         change_items IS NOT NULL
 ),
-***REMOVED***ltered_values AS (
+filtered_values AS (
     SELECT
         update_request_id,
         primary_key_id,
@@ -45,9 +45,9 @@ comparison_results AS (
         fv2.new_value_date AS new_value_date_2,
         fv2.processed_date AS processed_date_2
     FROM
-        ***REMOVED***ltered_values fv1
+        filtered_values fv1
     JOIN
-        ***REMOVED***ltered_values fv2
+        filtered_values fv2
     ON
         fv1.table_name = fv2.table_name
         AND fv1.primary_key_id = fv2.primary_key_id

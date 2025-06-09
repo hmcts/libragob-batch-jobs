@@ -1,19 +1,19 @@
-***REMOVED***
+#!/bin/bash
 echo "Running housekeeping tasks against the LibraGoB database..."
 
 runSQL() {
   DB_USER=$1
   PGPASSWORD=$2
   url=$3
-  ***REMOVED***lepath=$4
+  filepath=$4
   DB_HOST=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/\/.*//')
   DB_NAME=$(echo "$url" | sed 's/jdbc:postgresql:\/\///' | sed 's/:5432//' | sed 's/.*\///')
 
   echo "Connecting to $DB_NAME database at $DB_HOST"
 
-  echo $***REMOVED***lepath
+  echo $filepath
 
-  psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --***REMOVED***le=$***REMOVED***lepath
+  psql "sslmode=require host=${DB_HOST} dbname=${DB_NAME} user=${DB_USER} port=5432 password=${PGPASSWORD}" --file=$filepath
 }
 
 event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
