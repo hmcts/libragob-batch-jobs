@@ -106,7 +106,7 @@ cnt=0
   cat ${OPDIR}hk_log
 
   if [[ `cat ${OPDIR}hk_log | wc -l` -gt 0 ]];then
-    if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
+    if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory|DELETE)" ${OPDIR}hk_log` ]];then
       echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
 #    else
 #    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
@@ -1329,8 +1329,6 @@ echo "06/06/2025.*AZDB_fines_recon_status" >> $override_file
 echo "09/06/2025.*AZDB_fines_recon_status" >> $override_file
 echo "10/06/2025.*AZDB_fines_recon_status" >> $override_file
 
-
-
 echo "17/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "22/04/2025.*AZDB_update_processing_backlog77" >> $override_file
@@ -1347,11 +1345,7 @@ echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
 echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "09/05/2025.*AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
-
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
-
-echo "AZDB_housekeeping_completed_logs_error_check_cluster00" >> $override_file
 
 echo "23/05/2025.*AZDB_update_processing_backlog77" >> $override_file
 
