@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.1 H/K alert test reversal"
+echo "Script Version 26.2 H/K missing log alert removal"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -111,10 +111,10 @@ cnt=0
 #    else
 #    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
     fi
-  else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
+#  else
+#    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile found so pls confirm this and if so reopen JIRA ticket DTSPO-25927 and get HMCTS PlatOps to take a look,warn" >> $OUTFILE
   fi
-
+  
 #  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 
 #  if [[ $op_env == prod ]];then
