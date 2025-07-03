@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.2 Check #6 126 Tier 4"
+echo "Script Version 26.3 Check #3 RT blackout 19:xx"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -333,10 +333,14 @@ else
 result_backlog=ok
 fi
 
-if [[ $total_roundtrip -gt $roundtrip_threshold ]];then
-result_roundtrip=warn
+if [[ $(date "+%H") != 19 ]];then
+  if [[ $total_roundtrip -gt $roundtrip_threshold ]];then
+    result_roundtrip=warn
+  else
+    result_roundtrip=ok
+  fi
 else
-result_roundtrip=ok
+  result_roundtrip=ok
 fi
 
 echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE
