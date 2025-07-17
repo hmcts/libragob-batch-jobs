@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.4 Check #3 RT blackout 20:xx"
+echo "Script Version 26.5 Check #4 RT blackout 19:xx & 20:xx"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -376,25 +376,25 @@ fi
 count=`echo $line | awk -F"," '{print $2}'`
 
 if [[ $state == "idle" ]];then
-  if [[ $count -gt $idle_threshold ]];then
+  if [[ $count -gt $idle_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "idle in transaction" ]];then
-  if [[ $count -gt $idle_in_trans_threshold ]];then
+  if [[ $count -gt $idle_in_trans_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "active" ]];then
-  if [[ $count -gt $active_threshold ]];then
+  if [[ $count -gt $active_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "null" ]];then
-  if [[ $count -gt $null_threshold ]];then
+  if [[ $count -gt $null_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
