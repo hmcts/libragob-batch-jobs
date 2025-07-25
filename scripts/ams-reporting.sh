@@ -1362,6 +1362,8 @@ echo "17/06/2025.*AZDB_update_processing_backlog82" >> $override_file
 echo "02/07/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "AZDB_msg_backlog99" >> $override_file
+echo "AZDB_update_processing_backlog99" >> $override_file
+echo "AZDB_db_message_log_error99" >> $override_file
 
 fi
 
