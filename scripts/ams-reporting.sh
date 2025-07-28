@@ -364,7 +364,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 #same thing 25/04 after reboots, 485 seen so upped from 465 to 495
 idle_threshold=495
 idle_in_trans_threshold=15
-active_threshold=30 # 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 30. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
+active_threshold=32 # 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 32. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
 null_threshold=15
 
 while read -r line;do
@@ -1366,6 +1366,7 @@ echo "AZDB_update_processing_backlog99" >> $override_file
 echo "AZDB_db_message_log_error99" >> $override_file
 
 echo "28/07/2025.*AZDB_fines_recon_status" >> $override_file
+echo "28/07/2025.*AZDB_update_processing_backlog29" >> $override_file
 
 fi
 
