@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.8 29 recon override"
+echo "Script Version 26.9 29 recon MET counts"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -578,6 +578,9 @@ echo "DateTime,CheckName,Status,Result" >> $OUTFILE
 echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
 echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
 echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
+confiscation_mets_cnt=`cat ${OPDIR}confiscation_mets | wc -l`
+fines_mets_cnt=`cat ${OPDIR}fines_mets | wc -l`
+maintenance_mets_cnt=`cat ${OPDIR}maintenance_mets | wc -l`
 echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 
 for cnt in 1 2 3;do
@@ -677,7 +680,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -734,7 +737,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All ${fines_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -755,7 +758,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9b complete" >> $OUTFILE_LOG
