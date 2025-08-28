@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.9: check 3 18:xx"
+echo "Script Version 26.9: int limit"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1235,9 +1235,9 @@ max_message_audit_id=`echo $line | awk -F"," '{print $1}'`
 threshold_max_int=2000000000 #2147483647 is max allowable
 
 if [[ $max_message_audit_id -gt $threshold_max_int ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,warn" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id,$threshold_max_int,ok" >> $OUTFILE
+echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,ok" >> $OUTFILE
 fi
 
 count=$((count+1))
