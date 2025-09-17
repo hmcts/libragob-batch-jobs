@@ -1372,6 +1372,9 @@ echo "03/09/2025.*AZDB_fines_recon_status" >> $override_file
 echo "04/09/2025.*AZDB_fines_recon_status" >> $override_file
 echo "05/09/2025.*AZDB_fines_recon_status" >> $override_file
 
+echo "17/09/2025.*AZDB_update_processing_backlog103" >> $override_file
+echo "17/09/2025.*AZDB_update_processing_backlog130" >> $override_file
+echo "17/09/2025.*AZDB_update_processing_backlog135" >> $override_file
 fi
 
 testit=`cat $override_file | wc -l | xargs`
