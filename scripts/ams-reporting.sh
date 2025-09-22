@@ -20,6 +20,11 @@ OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 ##### BST Fix
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
+
+############################################################### Download Themis WSDL file
+wget "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl"
+
+
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
