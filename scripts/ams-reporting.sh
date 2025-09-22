@@ -169,7 +169,7 @@ cnt=0
 
 #done
 
-pod_hash=`grep -P "met-themis-fe-nodejs.*1111/1.*Running" ${OPDIR}pod_list00 | head -1 | awk '{print $1}'`
+pod_hash=`grep -P "met-themis-fe-nodejs.*1/1.*Running" ${OPDIR}pod_list00 | head -1 | awk '{print $1}'`
 
 if [[ $pod_hash ]];then
   pod_running=1
@@ -179,12 +179,9 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
-    echo "TEST"
-    echo "pod_hash=$pod_hash"
     onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
     echo "onpremise_endpoint_check=$onpremise_endpoint_check"
   else
-    echo "PROD"
     echo "pod_hash=$pod_hash"
     onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
     echo "onpremise_endpoint_check=$onpremise_endpoint_check"
@@ -193,10 +190,10 @@ if [[ $pod_running == 1 ]];then
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,ok" >> $OUTFILE
   fi
 else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
