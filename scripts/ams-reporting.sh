@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 26.9: int limit"
+echo "Script Version 27.0: premise endpoint check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -168,6 +168,26 @@ cnt=0
 #cnt=$((cnt+1))
 
 #done
+
+pod_hash=`grep -P "met-themis-fe-nodejs.*1/1.*Running" ${OPDIR}pod_list00 | head -1 | awk '{print $1}'`
+
+if [[ $op_env == test ]];then
+  echo "TEST"
+  echo "pod_hash=$pod_hash"
+  onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+  echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+else
+  echo "PROD"
+  echo "pod_hash=$pod_hash"
+  onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+  echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+fi
+
+if [[ $onpremise_endpoint_check ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are NodeJS PODs in Running status and the onpremise endpoint is reachable,ok" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,Either no NodeJS PODs are in Running status or the endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
