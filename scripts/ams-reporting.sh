@@ -169,7 +169,13 @@ cnt=0
 
 #done
 
-pod_hash=`grep -P "met-themis-fe-nodejs.*1/1.*Running" ${OPDIR}pod_list00 | head -1 | awk '{print $1}'`
+pod_hash=`grep -P "met-themis-fe-nodejs.*1111/1.*Running" ${OPDIR}pod_list00 | head -1 | awk '{print $1}'`
+
+if [[ $pod_hash ]];then
+  pod_running=1
+else
+  pod_running=0
+fi
 
 if [[ $op_env == test ]];then
   echo "TEST"
@@ -183,10 +189,13 @@ else
   echo "onpremise_endpoint_check=$onpremise_endpoint_check"
 fi
 
-if [[ $onpremise_endpoint_check ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are NodeJS PODs in Running status and the onpremise endpoint is reachable,ok" >> $OUTFILE
-else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,Either no NodeJS PODs are in Running status or the endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+if [[ $pod_running == 1 ]];then
+  if [[ $onpremise_endpoint_check ]];then
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable,ok" >> $OUTFILE
+  else
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+  fi
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
