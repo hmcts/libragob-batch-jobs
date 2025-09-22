@@ -177,19 +177,19 @@ else
   pod_running=0
 fi
 
-if [[ $op_env == test ]];then
-  echo "TEST"
-  echo "pod_hash=$pod_hash"
-  onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
-  echo "onpremise_endpoint_check=$onpremise_endpoint_check"
-else
-  echo "PROD"
-  echo "pod_hash=$pod_hash"
-  onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
-  echo "onpremise_endpoint_check=$onpremise_endpoint_check"
-fi
-
 if [[ $pod_running == 1 ]];then
+  if [[ $op_env == test ]];then
+    echo "TEST"
+    echo "pod_hash=$pod_hash"
+    onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+    echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+  else
+    echo "PROD"
+    echo "pod_hash=$pod_hash"
+    onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+    echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+  fi
+
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable,ok" >> $OUTFILE
   else
