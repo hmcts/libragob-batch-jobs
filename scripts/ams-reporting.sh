@@ -7,7 +7,7 @@ echo "Designed by Mark A. Porter"
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
 else
-op_env=prod
+op_env=stg
 fi
 
 OPDIR="/tmp/ams-reporting/"
@@ -22,8 +22,9 @@ echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
 
 ############################################################### Download Themis WSDL file
-THEMIS_WSDL_URL="https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl"
-wget "$THEMIS_WSDL_URL"  -O themissoapgatewayapi.wsdl
+THEMIS_WSDL_FQDN="${THEMIS_WSDL_FQDN:-libra-onpremise-gob-gateway.${op_env}.internal.hmcts.net}"
+THEMIS_WSDL_URL="https://${THEMIS_WSDL_FQDN}/themisgateway/service/themissoapgatewayapi?wsdl"
+wget "$THEMIS_WSDL_URL" -O "${OPDIR}themisgateway.wsdl"
 
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
