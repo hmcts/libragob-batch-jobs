@@ -7,7 +7,7 @@ echo "Designed by Mark A. Porter"
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
 else
-op_env=stg
+op_env=prod
 fi
 
 OPDIR="/tmp/ams-reporting/"
