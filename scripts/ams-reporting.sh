@@ -179,11 +179,9 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
-    onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
-    echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+    onpremise_endpoint_check=`kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
   else
-    echo "pod_hash=$pod_hash"
-    onpremise_endpoint_check=`kubectl -n met exec -it $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+    onpremise_endpoint_check=`kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
     echo "onpremise_endpoint_check=$onpremise_endpoint_check"
   fi
 
