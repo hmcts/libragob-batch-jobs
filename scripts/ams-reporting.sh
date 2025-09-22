@@ -22,7 +22,8 @@ echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
 
 ############################################################### Download Themis WSDL file
-wget "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl"
+THEMIS_WSDL_URL="https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl"
+wget "$THEMIS_WSDL_URL"
 
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
