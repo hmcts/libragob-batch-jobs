@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.0: premise endpoint check"
+echo "Script Version 27.1: premise endpoint check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -195,6 +195,7 @@ if [[ $pod_running == 1 ]];then
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
   fi
+else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
