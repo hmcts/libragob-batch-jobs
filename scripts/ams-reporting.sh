@@ -4,11 +4,8 @@
 echo "Script Version 27.1: premise endpoint check"
 echo "Designed by Mark A. Porter"
 
-if [[ `echo $KV_NAME | grep "test"` ]];then
-op_env=test
-else
-op_env=prod
-fi
+# Use OP_ENV environment variable, default to '{op_env}' if not set
+op_env="${OP_ENV:-prod}"
 
 OPDIR="/tmp/ams-reporting/"
 mkdir $OPDIR
@@ -83,9 +80,9 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
-kubectl config use-context ss-prod-00-aks
+kubectl config use-context ss-{op_env}-00-aks
 kubectl get pods -n met > ${OPDIR}pod_list00
-kubectl config use-context ss-prod-01-aks
+kubectl config use-context ss-{op_env}-01-aks
 kubectl get pods -n met > ${OPDIR}pod_list01
 
 cnt=0
@@ -123,7 +120,7 @@ cnt=0
   
 #  cnt_hk_logs=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | wc -l`
 
-#  if [[ $op_env == prod ]];then
+#  if [[ $op_env == {op_env} ]];then
 #    hk_logs_threshold=3
 #  else
 #    hk_logs_threshold=0
@@ -187,7 +184,7 @@ if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
     onpremise_endpoint_check=`kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
   else
-    onpremise_endpoint_check=`kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+    onpremise_endpoint_check=`kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.{op_env}.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
     echo "onpremise_endpoint_check=$onpremise_endpoint_check"
   fi
 
@@ -1453,7 +1450,7 @@ fi
 ### Push CSV file to BAIS so it can be ingested and displayed in the AMD ###
 ############################################################################
 if [[ 0 == 1 ]];then
-if [[ $op_env == prod ]];then
+if [[ $op_env == {op_env} ]];then
 echo "cat of /mnt/secrets/$KV_NAME/amd-sftp-pvt-key KV:"
 cat /mnt/secrets/$KV_NAME/amd-sftp-pvt-key
 fi
@@ -1466,7 +1463,7 @@ echo  "-----END OPENSSH PRIVATE KEY-----" >> /tmp/ams-reporting/sftp-pvt-key
 chmod 600 /tmp/ams-reporting/sftp-pvt-key
 
 if [[ 0 == 1 ]];then
-if [[ $op_env == prod ]];then
+if [[ $op_env == {op_env} ]];then
 echo "cat of /tmp/ams-reporting/sftp-pvt-key REBUILT:"
 cat /tmp/ams-reporting/sftp-pvt-key
 cat /tmp/ams-reporting/sftp-pvt-key | sed 's/[\t ]//g;/^$/d' > /tmp/ams-reporting/sftp-pvt-key
@@ -1494,7 +1491,7 @@ echo "sftp_endpoint: $sftp_endpoint" >> $OUTFILE_LOG
 echo "sftp_port: $sftp_port" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
-if [[ $op_env == prod ]];then
+if [[ $op_env == {op_env} ]];then
 #ssh-keygen -vvv -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 ssh-keygen -t rsa -b 4096 -f /tmp/ams-reporting/ams-reporting -N ""
 mv /tmp/ams-reporting/ams-reporting.pub /tmp/ams-reporting/ams-reporting.pub.key
