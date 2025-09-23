@@ -189,7 +189,7 @@ cat ${OPDIR}onpremise_endpoint_check
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
   fi
 else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
