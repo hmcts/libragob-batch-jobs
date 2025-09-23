@@ -183,7 +183,7 @@ if [[ $pod_running == 1 ]];then
   else
     kubectl -n met -i -v exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   fi
-
+cat ${OPDIR}onpremise_endpoint_check
   onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "100%"`
 
   if [[ $onpremise_endpoint_check ]];then
