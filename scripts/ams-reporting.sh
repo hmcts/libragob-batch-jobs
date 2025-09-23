@@ -179,14 +179,15 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
-    onpremise_endpoint_check=`kubectl -n met -iv exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
+    kubectl -n met -i -v exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   else
-    onpremise_endpoint_check=`kubectl -n met -iv exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" | grep "PostOpalRequest"`
-    echo "onpremise_endpoint_check=$onpremise_endpoint_check"
+    kubectl -n met -i -v exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   fi
 
+  onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "100%"`
+
   if [[ $onpremise_endpoint_check ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,ok" >> $OUTFILE
   fi
