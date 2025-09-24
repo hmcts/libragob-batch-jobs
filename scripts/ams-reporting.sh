@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.2: premise endpoint check"
+echo "Script Version 27.3: premise endpoint check"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -176,20 +176,20 @@ if [[ $pod_hash ]];then
 else
   pod_running=0
 fi
-echo "pod_running=$pod_running"
+
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
     kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   else
     kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   fi
-cat ${OPDIR}onpremise_endpoint_check
-  onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "100%"`
+
+  onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Resend"`
 
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
   fi
 else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
