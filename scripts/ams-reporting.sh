@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.3: premise endpoint check"
+echo "Script Version 27.4: test recs"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -601,9 +601,17 @@ echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 #echo "[Check #9b: Themis Azure Reconciliation" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
-echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
-echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
+
+if [[ $op_env == prod ]];then
+  echo -e "45\n66\n97\n107\n109\n110\n113\n116" > ${OPDIR}confiscation_mets
+  echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
+  echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
+else
+  echo -e "45\n" > ${OPDIR}confiscation_mets
+  echo -e "36\n73\n77\n" > ${OPDIR}fines_mets
+  echo -e "67\n" > ${OPDIR}maintenance_mets
+fi
+
 confiscation_mets_cnt=`cat ${OPDIR}confiscation_mets | wc -l`
 fines_mets_cnt=`cat ${OPDIR}fines_mets | wc -l`
 maintenance_mets_cnt=`cat ${OPDIR}maintenance_mets | wc -l`
