@@ -179,13 +179,14 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
+  echo "proxy off"
     kubectl -n met -it exec $pod_hash -- wget -Y off -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
+    onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Transport Level Reconciliation request"`
   else
-    kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
+    kubectl -n met -it exec $pod_hash -- wget -Y off -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
+    onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Resend"`
   fi
 cat ${OPDIR}onpremise_endpoint_check
-  onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Resend"`
-
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
