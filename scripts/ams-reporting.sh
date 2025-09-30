@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.4: test recs"
+echo "Script Version 27.6: test rec override"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1284,10 +1284,11 @@ echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 ####################
 cp $OUTFILE $OUTFILE.orig ### creates a copy of the current output file
 override_file=${OPDIR}ams-reporting_overrides_list.dat
+override_file_test=${OPDIR}ams-reporting_overrides_list_test.dat
 
 if [[ $op_env == test ]];then
 
-dummy=0
+echo "recon_status" >> $override_file_test
 
 else
 
@@ -1430,7 +1431,13 @@ echo "23/09/2025.*AZDB_fines_recon_status" >> $override_file
 
 fi
 
-testit=`cat $override_file | wc -l | xargs`
+if [[ $op_env == prod ]];then
+  testit=`cat $override_file | wc -l | xargs`
+  overrides=$override_file
+else
+  testit=`cat $override_file_test | wc -l | xargs`
+  overrides=$override_file_test
+fi
 
 if [[ $testit -gt 0 ]];then
 
@@ -1444,7 +1451,7 @@ while read -r line;do
         line_overidden=1
       fi
     fi
-  done < $override_file
+  done < $overrides
 
   if [[ $line_overidden == 0 ]];then
     echo $line >> $OUTFILE.temp
