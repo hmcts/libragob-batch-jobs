@@ -179,7 +179,7 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
-    kubectl -n met -it exec $pod_hash -- wget -O- --no-proxy "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
+    kubectl -n met -it exec $pod_hash -- wget -Y off -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   else
     kubectl -n met -it exec $pod_hash -- wget -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
   fi
