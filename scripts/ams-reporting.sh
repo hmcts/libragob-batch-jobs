@@ -391,7 +391,7 @@ echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 #same thing 25/04 after reboots, 485 seen so upped from 465 to 495
 idle_threshold=495
 idle_in_trans_threshold=15
-active_threshold=35 # 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
+active_threshold=50 # 50 for monthend. 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
 null_threshold=15
 
 while read -r line;do
@@ -1429,6 +1429,12 @@ echo "22/09/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "22/09/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "23/09/2025.*AZDB_fines_recon_status" >> $override_file
+
+######### MONTHEND - No 77 remove others as necessary based on those METs that still have incomplete updates for previous month just gone using: select met_id from month_end_mets where update_request_id is null; #########
+echo "01/10/2025.*AZDB_schema_lock.*(45|66|97|107|109|110|113|116|5|8|9|10|11|12|14|21|22|24|26|28|29|30|31|36|38|47|52|57|60|61|65|73|78|80|82|89|92|96|99|103|105|106|112|119|124|125|126|128|129|130|135|138|139|67|44|111)" >> $override_file
+echo "01/10/2025.*AZDB_db_message_log_error.*AESD-0008" >> $override_file
+echo "01/10/2025.*AZDB_update_processing_backlog.*(45|66|97|107|109|110|113|116|5|8|9|10|11|12|14|21|22|24|26|28|29|30|31|36|38|47|52|57|60|61|65|73|78|80|82|89|92|96|99|103|105|106|112|119|124|125|126|128|129|130|135|138|139|67|44|111)" >> $override_file
+######### MONTHEND - No 77 remove others as necessary based on those METs that still have incomplete updates for previous month just gone using: select met_id from month_end_mets where update_request_id is null; #########
 
 fi
 
