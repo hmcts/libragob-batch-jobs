@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.7: 139 Check #6 Tier 5"
+echo "Script Version 27.7: 105 Check #6 Tier 6"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -524,9 +524,9 @@ t_delta_threshold_mins=90
 
 if [[ $schema_id == 38 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 128 ]];then
   t_delta_threshold_mins=$((90*7))
-elif [[ $schema_id == 77 ]] || [[ $schema_id == 11 ]];then
+elif [[ $schema_id == 77 ]] || [[ $schema_id == 11 ]] || [[ $schema_id == 105 ]];then
   t_delta_threshold_mins=$((90*6))
-elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 99 ]];then
+elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 99 ]];then
   t_delta_threshold_mins=$((90*5))
 elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 126 ]] || [[ $schema_id == 139 ]];then
   t_delta_threshold_mins=$((90*4))
