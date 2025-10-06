@@ -457,7 +457,7 @@ echo "schema_id=$schema_id"
 echo "error_message=$error_message"
   if [[ `echo $line | grep -P "999900.*RECONCILIATION_RESULT_XML" ` ]];then
     error_message="999900:.*RECONCILIATION_RESULT_XML - TOO LONG TO DISPLAY"
-  elif [[ `echo $line | grep -P "(reconciliation_result|value|Row Count|Controls Totals|Transaction Balance|Live Accounts|Arrears Amount|Outstanding Amount)" ` ]];then
+  elif [[ `echo $line | grep -P "(reconciliation_result|value|Row Count|Control Totals|Transaction Balance|Live Accounts|Arrears Amount|Outstanding Amount)" ` ]];then
     continue
   fi
 
