@@ -342,11 +342,11 @@ else
 adj_delivery_rate=$adj_delivery_rate_tmp
 fi
 
-if [[ $schema_id == 77 ]] || [[ $schema_id == 99 ]] || [[ $schema_id  ]];then
+if [[ $schema_id == 77 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 126 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*8))
 elif [[ $schema_id == 38 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 105 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*4))
-elif [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 31 ]] || [[ $schema_id  ]];then
+elif [[ $schema_id == 129 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 125 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*3))
 elif [[ $schema_id == 130 ]] || [[ $schema_id == 112 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 61 ]];then
   backlog_adaptive_threshold=$(($backlog_adaptive_threshold*2))
