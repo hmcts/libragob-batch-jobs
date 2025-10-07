@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 27.9: TEST Check #5 99900 fix continue & more filters"
+echo "Script Version 28.0: TEST Check #5 value filter change"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -457,7 +457,7 @@ echo "schema_id=$schema_id"
 echo "error_message=$error_message"
   if [[ `echo $line | grep -P "999900.*RECONCILIATION_RESULT_XML" ` ]];then
     error_message="999900:RECONCILIATION_RESULT_XML - TOO LONG TO DISPLAY"
-  elif [[ `echo $line | grep -P "(reconciliation_result|value|Row Count|Control Totals|Transaction Balance|Live Accounts|Arrears Amount|Outstanding Amount|ChangeItems|TableItems)" ` ]];then
+  elif [[ `echo $line | grep -P "(reconciliation_result|\<value\>|Row Count|Control Totals|Transaction Balance|Live Accounts|Arrears Amount|Outstanding Amount|ChangeItems|TableItems)" ` ]];then
     continue
   fi
 
