@@ -721,7 +721,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} MET(s) have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -778,7 +778,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All ${fines_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All ${fines_mets_cnt} MET(s) have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -799,7 +799,7 @@ if [[ `echo $met_no_good_result_list` ]];then
 elif [[ `echo $met_recon_errors_list` ]];then
   echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the last query of Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} METs have seen a successful rec in the last 4 days,ok" >> $OUTFILE
+  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} MET(s) have seen a successful rec in the last 4 days,ok" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #9b complete" >> $OUTFILE_LOG
