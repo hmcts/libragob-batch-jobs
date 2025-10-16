@@ -614,9 +614,9 @@ if [[ $op_env == prod ]];then
   echo -e "5\n8\n9\n10\n11\n12\n14\n21\n22\n24\n26\n28\n29\n30\n31\n36\n38\n47\n52\n57\n60\n61\n65\n73\n77\n78\n80\n82\n89\n92\n96\n99\n103\n105\n106\n112\n119\n124\n125\n126\n128\n129\n130\n135\n138\n139" > ${OPDIR}fines_mets
   echo -e "67\n44\n111" > ${OPDIR}maintenance_mets
 else
-  echo -e "45\n" > ${OPDIR}confiscation_mets
-  echo -e "36\n73\n77\n" > ${OPDIR}fines_mets
-  echo -e "67\n" > ${OPDIR}maintenance_mets
+  echo -e "45" > ${OPDIR}confiscation_mets
+  echo -e "36\n73\n77" > ${OPDIR}fines_mets
+  echo -e "67" > ${OPDIR}maintenance_mets
 fi
 
 confiscation_mets_cnt=`cat ${OPDIR}confiscation_mets | wc -l`
@@ -1295,7 +1295,7 @@ override_file_test=${OPDIR}ams-reporting_overrides_list_test.dat
 
 if [[ $op_env == test ]];then
 
-echo "recon_status" >> $override_file_test
+echo "08/10/2025.*recon_status" >> $override_file_test
 
 else
 
