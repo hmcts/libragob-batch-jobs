@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.0: Check #6 126 Tier 7"
+echo "Script Version 28.1: Stats 12d onwards disabled"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -188,9 +188,9 @@ if [[ $pod_running == 1 ]];then
   fi
 cat ${OPDIR}onpremise_endpoint_check
   if [[ $onpremise_endpoint_check ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint is down so check if the ManagedServers in IH are running,warn" >> $OUTFILE
+    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is down so check if the ManagedServers are running,warn" >> $OUTFILE
   fi
 else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
@@ -913,6 +913,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_gateway_audit_row_count,$rowcount_gateway_audi
 fi
 
 echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
+
+if [[ 0 == 1 ]];then
 ####################################################### CHECK 12d - 12r, remaining stats
 echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
@@ -1173,6 +1175,8 @@ echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_table_updates,$dateddmmyyyy,$
 done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
 echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+
+fi
 ####################################################### CHECK 12
 echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,update_request_id,update_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
