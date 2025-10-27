@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.1: Stats 12d onwards disabled FORCE NEW UPDATE"
+echo "Script Version 28.2: TEST thread count thresholds"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -387,12 +387,19 @@ echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
 echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
-#idle_threshold=485 # tuned from 465 to 485 as uptick ~350 zombied idles: select * from pg_stat_activity where state='idle' and backend_start > '2025-04-22 23:50:37' and backend_start < '2025-04-23 00:21:00'. POD bounce the next day cleared them so reverted
-#same thing 25/04 after reboots, 485 seen so upped from 465 to 495
-idle_threshold=495
-idle_in_trans_threshold=15
-active_threshold=50 # 50 for monthend. 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
-null_threshold=15
+if [[ $op_env == prod ]];then
+  #idle_threshold=485 # tuned from 465 to 485 as uptick ~350 zombied idles: select * from pg_stat_activity where state='idle' and backend_start > '2025-04-22 23:50:37' and backend_start < '2025-04-23 00:21:00'. POD bounce the next day cleared them so reverted
+  #same thing 25/04 after reboots, 485 seen so upped from 465 to 495
+  idle_threshold=495
+  idle_in_trans_threshold=15
+  active_threshold=50 # 50 for monthend. 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
+  null_threshold=15
+else
+  idle_threshold=60
+  idle_in_trans_threshold=15
+  active_threshold=10
+  null_threshold=60
+fi
 
 while read -r line;do
 
