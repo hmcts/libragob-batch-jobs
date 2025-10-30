@@ -398,7 +398,7 @@ else
   idle_threshold=60
   idle_in_trans_threshold=15
   active_threshold=10
-  null_threshold=60
+  null_threshold=90
 fi
 
 while read -r line;do
