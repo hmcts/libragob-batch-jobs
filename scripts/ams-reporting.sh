@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.2: TEST thread count thresholds"
+echo "Script Version 28.2: 82 override postgres v13"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -1464,6 +1464,8 @@ echo "10/10/2025.*AZDB_update_processing_backlog96" >> $override_file
 
 echo "11/11/2025.*AZDB_update_processing_backlog8" >> $override_file
 echo "11/11/2025.*AZDB_update_processing_backlog82" >> $override_file
+
+echo "14/11/2025.*AZDB_update_processing_backlog82" >> $override_file
 
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
 echo "01/10/2025.*AZDB_schema_lock.*(45|66|97|107|109|110|113|116|5|8|9|10|11|12|14|21|22|24|26|28|29|30|31|36|38|47|52|57|60|61|65|73|77|78|80|82|89|92|96|99|103|105|106|112|119|124|125|126|128|129|130|135|138|139|67|44|111)" >> $override_file
