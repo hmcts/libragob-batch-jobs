@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.3: GMT timezone"
+echo "Script Version 28.3: GMT timezone uncommented"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -15,8 +15,8 @@ mkdir $OPDIR
 OUTFILE="${OPDIR}ThemisAZ_hc.csv"
 OUTFILE_STATS="${OPDIR}ThemisAZ_stats.csv"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
-#echo $(date "+%d/%m/%Y %T") > $OUTFILE
-#echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
+echo $(date "+%d/%m/%Y %T") > $OUTFILE
+echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ##### BST Fix
 #echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
 #echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
