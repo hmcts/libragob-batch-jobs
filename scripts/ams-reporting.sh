@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.4: remove cat of cert"
+echo "Script Version 28.5: remove cat of HK log"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -101,9 +101,6 @@ cnt=0
 #if [[ $cnt == 0 ]];then
   hk_hash=`grep -P "housekeeping.*0/1.*Completed" ${OPDIR}pod_list0${cnt} | tail -1 | awk '{print $1}'`
   kubectl -n met logs ${hk_hash} --prefix=true --timestamps=true > ${OPDIR}hk_log
-#  echo "pod/libragob-batch-housekeeping-job-29116500-ct994/libragob-batch-housekeeping-job] 2025-05-11T19:20:17.641998692Z DELETE 33280" > ${OPDIR}hk_log
-  echo "cat of hk_log:"
-  cat ${OPDIR}hk_log
 
   if [[ `cat ${OPDIR}hk_log | wc -l` -gt 0 ]];then
     if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
