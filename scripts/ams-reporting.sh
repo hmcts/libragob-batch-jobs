@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.3: GMT timezone uncommented"
+echo "Script Version 28.4: remove cat of cert"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -186,7 +186,7 @@ if [[ $pod_running == 1 ]];then
     kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
     onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Resend"`
   fi
-cat ${OPDIR}onpremise_endpoint_check
+
   if [[ $onpremise_endpoint_check ]];then
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
