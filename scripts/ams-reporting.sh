@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 28.5: remove cat of HK log"
+echo "Script Version 28.6: message_log 70M threshold"
 echo "Designed by Mark A. Porter"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
@@ -832,7 +832,7 @@ threshold_count_gateway_audit=100000
 else
 threshold_count_update_requests=5000000
 threshold_count_table_updates=9000000
-threshold_count_message_log=20000000
+threshold_count_message_log=70000000
 threshold_count_dac_audit=70000000
 threshold_count_gateway_audit=1500000
 fi
