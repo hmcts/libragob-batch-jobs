@@ -21,6 +21,8 @@ jobs:
       image-tags: |
         type=raw,value=pr-${{github.event.number}}-{{sha}}-{{date 'X'}},enable=${{ github.event_name == 'pull_request' }}
         type=raw,value=prod-{{sha}}-{{date 'X'}},enable=${{ github.ref == 'refs/heads/main' }}
+      build-args: |
+        SCRIPT_FILE=${{ matrix.script }}.sh
       push: true    
     secrets:
       REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
