@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         script: [ 'housekeeping', 'ams-reporting']
-    uses: hmcts/cnp-githubactions-library/workflows/container-build-and-push.yaml@main
+    uses: hmcts/cnp-githubactions-library/.github/workflows/container-build-and-push.yaml@main
     with:
       image-name: azure-devops-agent
       dockerfile: Dockerfile
