@@ -1476,7 +1476,9 @@ echo "18/11/2025.*AZDB_maintenance_recon_status" >> $override_file
 
 echo "25/11/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "26/11/2025.*AZDB_fines_recon_status" >> $override_file
+echo "08/12/2025.*SchemaId 82 is locked" >> $override_file
+echo "08/12/2025.*AZDB_db_message_log_error82" >> $override_file
+echo "08/12/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "03/12/2025.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 echo "04/12/2025.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
