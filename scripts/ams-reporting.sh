@@ -1493,6 +1493,7 @@ echo "10/12/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "22/12/2025.*AZDB_fines_recon_status.*103" >> $override_file
 
 echo "21/01/2026.*SchemaId 30 is locked" >> $override_file
+echo "21/01/2026.*AZDB_msg_backlog30" >> $override_file
 echo "21/01/2026.*AZDB_db_message_log_error30" >> $override_file
 echo "21/01/2026.*AZDB_update_processing_backlog30" >> $override_file
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
