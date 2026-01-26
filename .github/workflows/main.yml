@@ -1,15 +1,64 @@
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
+    paths:
+      - 'main/**'
+      - '.github/workflows/main.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'main/**'
+      - '.github/workflows/main.yml'
 
 name: Build and Publish images
 
 jobs:
-  build-and-publish:
+  build-and-publish-hmctsprod:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    strategy:
+      matrix:
+        script: [ 'housekeeping', 'ams-reporting']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate build ID
+        id: prep
+        run: |
+          sha=${GITHUB_SHA::8}
+          ts=$(date +%s)
+          echo "BUILD_ID=${sha}-${ts}" >> $GITHUB_OUTPUT
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: b354d443-d632-4d61-8ee8-2abc2c7baf23 # DTS Shared GitHub Actions ACR Publisher 1
+          tenant-id: 531ff96d-0ae9-462a-8d2d-bec7c0b42082 # HMCTS.NET
+          allow-no-subscriptions: true
+
+      - name: 'ACR Login'
+        run: |
+          az acr login --name hmctsprod
+
+      # HMCTSPROD ACR
+      - name: 'Build and push PR image'
+        if: github.event_name == 'pull_request'
+        run: |
+          docker build . -t hmctsprod.azurecr.io/libragob/${{ matrix.script }}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }} --build-arg SCRIPT_FILE=${{ matrix.script }}.sh
+          docker push hmctsprod.azurecr.io/libragob/${{ matrix.script }}:pr-${{github.event.number}}-${{ steps.prep.outputs.BUILD_ID }}
+
+      - name: 'Build and push prod image'
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build . -t hmctsprod.azurecr.io/libragob/${{ matrix.script }}:prod-${{ steps.prep.outputs.BUILD_ID }} -t hmctsprod.azurecr.io/libragob/${{ matrix.script }}:latest --build-arg SCRIPT_FILE=${{ matrix.script }}.sh
+          docker push hmctsprod.azurecr.io/libragob/${{ matrix.script }}:prod-${{ steps.prep.outputs.BUILD_ID }}
+          docker push hmctsprod.azurecr.io/libragob/${{ matrix.script }}:latest
+
+  # HMCTSPUBLIC ACR
+  build-and-publish-hmctspublic:
     strategy:
       matrix:
         script: [ 'housekeeping', 'ams-reporting']
