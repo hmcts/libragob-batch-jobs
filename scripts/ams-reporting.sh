@@ -395,7 +395,7 @@ if [[ $op_env == prod ]];then
   #same thing 25/04 after reboots, 485 seen so upped from 465 to 495
   idle_threshold=495
   idle_in_trans_threshold=15
-  active_threshold=50 # 50 for monthend. 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
+  active_threshold=55 # from 50 for monthend. 28 seen when 372K batch running on 25/07/2025 so tuned from 25 to 35. 23 seen at 12:40 19/12/2024 when two big bundled updates on 105 & 112 were playing in so tuned from 18 to 25.
   null_threshold=15
 else
   idle_threshold=60
@@ -1217,7 +1217,7 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
     check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
     epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
     check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
-    runtime_threshold=55
+    runtime_threshold=50
     linecount_threshold=500
 
     if [[ $check12_sp_runtime_secs -gt $runtime_threshold ]] || [[ $dupe_seq_nums_linecount -gt $linecount_threshold ]];then
