@@ -1217,7 +1217,7 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
     check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
     epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
     check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
-    runtime_threshold=50
+    runtime_threshold=55
     linecount_threshold=500
 
     if [[ $check12_sp_runtime_secs -gt $runtime_threshold ]] || [[ $dupe_seq_nums_linecount -gt $linecount_threshold ]];then
