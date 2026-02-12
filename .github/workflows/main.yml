@@ -23,7 +23,7 @@ jobs:
       matrix:
         script: [ 'housekeeping', 'ams-reporting']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Generate build ID
         id: prep
