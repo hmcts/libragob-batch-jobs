@@ -3,12 +3,14 @@ on:
     branches:
       - main
     paths:
+      - 'scripts/**'
       - 'main/**'
       - '.github/workflows/main.yml'
   pull_request:
     branches:
       - main
     paths:
+      - 'scripts/**'
       - 'main/**'
       - '.github/workflows/main.yml'
 
