@@ -4,14 +4,14 @@ on:
       - main
     paths:
       - 'scripts/**'
-      - 'main/**'
+      - 'Dockerfile'
       - '.github/workflows/main.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'scripts/**'
-      - 'main/**'
+      - 'Dockerfile'
       - '.github/workflows/main.yml'
 
 name: Build and Publish images
