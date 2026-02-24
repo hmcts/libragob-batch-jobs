@@ -3,13 +3,15 @@ on:
     branches:
       - main
     paths:
-      - 'main/**'
+      - 'scripts/**'
+      - 'Dockerfile'
       - '.github/workflows/main.yml'
   pull_request:
     branches:
       - main
     paths:
-      - 'main/**'
+      - 'scripts/**'
+      - 'Dockerfile'
       - '.github/workflows/main.yml'
 
 name: Build and Publish images
