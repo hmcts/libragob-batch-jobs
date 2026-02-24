@@ -3,6 +3,7 @@
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
 echo "Script Version 29.0: active threads to 55 for M/E"
 echo "Designed by Mark A. Porter"
+# arbitrary script change to test if build action/checks trigger
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
