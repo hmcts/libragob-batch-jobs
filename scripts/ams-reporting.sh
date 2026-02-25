@@ -549,7 +549,7 @@ elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]
   t_delta_threshold_mins=$((90*4))
 elif [[ $schema_id == 57 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 26 ]] || [[ $schema_id == 119 ]] || [[ $schema_id == 28 ]] || [[ $schema_id == 60 ]] || [[ $schema_id == 24 ]] || [[ $schema_id == 22 ]] || [[ $schema_id == 29 ]];then
   t_delta_threshold_mins=$((90*3))
-elif [[ $schema_id == 8 ]] || [[ $schema_id == 138 ]] || [[ $schema_id == 96 ]] || [[ $schema_id == 30 ]] || [[ $schema_id == 21 ]] || [[ $schema_id == 10 ]] || [[ $schema_id == 5 ]] || [[ $schema_id == 12 ]] || [[ $schema_id == 14 ]] || [[$schema_id == 65 ]] ;then
+elif [[ $schema_id == 8 ]] || [[ $schema_id == 138 ]] || [[ $schema_id == 96 ]] || [[ $schema_id == 30 ]] || [[ $schema_id == 21 ]] || [[ $schema_id == 10 ]] || [[ $schema_id == 5 ]] || [[ $schema_id == 12 ]] || [[ $schema_id == 14 ]] || [[ $schema_id == 65 ]];then
   t_delta_threshold_mins=$((90*2))
 fi
 
