@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 29.2: 4day rec check"
+echo "Script Version 29.3: 4day rec check"
 echo "Designed by Mark A. Porter"
 # arbitrary script change to test if build action/checks trigger
 
@@ -737,6 +737,23 @@ fi
 
 echo "cat of ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv"
 cat ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv
+
+last_themis_rec_run_date=`head -1 ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | awk '{print $3}'`
+echo "last_themis_rec_run_date=$last_themis_rec_run_date"
+last_themis_rec_run_date_1900_secs=$(date '+%s' -d "$last_themis_rec_run_date")
+op_date_1900_secs=$(date '+%s' -d "$op_date")
+echo "last_themis_rec_run_date_1900_secs=$last_themis_rec_run_date_1900_secs"
+echo "op_date_1900_secs=$op_date_1900_secs"
+last_themis_rec_run_date_delta_secs=`expr $op_date_1900_secs - $last_themis_rec_run_date_1900_secs`
+echo "last_themis_rec_run_date_delta_secs=$last_themis_rec_run_date_delta_secs"
+four_days_in_secs=$((4*24*60*60))
+echo "four_days_in_secs=$four_days_in_secs"
+
+if [[ $last_themis_run_date_delta_secs -gt $four_days_in_secs$ ]];then
+  echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,There is no successful Azure rec since $last_themis_rec_run_date so check that the Oracle rec has been running ok,warn" >> $OUTFILE
+else
+  echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,The Azure rec last ran on $last_themis_rec_run_date which is within the 4 day threshold,ok" >> $OUTFILE
+fi
 
 met_recon_errors_list=''
 met_no_good_result_list=''
