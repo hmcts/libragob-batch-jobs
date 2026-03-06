@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 29.3: 4day rec check test5"
+echo "Script Version 29.3: op_env for POD lookups"
 echo "Designed by Mark A. Porter"
 # arbitrary script change to test if build action/checks trigger
 
@@ -78,10 +78,17 @@ fi
 
 echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
-kubectl config use-context ss-prod-00-aks
-kubectl get pods -n met > ${OPDIR}pod_list00
-kubectl config use-context ss-prod-01-aks
-kubectl get pods -n met > ${OPDIR}pod_list01
+if [[ $op_env == test ]];then
+  kubectl config use-context ss-test-00-aks
+  kubectl get pods -n met > ${OPDIR}pod_list00
+  kubectl config use-context ss-test-01-aks
+  kubectl get pods -n met > ${OPDIR}pod_list01
+else
+  kubectl config use-context ss-prod-00-aks
+  kubectl get pods -n met > ${OPDIR}pod_list00
+  kubectl config use-context ss-prod-01-aks
+  kubectl get pods -n met > ${OPDIR}pod_list01
+fi
 
 cnt=0
 #day_today=$(date "+%a")
