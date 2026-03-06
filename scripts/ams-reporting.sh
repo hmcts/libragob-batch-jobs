@@ -847,7 +847,7 @@ if [[ $op_env == test ]];then
 threshold_count_update_requests=100000
 threshold_count_table_updates=500000
 threshold_count_message_log=200000
-threshold_count_dac_audit=120000000
+threshold_count_dac_audit=150000000
 threshold_count_gateway_audit=100000
 else
 threshold_count_update_requests=5000000
