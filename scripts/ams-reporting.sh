@@ -1527,6 +1527,8 @@ echo "04/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "05/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "06/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "09/03/2026.*AZDB_fines_recon_status.*" >> $override_file
+echo "10/03/2026.*AZDB_fines_recon_status.*" >> $override_file
+echo "10/03/2026.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
 echo "01/10/2025.*AZDB_schema_lock.*(45|66|97|107|109|110|113|116|5|8|9|10|11|12|14|21|22|24|26|28|29|30|31|36|38|47|52|57|60|61|65|73|77|78|80|82|89|92|96|99|103|105|106|112|119|124|125|126|128|129|130|135|138|139|67|44|111)" >> $override_file
