@@ -1335,101 +1335,37 @@ else
 
 echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
 
-echo "06/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "06/01/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
-
-echo "07/01/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "16/01/2025.*AZDB_db_message_log_error(105|106).*23505.*duplicate key value violates unique constraint.*update_requests_pk" >> $override_file
 
 echo "17/01/2025.*AZDB_update_processing_backlog38" >> $override_file
 
-echo "31/01/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "31/01/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "19/02/2025.*AZDB_update_processing_backlog82" >> $override_file
-
 echo "19/02/2025.*AZDB_db_message_log_error82.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
-echo "20/02/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "26/02/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "12/03/2025.*AZDB_update_processing_backlog135" >> $override_file
-
 echo "13/03/2025.*AZDB_update_processing_backlog105" >> $override_file
-
-echo "13/03/2025.*AZDB_update_processing_backlog10" >> $override_file
-
-echo "13/03/2025.*AZDB_update_processing_backlog52" >> $override_file
 
 echo "13/03/2025.*AZDB_db_message_log_error5.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
 echo "13/03/2025.*AZDB_db_message_log_error47.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
 
-echo "13/03/2025.*AZDB_db_message_log_error52.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
-
-echo "14/03/2025.*AZDB_update_processing_backlog5" >> $override_file
-
-echo "14/03/2025.*AZDB_update_processing_backlog47" >> $override_file
-
-echo "14/03/2025.*AZDB_update_processing_backlog52" >> $override_file
-
 # 490K updates 26/03 on 77 but remained locked overnight due to dupe seq num out-of-hours
 echo "27/03/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "27/03/2025.*AZDB_msg_backlog77" >> $override_file
 
-echo "28/03/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "31/03/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "31/03/2025.*AZDB_msg_backlog77" >> $override_file
 echo "31/03/2025.*AZDB_msg_backlog103" >> $override_file
 echo "31/03/2025.*AZDB_msg_backlog12" >> $override_file
-echo "31/03/2025.*AZDB_update_processing_backlog44" >> $override_file
-echo "31/03/2025.*AZDB_update_processing_backlog103" >> $override_file
-echo "31/03/2025.*AZDB_update_processing_backlog12" >> $override_file
-echo "31/03/2025.*AZDB_update_processing_backlog99" >> $override_file
-echo "31/03/2025.*AZDB_update_processing_backlog105" >> $override_file
 
-echo "01/04/2025.*AZDB_update_processing_backlog130" >> $override_file
-
-echo "08/04/2025.*AZDB_update_processing_backlog126" >> $override_file
-
-echo "09/04/2025.*AZDB_update_processing_backlog96" >> $override_file
-echo "09/04/2025.*AZDB_update_processing_backlog135" >> $override_file
 echo "09/04/2025.*AZDB_update_processing_backlog103" >> $override_file
 
 echo "10/04/2025.*AZDB_update_processing_backlog135" >> $override_file
 
-echo "11/04/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "14/04/2025.*AZDB_fines_recon_status" >> $override_file
-echo "14/04/2025.*AZDB_msg_backlog31" >> $override_file
-echo "15/04/2025.*AZDB_fines_recon_status" >> $override_file
-echo "16/04/2025.*AZDB_fines_recon_status" >> $override_file
-echo "22/04/2025.*AZDB_fines_recon_status" >> $override_file
-echo "04/06/2025.*AZDB_fines_recon_status" >> $override_file
-echo "05/06/2025.*AZDB_fines_recon_status" >> $override_file
-echo "06/06/2025.*AZDB_fines_recon_status" >> $override_file
-echo "09/06/2025.*AZDB_fines_recon_status" >> $override_file
-echo "10/06/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "17/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "22/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
 echo "25/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint." >> $override_file
-echo "25/04/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "29/04/2025.*AZDB_update_processing_backlog30" >> $override_file
 echo "29/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
 
 echo "30/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "02/05/2025.*AZDB_fines_recon_status" >> $override_file
-echo "06/05/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "07/05/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
 
@@ -1437,77 +1373,30 @@ echo "23/05/2025.*AZDB_update_processing_backlog77" >> $override_file
 
 echo "03/06/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "17/06/2025.*AZDB_update_processing_backlog82" >> $override_file
-
 echo "02/07/2025.*AZDB_update_processing_backlog77" >> $override_file
 
-echo "02/09/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "03/09/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "04/09/2025.*AZDB_fines_recon_status" >> $override_file
 echo "05/09/2025.*AZDB_fines_recon_status" >> $override_file
 
-echo "17/09/2025.*AZDB_update_processing_backlog103" >> $override_file
-echo "17/09/2025.*AZDB_update_processing_backlog130" >> $override_file
-echo "17/09/2025.*AZDB_update_processing_backlog135" >> $override_file
 echo "17/09/2025.*AZDB_update_processing_backlog26" >> $override_file
 
-echo "18/09/2025.*AZDB_update_processing_backlog61" >> $override_file
 echo "18/09/2025.*AZDB_update_processing_backlog105" >> $override_file
-echo "18/09/2025.*AZDB_msg_backlog61" >> $override_file
 echo "18/09/2025.*AZDB_msg_backlog105" >> $override_file
 
-echo "19/09/2025.*AZDB_update_processing_backlog105" >> $override_file
-echo "19/09/2025.*AZDB_update_processing_backlog61" >> $override_file
-
-echo "22/09/2025.*AZDB_update_processing_backlog103" >> $override_file
-echo "22/09/2025.*AZDB_update_processing_backlog96" >> $override_file
-echo "22/09/2025.*AZDB_update_processing_backlog124" >> $override_file
-echo "22/09/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "22/09/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "23/09/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "08/10/2025.*AZDB_update_processing_backlog126" >> $override_file
-echo "08/10/2025.*AZDB_update_processing_backlog125" >> $override_file
-echo "08/10/2025.*AZDB_update_processing_backlog99" >> $override_file
-
-echo "09/10/2025.*AZDB_update_processing_backlog126" >> $override_file
-echo "09/10/2025.*AZDB_update_processing_backlog99" >> $override_file
-
-echo "10/10/2025.*AZDB_update_processing_backlog96" >> $override_file
-
 echo "11/11/2025.*AZDB_update_processing_backlog8" >> $override_file
-echo "11/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "14/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "14/11/2025.*AZDB_msg_backlog82" >> $override_file
 
 echo "17/11/2025.*AZDB_msg_backlog82" >> $override_file
 echo "17/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "17/11/2025.*AZDB_fines_recon_status" >> $override_file
 
 echo "18/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "18/11/2025.*AZDB_fines_recon_status" >> $override_file
 echo "18/11/2025.*AZDB_confiscation_recon_status" >> $override_file
 echo "18/11/2025.*AZDB_maintenance_recon_status" >> $override_file
 
-echo "25/11/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "03/12/2025.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 echo "04/12/2025.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 
 echo "08/12/2025.*AZDB_schema_lock.*82" >> $override_file
-echo "08/11/2025.*AZDB_msg_backlog82" >> $override_file
 echo "08/12/2025.*AZDB_db_message_log_error82.*ANMD-0003.*NM_FINES_DB.*Reconciliation" >> $override_file
 echo "08/12/2025.*AZDB_update_processing_backlog82" >> $override_file
 echo "08/12/2025.*AZDB_fines_recon_status.*82" >> $override_file
-
-echo "09/12/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "09/12/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "10/12/2025.*AZDB_fines_recon_status.*82" >> $override_file
 
 echo "10/12/2025.*AZDB_update_processing_backlog77" >> $override_file
 echo "22/12/2025.*AZDB_fines_recon_status.*103" >> $override_file
@@ -1530,6 +1419,7 @@ echo "09/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/03/2026.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 echo "11/03/2026.*AZDB_fines_recon_status.*" >> $override_file
+echo "12/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
 echo "01/10/2025.*AZDB_schema_lock.*(45|66|97|107|109|110|113|116|5|8|9|10|11|12|14|21|22|24|26|28|29|30|31|36|38|47|52|57|60|61|65|73|77|78|80|82|89|92|96|99|103|105|106|112|119|124|125|126|128|129|130|135|138|139|67|44|111)" >> $override_file
