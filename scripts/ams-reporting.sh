@@ -3,6 +3,7 @@
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
 echo "Script Version 29.3: op_env for POD lookups"
 echo "Designed by Mark A. Porter"
+echo $(date "+%d/%m/%Y %T" -d "+1 hours") 
 # arbitrary script change to test if build action/checks trigger
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
