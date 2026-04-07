@@ -848,7 +848,7 @@ if [[ $op_env == test ]];then
 threshold_count_update_requests=100000
 threshold_count_table_updates=500000
 threshold_count_message_log=200000
-threshold_count_dac_audit=200000000
+threshold_count_dac_audit=120000000 # it is believed storage will max out at 150M rows which then needs temp storage adding by HMCTS PlatOps as per point #4 in https://centralgovernmentcgi.atlassian.net/wiki/spaces/LSS/pages/4527423491/Themis+-+Broken+How+to+Investigate+Cheatsheet
 threshold_count_gateway_audit=100000
 else
 threshold_count_update_requests=5000000
