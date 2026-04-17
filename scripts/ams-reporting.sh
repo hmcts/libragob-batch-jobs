@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 29.3: Check #6 67 Tier 5"
+echo "Script Version 29.4: TEST update RT"
 echo "Designed by Mark A. Porter"
 echo $(date "+%d/%m/%Y %T" -d "+1 hours") 
 # arbitrary script change to test if build action/checks trigger
@@ -282,7 +282,7 @@ backlog_threshold=850000 # 50K allowable backlog at 17:xx, but all hourly thresh
 if [[ $op_env == prod ]];then
   roundtrip_threshold=2000
 else
-  roundtrip_threshold=3000
+  roundtrip_threshold=4000
 fi
 
 dt_hr=$(date "+%H")
