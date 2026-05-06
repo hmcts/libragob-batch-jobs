@@ -3,17 +3,16 @@
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
 echo "Script Version 29.4: TEST update RT"
 echo "Designed by Mark A. Porter"
-echo $(date "+%d/%m/%Y %T" -d "+1 hours") 
 # arbitrary script change to test if build action/checks trigger
 
-log_msg() 
+date_msg() 
 {
-  local echo_desh="$1"
-  local echo_file="$2"
   ### BST Fix below 
-  echo "$(date "+%d/%m/%Y %T") ${echo_desh}" >> "$echo_file"
-  ##echo "$(date "+%d/%m/%Y %T" -d "+1 hours") ${echo_desh}" >> "$echo_file"
+  ##date "+%d/%m/%Y %T"
+  date "+%d/%m/%Y %T" -d "+1 hours"
 }
+
+echo "$(date_msg)"
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
@@ -26,11 +25,13 @@ mkdir $OPDIR
 OUTFILE="${OPDIR}ThemisAZ_hc.csv"
 OUTFILE_STATS="${OPDIR}ThemisAZ_stats.csv"
 OUTFILE_LOG="${OPDIR}ThemisAZ.log"
+
 ##echo $(date "+%d/%m/%Y %T") > $OUTFILE
 ##echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ##### BST Fix
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
 echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
+
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
 event_username=$(cat /mnt/secrets/$KV_NAME/amd-event-username)
