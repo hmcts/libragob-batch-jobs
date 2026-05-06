@@ -226,27 +226,37 @@ fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #2" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #2" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/2AZUREDB_AMD_locked_keys.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #2 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #2 has been run" >> $OUTFILE_LOG
 
 if [[ `cat ${OPDIR}2AZUREDB_AMD_locked_keys.csv | wc -l` -gt 0 ]];then
   while read -r line;do
     key_lock=`echo $line | awk '{print $1}'`
-    echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_key_lock,Instance Key $key_lock is locked,warn" >> $OUTFILE
   done < ${OPDIR}2AZUREDB_AMD_locked_keys.csv
 fi
 
-echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #2 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #2 complete" >> $OUTFILE_LOG
+
 ### Calc the 3 roundtrip ETAs from dac & gw audit tables for purpose of determining the DeliveryTime of each Schema backlog in Check #3
 ####################################################### CHECK 12a
 echo "[Check #12a: Today's Latest 10 DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+
+echo "$(date_msg) Starting Check #12a" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #12a" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12a has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #12a has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #12a has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
@@ -254,9 +264,11 @@ updated_date=`echo $line | awk -F"," '{print $1}'`
 uuid=`echo $line | awk -F"," '{print $2}'`
 roundtrip=`echo $line | awk -F"," '{print $3}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_10_proc_rates,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE_STATS
+echo "$(date_msg),AZDB_dacaudit_db_10_proc_rates,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE_STATS
+##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_10_proc_rates,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE_STATS
 
 done < ${OPDIR}12aAZUREDB_AMD_dacaudit_DBstep13-12_latest10_processing_rates.csv
+
 ####################################################### CHECK 12b
 echo "[Check #12b: Today's Latest 10 DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE_STATS
@@ -274,6 +286,7 @@ roundtrip=`echo $line | awk -F"," '{print $3}'`
 echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_10_proc_rates,$updated_date,$uuid,$roundtrip,ok" >> $OUTFILE_STATS
 
 done < ${OPDIR}12bAZUREDB_AMD_dacaudit_DBstep10-1_latest10_processing_rates.csv
+
 ####################################################### CHECK 12c
 echo "[Check #12c: Today's Latest 10 GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
 echo "DateTime,CheckName,updated_date,uuid,Roundtrip in Millisecs,Result" >> $OUTFILE_STATS
