@@ -204,7 +204,8 @@ if [[ $pod_running == 1 ]];then
   fi
 
   if [[ $onpremise_endpoint_check ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
     echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is down so check if the ManagedServers are running,warn" >> $OUTFILE
   fi
