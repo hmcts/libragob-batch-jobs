@@ -6,6 +6,15 @@ echo "Designed by Mark A. Porter"
 echo $(date "+%d/%m/%Y %T" -d "+1 hours") 
 # arbitrary script change to test if build action/checks trigger
 
+log_msg() 
+{
+  local echo_desh="$1"
+  local echo_file="$2"
+  ### BST Fix below 
+  echo "$(date "+%d/%m/%Y %T") ${echo_desh}" >> "$echo_file"
+  ##echo "$(date "+%d/%m/%Y %T" -d "+1 hours") ${echo_desh}" >> "$echo_file"
+}
+
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
 else
