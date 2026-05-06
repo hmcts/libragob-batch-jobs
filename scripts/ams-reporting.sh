@@ -13,8 +13,8 @@ date_msg()
 }
 
 echo "$(date_msg)"
-echo "$(date_msg)" > $OUTFILE
-echo "$(date_msg)" > $OUTFILE_STATS
+##echo "$(date_msg)" > $OUTFILE
+##echo "$(date_msg)" > $OUTFILE_STATS
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
