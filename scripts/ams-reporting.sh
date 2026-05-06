@@ -13,6 +13,8 @@ date_msg()
 }
 
 echo "$(date_msg)"
+echo "$(date_msg)" > $OUTFILE
+echo "$(date_msg)" > $OUTFILE_STATS
 
 if [[ `echo $KV_NAME | grep "test"` ]];then
 op_env=test
@@ -29,8 +31,8 @@ OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 ##echo $(date "+%d/%m/%Y %T") > $OUTFILE
 ##echo $(date "+%d/%m/%Y %T") > $OUTFILE_STATS
 ##### BST Fix
-echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
-echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
+##echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE
+##echo $(date "+%d/%m/%Y %T" -d "+1 hours")  > $OUTFILE_STATS
 
 ############################################################### Set-up DB connection variables, extracted from KeyVault
 # EventDB connection variables
@@ -75,19 +77,25 @@ maintenance_db=`echo $maintenance_url | awk -F":" {'print $4'} | awk -F"\/" {'pr
 ####################################################### CHECK 1
 echo "[Check #1: Locked Schemas]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #1" > $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+
+echo "$(date_msg) Starting Check #1" > $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #1" > $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/1AZUREDB_AMD_locked_schemas.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #1 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #1 has been run" >> $OUTFILE_LOG
 
 if [[ `cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv | wc -l` -gt 0 ]];then
   while read -r line;do
     schema_lock=`echo $line | awk '{print $1}'`
-    echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_schema_lock,SchemaId $schema_lock is locked,warn" >> $OUTFILE
   done < ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
 fi
 
-echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #1 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #1 complete" >> $OUTFILE_LOG
 
 if [[ $op_env == test ]];then
   kubectl config use-context ss-test-00-aks
@@ -123,7 +131,8 @@ cnt=0
 
   if [[ `cat ${OPDIR}hk_log | wc -l` -gt 0 ]];then
     if [[ `grep -Pi "(error|warn|exception|severe|fatal|crit|fail|ORA-|time.*out|out.*of.*memory)" ${OPDIR}hk_log` ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+      echo "$(date_msg),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
+      ##echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},Completed Housekeeping logfile errors found so check POD logs and then report it to the DBAs,warn" >> $OUTFILE
 #    else
 #    echo "$(date "+%d/%m/%Y %T"),AZDB_housekeeping_completed_logs_error_check_cluster0${cnt},No Completed Housekeeping logfile errors found,ok" >> $OUTFILE
     fi
@@ -207,10 +216,12 @@ if [[ $pod_running == 1 ]];then
     echo "$(date_msg),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
     ##echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is reachable $onpremise_endpoint_check,ok" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is down so check if the ManagedServers are running,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is down so check if the ManagedServers are running,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,On-premise endpoint in IH is down so check if the ManagedServers are running,warn" >> $OUTFILE
   fi
 else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_onpremise_endpoint_check,There are no NodeJS PODs in Running status so if this is unexpected then raise JIRA and get HMCTS PlatOps to investigate,warn" >> $OUTFILE
 fi
 ####################################################### CHECK 2
 echo "[Check #2: Locked Instance Keys]" >> $OUTFILE
