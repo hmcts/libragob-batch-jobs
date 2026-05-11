@@ -313,10 +313,13 @@ done < ${OPDIR}12cAZUREDB_AMD_gwaudit_step10-1_latest10_processing_rates.csv
 ####################################################### CHECK 3
 echo "[Check #3: Update Backlogs]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,Status,COUNTupdates,MAXupdates,SUMupdates,BacklogThreshold,ResultBacklog,RoundtripMS,RoundtripThreshold,ETA,ResultRoundtrip" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #3" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #3" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/3AZUREDB_AMD_message_backlogs.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #3 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #3 has been run" >> $OUTFILE_LOG
 
 backlog_threshold=850000 # 50K allowable backlog at 17:xx, but all hourly thresholds have now been doubled-up for MET77 as biggest hitter
 
@@ -425,20 +428,25 @@ else
   result_roundtrip=ok
 fi
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE
+echo "$(date_msg),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE 
+##echo "$(date "+%d/%m/%Y %T"),AZDB_msg_backlog${schema_id},$status,$count_updates,$max_number_of_table_updates,$sum_number_of_table_updates,$backlog_adaptive_threshold,$result_backlog,$total_roundtrip,$roundtrip_threshold,${adj_delivery_rate}${eta_units},$result_roundtrip" >> $OUTFILE
 
 fi
 
 done < ${OPDIR}3AZUREDB_AMD_message_backlogs.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #3 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #3 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 4
 echo "[Check #4: Thread Status Counts]" >> $OUTFILE
 echo "DateTime,CheckName,State,Threshold,Count,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #4" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #4" >> $OUTFILE_LOG 
+##echo "$(date "+%d/%m/%Y %T") Starting Check #4" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/4AZUREDB_AMD_thread_status_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #4 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #4 has been run" >> $OUTFILE_LOG
 
 if [[ $op_env == prod ]];then
   #idle_threshold=485 # tuned from 465 to 485 as uptick ~350 zombied idles: select * from pg_stat_activity where state='idle' and backend_start > '2025-04-22 23:50:37' and backend_start < '2025-04-23 00:21:00'. POD bounce the next day cleared them so reverted
@@ -466,35 +474,46 @@ count=`echo $line | awk -F"," '{print $2}'`
 
 if [[ $state == "idle" ]];then
   if [[ $count -gt $idle_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,warn" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "idle in transaction" ]];then
   if [[ $count -gt $idle_in_trans_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,warn" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$idle_in_trans_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "active" ]];then
   if [[ $count -gt $active_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,warn" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$active_threshold,$count,ok" >> $OUTFILE
   fi
 elif [[ $state == "null" ]];then
   if [[ $count -gt $null_threshold ]] && [[ $(date "+%H") != 19 ]] && [[ $(date "+%H") != 20 ]];then
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,warn" >> $OUTFILE
   else
-    echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,$state,$null_threshold,$count,ok" >> $OUTFILE
   fi
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,${state}NEVERseenBEFORE,N/A,$count,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_db_threads,${state}NEVERseenBEFORE,N/A,$count,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_threads,${state}NEVERseenBEFORE,N/A,$count,warn" >> $OUTFILE
 fi
 
 done < ${OPDIR}4AZUREDB_AMD_thread_status_counts.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #4 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #4 complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,error_message,Result" >> $OUTFILE
