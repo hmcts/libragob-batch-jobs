@@ -517,10 +517,13 @@ echo "$(date_msg) Check #4 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 5
 echo "[Check #5: MESSAGE_LOG Errors]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,error_message,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #5" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #5" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/5AZUREDB_AMD_message_log_errors.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #5 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #5 has been run" >> $OUTFILE_LOG
 
 echo "cat of locked schemas"
 cat ${OPDIR}1AZUREDB_AMD_locked_schemas.csv
@@ -532,8 +535,8 @@ cat ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
 while read -r line;do
   schema_id=`echo $line | awk -F"," '{print $1}'`
   error_message=`echo $line | awk -F"," '{print $2}'`
-echo "schema_id=$schema_id"
-echo "error_message=$error_message"
+  echo "schema_id=$schema_id"
+  echo "error_message=$error_message"
   if [[ `echo $line | grep -P "999900.*RECONCILIATION_RESULT_XML" ` ]];then
     error_message="999900:RECONCILIATION_RESULT_XML - TOO LONG TO DISPLAY"
   elif [[ `echo $line | grep -P "(reconciliation_result|\<value\>|Row Count|Control Totals|Transaction Balance|Live Accounts|Arrears Amount|Outstanding Amount|ChangeItems|TableItems)" ` ]];then
@@ -544,32 +547,39 @@ echo "error_message=$error_message"
     echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
   else
     aesd_depth=`cat ${OPDIR}3AZUREDB_AMD_message_backlogs.csv | grep -P "^${schema_id}," | grep "UNPROCESSED" | awk -F"," '{print $4}' | xargs`
-echo "aesd_depth=$aesd_depth"
-echo "the error=$error_message"
-echo "the depth conditional"
-if [[ $aesd_depth -lt 10000 ]];then echo "true";else echo "false";fi
-echo "the 0003 conditional"
-if [[ `echo $error_message | grep "AESD-0003"` ]];then echo "true";else echo "false";fi
-echo "the 0004 conditional"
-if [[ `echo $error_message | grep "AESD-0004"` ]];then echo "true";else echo "false";fi
-echo "the 23505 dupe key conditional"
-if [[ `echo $error_message | grep -P "23505.*duplicate key value"` ]];then echo "true";else echo "false";fi
-    if [[ ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0003"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0004"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep -P "23505.*duplicate key value"` ) ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
-    else
-      echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+    echo "aesd_depth=$aesd_depth"
+    echo "the error=$error_message"
+    echo "the depth conditional"
+    if [[ $aesd_depth -lt 10000 ]];then echo "true";else echo "false";fi
+      echo "the 0003 conditional"
+    if [[ `echo $error_message | grep "AESD-0003"` ]];then echo "true";else echo "false";fi
+      echo "the 0004 conditional"
+    if [[ `echo $error_message | grep "AESD-0004"` ]];then echo "true";else echo "false";fi
+      echo "the 23505 dupe key conditional"
+    if [[ `echo $error_message | grep -P "23505.*duplicate key value"` ]];then echo "true";else echo "false";fi
+      if [[ ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0003"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep "AESD-0004"` ) || ( $aesd_depth -lt 10000 && `echo $error_message | grep -P "23505.*duplicate key value"` ) ]];then
+        echo "$(date_msg),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE 
+        ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,ok" >> $OUTFILE
+      else
+        echo "$(date_msg),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+        ##echo "$(date "+%d/%m/%Y %T"),AZDB_db_message_log_error${schema_id},$error_message,warn" >> $OUTFILE
+      fi
     fi
-  fi
 done < ${OPDIR}5AZUREDB_AMD_message_log_errors.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #5 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #5 complete" >> $OUTFILE_LOG
 ####################################################### CHECK 6
+
 echo "[Check #6: Unprocessed, Complete & Processing Checks]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,Threshold,earliest_unprocessed,latest_complete,latest_processing,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #6" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #6" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/6AZUREDB_AMD_update_processing_backlog.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #6 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #6 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #6 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
