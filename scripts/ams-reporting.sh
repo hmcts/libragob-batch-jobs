@@ -716,7 +716,9 @@ fi
 confiscation_mets_cnt=`cat ${OPDIR}confiscation_mets | wc -l`
 fines_mets_cnt=`cat ${OPDIR}fines_mets | wc -l`
 maintenance_mets_cnt=`cat ${OPDIR}maintenance_mets | wc -l`
-echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
+
+echo "$(date_msg) Starting Check #9b" >> $OUTFILE_LOG 
+##echo "$(date "+%d/%m/%Y %T") Starting Check #9b" >> $OUTFILE_LOG
 
 for cnt in 1 2 3;do
   if [[ $cnt == 1 ]];then
@@ -728,11 +730,13 @@ for cnt in 1 2 3;do
       rec_rows=8
     fi
 
-    echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    echo "$(date_msg) Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${confiscation_host} dbname=${confiscation_db} port=${confiscation_port} user=${confiscation_username} password=${confiscation_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date_msg) SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   elif [[ $cnt == 2 ]];then
     dbname_str=fines
 
@@ -742,11 +746,13 @@ for cnt in 1 2 3;do
       rec_rows=46
     fi
 
-    echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    echo "$(date_msg) Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${fines_host} dbname=${fines_db} port=${fines_port} user=${fines_username} password=${fines_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date_msg) SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   else
     dbname_str=maintenance
 
@@ -756,11 +762,13 @@ for cnt in 1 2 3;do
       rec_rows=3
     fi
 
-    echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    echo "$(date_msg) Connecting to ${dbname_str} database" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") Connecting to ${dbname_str} database" >> $OUTFILE_LOG
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result.sql
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_errors.sql
     psql "sslmode=require host=${maintenance_host} dbname=${maintenance_db} port=${maintenance_port} user=${maintenance_username} password=${maintenance_password}" --file=/sql/9AZUREDB_AMD_${dbname_str}_recon_result_by_met.sql
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    echo "$(date_msg) SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") SQL for Check #9b ${dbname_str} rec has been run" >> $OUTFILE_LOG
   fi
 
   # sort the data desc on date ("k"olumn 2) which necessarily sorts by RR_ID column 1 desc, so that head -1 doesn't cut out any RR_ID as a result
@@ -778,15 +786,19 @@ for cnt in 1 2 3;do
         rr_cnt=`echo $rec_line | awk -F"," '{print $3}'`
 
         if [[ `echo $rec_line | grep -P ",${rec_rows}$"` ]];then
-          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
+          echo "$(date_msg),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE 
+          ##echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows,DATE=$op_date,ok" >> $OUTFILE
         else
-          echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
+          echo "$(date_msg),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
+          ##echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=$rr_id ROWS=$rr_cnt/$rec_rows has missing rec(s),DATE=$op_date,ok" >> $OUTFILE
         fi
       else
-        echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
+        echo "$(date_msg),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
+        ##echo "$(date "+%d/%m/%Y %T"),$dbname_str RR_ID=missing ROWS=missing,DATE=missing,ok" >> $OUTFILE
       fi
     done
-echo "$(date "+%d/%m/%Y %T") Check #9b DEBUG for database $dbname_str complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #9b DEBUG for database $dbname_str complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #9b DEBUG for database $dbname_str complete" >> $OUTFILE_LOG
 
 fi
 
@@ -811,11 +823,14 @@ while read -r met;do
 done < ${OPDIR}confiscation_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_confiscation_recon_status,All ${confiscation_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -889,11 +904,14 @@ while read -r met;do
 done < ${OPDIR}maintenance_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_maintenance_recon_status,All ${maintenance_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
 fi
 
 last_themis_rec_run_date=`head -1 ${OPDIR}9AZUREDB_AMD_confiscation_recon_result_by_met.csv | awk -F"," '{print $3}'`
@@ -903,12 +921,16 @@ last_themis_rec_run_date_delta_secs=`expr $op_date_1900_secs - $last_themis_rec_
 four_days_in_secs=$((4*24*60*60))
 
 if [[ $last_themis_rec_run_date_delta_secs -gt $four_days_in_secs ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,There is no successful Azure rec since $last_themis_rec_run_date so check that the Oracle rec has been running ok,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_date_last_rec_run,There is no successful Azure rec since $last_themis_rec_run_date so check that the Oracle rec has been running ok,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,There is no successful Azure rec since $last_themis_rec_run_date so check that the Oracle rec has been running ok,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,The Azure recs last ran on $last_themis_rec_run_date which is within the 4 day threshold,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_date_last_rec_run,The Azure recs last ran on $last_themis_rec_run_date which is within the 4 day threshold,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_date_last_rec_run,The Azure recs last ran on $last_themis_rec_run_date which is within the 4 day threshold,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Check #9b complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #9b complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #9b complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 10
 #echo "[Check #10: Themis WebLogic]" >> $OUTFILE
 #echo "$(date "+%d/%m/%Y %T") Starting Check #10" >> $OUTFILE_LOG
@@ -920,51 +942,53 @@ echo "[Check #11: Table Row Counts]" >> $OUTFILE
 echo "DateTime,CheckName,RowCount,Threshold,Result" >> $OUTFILE
 
 if [[ $op_env == test ]];then
-threshold_count_update_requests=100000
-threshold_count_table_updates=500000
-threshold_count_message_log=200000
-threshold_count_dac_audit=120000000 # it is believed storage will max out at 150M rows which then needs temp storage adding by HMCTS PlatOps as per point #4 in https://centralgovernmentcgi.atlassian.net/wiki/spaces/LSS/pages/4527423491/Themis+-+Broken+How+to+Investigate+Cheatsheet
-threshold_count_gateway_audit=100000
+  threshold_count_update_requests=100000
+  threshold_count_table_updates=500000
+  threshold_count_message_log=200000
+  threshold_count_dac_audit=120000000 # it is believed storage will max out at 150M rows which then needs temp storage adding by HMCTS PlatOps as per point #4 in https://centralgovernmentcgi.atlassian.net/wiki/spaces/LSS/pages/4527423491/Themis+-+Broken+How+to+Investigate+Cheatsheet
+  threshold_count_gateway_audit=100000
 else
-threshold_count_update_requests=5000000
-threshold_count_table_updates=9000000
-threshold_count_message_log=70000000
-threshold_count_dac_audit=70000000
-threshold_count_gateway_audit=1500000
+  threshold_count_update_requests=5000000
+  threshold_count_table_updates=9000000
+  threshold_count_message_log=70000000
+  threshold_count_dac_audit=70000000
+  threshold_count_gateway_audit=1500000
 fi
 
-echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #11a" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #11a" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11aAZUREDB_AMD_row_counts_update_requests.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #11a has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #11a has been run" >> $OUTFILE_LOG
 
 rowcount_update_requests=`cat ${OPDIR}11aAZUREDB_AMD_row_counts_update_requests.csv`
 
 if [[ $rowcount_update_requests -gt $threshold_count_update_requests ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,warn" >> $OUTFILE
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_update_requests_row_count,$rowcount_update_requests,$threshold_count_update_requests,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Starting Check #11b" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #11b" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #11b" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11bAZUREDB_AMD_row_counts_table_updates.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #11b has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #11b has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #11b has been run" >> $OUTFILE_LOG
 
 rowcount_table_updates=`cat ${OPDIR}11bAZUREDB_AMD_row_counts_table_updates.csv`
 
 if [[ $rowcount_table_updates -gt $threshold_count_table_updates ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,warn" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,warn" >> $OUTFILE
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,ok" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,ok" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,ok" >> $OUTFILE
 fi
 
 echo "$(date "+%d/%m/%Y %T") Starting Check #11c" >> $OUTFILE_LOG
