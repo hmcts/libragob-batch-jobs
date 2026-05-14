@@ -883,11 +883,14 @@ while read -r met;do
 done < ${OPDIR}fines_mets
 
 if [[ `echo $met_no_good_result_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_no_good_result_list,warn" >> $OUTFILE
 elif [[ `echo $met_recon_errors_list` ]];then
-  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,Check rec history by means of the queries for Check #9 on JBOX in C:\Libra\MarkP\sql.txt: $met_recon_errors_list,warn" >> $OUTFILE
 else
-  echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All ${fines_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_fines_recon_status,All ${fines_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_fines_recon_status,All ${fines_mets_cnt} MET(s) have seen a successful rec in the last 4 results,ok" >> $OUTFILE
 fi
 
 met_recon_errors_list=''
@@ -1348,34 +1351,43 @@ while read -r line;do
     echo "$(date_msg),AZDB_minute_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
     ##echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12qAZUREDB_AMD_minute_completed_update_request_counts.csv
-######################################################################################################################################################################################################
-echo "[Check #12r: Minute Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12r" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12rAZUREDB_AMD_minute_completed_table_updates_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12r has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12qAZUREDB_AMD_minute_completed_update_request_counts.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12r: Minute Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12r" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12r" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12rAZUREDB_AMD_minute_completed_table_updates_counts.sql
+  echo "$(date_msg) SQL for Check #12r has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12r has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_minute_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
+  done < ${OPDIR}12rAZUREDB_AMD_minute_completed_table_updates_counts.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+  echo "$(date_msg) Check #12 complete" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
 
 fi
+
 ####################################################### CHECK 12
 echo "[Check #12: ora_rowscn SequenceNumber Bug]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,update_request_id,update_type,created_date,sequence_number,previous_sequence_number,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #12" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #12" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG 
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #12 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #12 has been run" >> $OUTFILE_LOG
 echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv BEFORE SP:" >> $OUTFILE_LOG
 cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
 
@@ -1385,7 +1397,8 @@ dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv |
 if [[ `cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l` -gt 0 ]];then
   check12_sp_start_time=$(date "+%H:%M:%S %a %b %e %Y")
   epoch_secs_check12_sp_start_time=$(date '+%s' -d "$check12_sp_start_time")
-  echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+  echo "$(date_msg) SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix is about to be run: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
 #  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.sql --echo-queries
   psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'call fix_duplicate_seq_nos()' -e
 #ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
@@ -1395,7 +1408,8 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
 #echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
 #cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
 #  if [ $? -eq 0 ];then
-    echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+    echo "$(date_msg) SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12 for duplicate sequence number fix has been run without errors: call fix_duplicate_seq_nos()" >> $OUTFILE_LOG
     check12_sp_end_time=$(date "+%H:%M:%S %a %b %e %Y")
     epoch_secs_check12_sp_end_time=$(date '+%s' -d "$check12_sp_end_time")
     check12_sp_runtime_secs=`expr $epoch_secs_check12_sp_end_time - $epoch_secs_check12_sp_start_time`
@@ -1403,19 +1417,23 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
     linecount_threshold=500
 
     if [[ $check12_sp_runtime_secs -gt $runtime_threshold ]] || [[ $dupe_seq_nums_linecount -gt $linecount_threshold ]];then
-      echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
+      echo "$(date_msg),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE 
+      ##echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,warn" >> $OUTFILE
 #    else
 #      echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsCleared=${dupe_seq_nums_linecount},linecount_threshold=GT${linecount_threshold},Runtime=${check12_sp_runtime_secs}secs,runtime_threshold=GT${runtime_threshold},,ok" >> $OUTFILE
     fi
 
-    echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
+    echo "$(date_msg) Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database to perform 2nd round check of duplicate sequence numbers" >> $OUTFILE_LOG
 #    psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12AZUREDB_AMD_ora_rowscn_bug_seq_nums.sql --echo-queries
     psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" -c 'call fix_duplicate_seq_nos()' -e
-    echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
+    echo "$(date_msg) 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
+    ##echo "$(date "+%d/%m/%Y %T") 2nd round of duplicate sequence numbers completed ok" >> $OUTFILE_LOG
     echo "cat of 12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv:" >> $OUTFILE_LOG
     cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv >> $OUTFILE_LOG
     new_dupe_seq_nums_linecount=`cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv | wc -l`
-    echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsBeforeCleardown=${dupe_seq_nums_linecount},RowsAfterCleardown=${new_dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
+    echo "$(date_msg),AZDB_call_fix_duplicate_seq_nos(),RowsBeforeCleardown=${dupe_seq_nums_linecount},RowsAfterCleardown=${new_dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),RowsBeforeCleardown=${dupe_seq_nums_linecount},RowsAfterCleardown=${new_dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
 #ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 #ls -altr ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums_fix.csv
 #  else
@@ -1426,38 +1444,46 @@ cat ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv >> $OUTFILE_LOG
 #    echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),SQL for Check #12 for duplicate sequence number fix has been run with errors so check the logfile,RowsToClear=${dupe_seq_nums_linecount},,,,warn" >> $OUTFILE
 #  fi
 else
-  echo "$(date "+%d/%m/%Y %T") No duplicate sequence numbers have been found in Check #12 so the fix SP hasn't been run" >> $OUTFILE_LOG
+  echo "$(date_msg) No duplicate sequence numbers have been found in Check #12 so the fix SP hasn't been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") No duplicate sequence numbers have been found in Check #12 so the fix SP hasn't been run" >> $OUTFILE_LOG
 #  echo "$(date "+%d/%m/%Y %T"),AZDB_call_fix_duplicate_seq_nos(),No duplicate sequence numbers found so the fix SP hasn't been run,dupe_seq_nums_linecount=${dupe_seq_nums_linecount},,,,ok" >> $OUTFILE
 fi
 #fi
 
 while read -r line;do
 
-schema_id=`echo $line | awk -F"," '{print $1}'`
-update_request_id=`echo $line | awk -F"," '{print $2}'`
-update_type=`echo $line | awk -F"," '{print $3}'`
-created_date=`echo $line | awk -F"," '{print $4}'`
-sequence_number=`echo $line | awk -F"," '{print $5}'`
-previous_sequence_number=`echo $line | awk -F"," '{print $6}'`
+  schema_id=`echo $line | awk -F"," '{print $1}'`
+  update_request_id=`echo $line | awk -F"," '{print $2}'`
+  update_type=`echo $line | awk -F"," '{print $3}'`
+  created_date=`echo $line | awk -F"," '{print $4}'`
+  sequence_number=`echo $line | awk -F"," '{print $5}'`
+  previous_sequence_number=`echo $line | awk -F"," '{print $6}'`
 
-#if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
-if [[ $sequence_number -eq $previous_sequence_number ]];then
-#echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
-fi
+  #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
+  if [[ $sequence_number -eq $previous_sequence_number ]];then
+    #echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
+    echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+  else
+    echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
+  fi
 
 done < ${OPDIR}12AZUREDB_AMD_ora_rowscn_bug_seq_nums.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #12 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #12 complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 13
 echo "[Check #13: DAC & Gateway message_audit_id INT out of range]" >> $OUTFILE
 echo "DateTime,CheckName,Tablename,max(message_audit_id),Threshold,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+echo "$(date_msg)  Starting Check #13" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #13" >> $OUTFILE_LOG
+echo "$(date_msg)  Connecting to $postgres_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/13AZUREDB_AMD_message_audit_id_INT_out_of_range.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #13 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #13 has been run" >> $OUTFILE_LOG
 count=1
 
 while read -r line;do
@@ -1472,16 +1498,19 @@ max_message_audit_id=`echo $line | awk -F"," '{print $1}'`
 threshold_max_int=2000000000 #2147483647 is max allowable
 
 if [[ $max_message_audit_id -gt $threshold_max_int ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,warn" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_message_audit_id_INT_out_of_range,$tablename,$max_message_audit_id limit 2147483647,$threshold_max_int,ok" >> $OUTFILE
 fi
 
 count=$((count+1))
 
 done < ${OPDIR}13AZUREDB_AMD_message_audit_id_INT_out_of_range.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #13 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #13 complete" >> $OUTFILE_LOG
 ####################
 ### AMD Override ###
 ####################
@@ -1495,89 +1524,6 @@ echo "08/10/2025.*recon_status" >> $override_file_test
 
 else
 
-echo "03/01/2025.*AZDB_db_message_log_error77.*duplicate" >> $override_file
-
-echo "06/01/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
-
-echo "16/01/2025.*AZDB_db_message_log_error(105|106).*23505.*duplicate key value violates unique constraint.*update_requests_pk" >> $override_file
-
-echo "17/01/2025.*AZDB_update_processing_backlog38" >> $override_file
-
-echo "19/02/2025.*AZDB_db_message_log_error82.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
-
-echo "13/03/2025.*AZDB_update_processing_backlog105" >> $override_file
-
-echo "13/03/2025.*AZDB_db_message_log_error5.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
-
-echo "13/03/2025.*AZDB_db_message_log_error47.*AESD-0003 : The previous update request id for which the next available update request id should follow has not finished processing" >> $override_file
-
-# 490K updates 26/03 on 77 but remained locked overnight due to dupe seq num out-of-hours
-echo "27/03/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "27/03/2025.*AZDB_msg_backlog77" >> $override_file
-
-echo "31/03/2025.*AZDB_msg_backlog103" >> $override_file
-echo "31/03/2025.*AZDB_msg_backlog12" >> $override_file
-
-echo "09/04/2025.*AZDB_update_processing_backlog103" >> $override_file
-
-echo "10/04/2025.*AZDB_update_processing_backlog135" >> $override_file
-
-echo "25/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint." >> $override_file
-
-echo "29/04/2025.*AZDB_update_processing_backlog30" >> $override_file
-echo "29/04/2025.*AZDB_db_message_log_error77.*23505.*duplicate key value violates unique constraint" >> $override_file
-
-echo "30/04/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "12/05/2025.*AZDB_db_threads.*active" >> $override_file
-
-echo "23/05/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "03/06/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "02/07/2025.*AZDB_update_processing_backlog77" >> $override_file
-
-echo "05/09/2025.*AZDB_fines_recon_status" >> $override_file
-
-echo "17/09/2025.*AZDB_update_processing_backlog26" >> $override_file
-
-echo "18/09/2025.*AZDB_update_processing_backlog105" >> $override_file
-echo "18/09/2025.*AZDB_msg_backlog105" >> $override_file
-
-echo "11/11/2025.*AZDB_update_processing_backlog8" >> $override_file
-
-echo "17/11/2025.*AZDB_msg_backlog82" >> $override_file
-echo "17/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-
-echo "18/11/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "18/11/2025.*AZDB_confiscation_recon_status" >> $override_file
-echo "18/11/2025.*AZDB_maintenance_recon_status" >> $override_file
-
-echo "04/12/2025.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
-
-echo "08/12/2025.*AZDB_schema_lock.*82" >> $override_file
-echo "08/12/2025.*AZDB_db_message_log_error82.*ANMD-0003.*NM_FINES_DB.*Reconciliation" >> $override_file
-echo "08/12/2025.*AZDB_update_processing_backlog82" >> $override_file
-echo "08/12/2025.*AZDB_fines_recon_status.*82" >> $override_file
-
-echo "10/12/2025.*AZDB_update_processing_backlog77" >> $override_file
-echo "22/12/2025.*AZDB_fines_recon_status.*103" >> $override_file
-
-echo "21/01/2026.*SchemaId 30 is locked" >> $override_file
-echo "21/01/2026.*AZDB_msg_backlog30" >> $override_file
-echo "21/01/2026.*AZDB_db_message_log_error30" >> $override_file
-echo "21/01/2026.*AZDB_update_processing_backlog30" >> $override_file
-echo "24/02/2026.*AZDB_fines_recon_status.*139" >> $override_file
-echo "25/02/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "26/02/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "27/02/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "28/02/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "02/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "03/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "04/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "05/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "06/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "09/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/03/2026.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 echo "11/03/2026.*AZDB_fines_recon_status.*" >> $override_file
@@ -1714,29 +1660,36 @@ quit
 EOF
 
 if [ $? -eq 0 ];then
-bais_upload_errors=0
-echo "$(date "+%d/%m/%Y %T") The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
+  bais_upload_errors=0
+  echo "$(date_msg) The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") The CSVs have been successfully uploaded to BAIS" >> $OUTFILE_LOG
 else
-bais_upload_errors=1
-echo "$(date "+%d/%m/%Y %T") Connection to BAIS has most probably timed out, turn on -vvv debug to diagnose further as necessary" >> $OUTFILE_LOG
+  bais_upload_errors=1
+  echo "$(date_msg) Connection to BAIS has most probably timed out, turn on -vvv debug to diagnose further as necessary" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connection to BAIS has most probably timed out, turn on -vvv debug to diagnose further as necessary" >> $OUTFILE_LOG
+  
 fi
 
 else
-
-echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >> $OUTFILE_LOG
+  echo "$(date_msg) Cannot access BAIS KeyVault connection variables" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Cannot access BAIS KeyVault connection variables" >> $OUTFILE_LOG
 
 fi
 ####################################################### CHECK 14
 echo "[Check #14: Critical Logfile Errors]" >> $OUTFILE
 echo "DateTime,CheckName,Status,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #14" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #14" >> $OUTFILE_LOG
 
 if [[ $bais_upload_errors == 1 ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE
+  echo "$(date_msg),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,warn" >> $OUTFILE
 else
-echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_bais_upload,$bais_upload_errors,ok" >> $OUTFILE
 fi
-echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #14 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #14 complete" >> $OUTFILE_LOG
 ############################################################### Script END ###############################################################
 echo "cat of $OUTFILE:"
 cat $OUTFILE
