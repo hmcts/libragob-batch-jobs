@@ -582,117 +582,122 @@ echo "$(date_msg) SQL for Check #6 has been run" >> $OUTFILE_LOG
 ##echo "$(date "+%d/%m/%Y %T") SQL for Check #6 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
+  schema_id=`echo $line | awk -F"," '{print $1}'`
+  earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
+  dt_earliest_unprocessed=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
+  latest_complete=`echo $line | awk -F"," '{print $3}'`
+  latest_processing=`echo $line | awk -F"," '{print $4}'`
+  dt_latest_processing=`echo $latest_processing | awk -F"." '{print $1}'`
+  dt_now=$(date "+%Y-%m-%d %T")
 
-schema_id=`echo $line | awk -F"," '{print $1}'`
-earliest_unprocessed=`echo $line | awk -F"," '{print $2}'`
-dt_earliest_unprocessed=`echo $earliest_unprocessed | awk -F"." '{print $1}'`
-latest_complete=`echo $line | awk -F"," '{print $3}'`
-latest_processing=`echo $line | awk -F"," '{print $4}'`
-dt_latest_processing=`echo $latest_processing | awk -F"." '{print $1}'`
-dt_now=$(date "+%Y-%m-%d %T")
+  if [[ `echo $earliest_unprocessed` ]];then
+    t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
+    t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
+    t_delta_secs_unprocessed=`expr $t_out_1900_unprocessed - $t_in_1900_unprocessed`
+  else
+    t_delta_secs_unprocessed=0
+  fi
 
-if [[ `echo $earliest_unprocessed` ]];then
+  if [[ `echo $latest_processing` ]];then
+    t_out_1900_processing=$(date '+%s' -d "$dt_now")
+    t_in_1900_processing=$(date '+%s' -d "$dt_latest_processing")
+    t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
+  else
+    t_delta_secs_processing=0
+  fi
 
-t_out_1900_unprocessed=$(date '+%s' -d "$dt_now")
-t_in_1900_unprocessed=$(date '+%s' -d "$dt_earliest_unprocessed")
-t_delta_secs_unprocessed=`expr $t_out_1900_unprocessed - $t_in_1900_unprocessed`
+  t_delta_threshold_mins=90
 
-else
+  if [[ $schema_id == 38 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 128 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 126 ]];then
+    t_delta_threshold_mins=$((90*7))
+  elif [[ $schema_id == 77 ]] || [[ $schema_id == 11 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 125 ]];then
+    t_delta_threshold_mins=$((90*6))
+  elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 67 ]];then
+    t_delta_threshold_mins=$((90*5))
+  elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 139 ]];then
+    t_delta_threshold_mins=$((90*4))
+  elif [[ $schema_id == 57 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 26 ]] || [[ $schema_id == 119 ]] || [[ $schema_id == 28 ]] || [[ $schema_id == 60 ]] || [[ $schema_id == 24 ]] || [[ $schema_id == 22 ]] || [[ $schema_id == 29 ]];then
+    t_delta_threshold_mins=$((90*3))
+  elif [[ $schema_id == 8 ]] || [[ $schema_id == 138 ]] || [[ $schema_id == 111 ]] || [[ $schema_id == 96 ]] || [[ $schema_id == 30 ]] || [[ $schema_id == 21 ]] || [[ $schema_id == 10 ]] || [[ $schema_id == 5 ]] || [[ $schema_id == 12 ]] || [[ $schema_id == 14 ]] || [[ $schema_id == 65 ]];then
+    t_delta_threshold_mins=$((90*2))
+  fi
 
-t_delta_secs_unprocessed=0
+  t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
 
-fi
-
-if [[ `echo $latest_processing` ]];then
-
-t_out_1900_processing=$(date '+%s' -d "$dt_now")
-t_in_1900_processing=$(date '+%s' -d "$dt_latest_processing")
-t_delta_secs_processing=`expr $t_out_1900_processing - $t_in_1900_processing`
-
-else
-
-t_delta_secs_processing=0
-
-fi
-
-t_delta_threshold_mins=90
-
-if [[ $schema_id == 38 ]] || [[ $schema_id == 129 ]] || [[ $schema_id == 128 ]] || [[ $schema_id == 105 ]] || [[ $schema_id == 126 ]];then
-  t_delta_threshold_mins=$((90*7))
-elif [[ $schema_id == 77 ]] || [[ $schema_id == 11 ]] || [[ $schema_id == 99 ]] || [[ $schema_id == 125 ]];then
-  t_delta_threshold_mins=$((90*6))
-elif [[ $schema_id == 44 ]] || [[ $schema_id == 31 ]] || [[ $schema_id == 82 ]] || [[ $schema_id == 135 ]] || [[ $schema_id == 89 ]] || [[ $schema_id == 92 ]] || [[ $schema_id == 67 ]];then
-  t_delta_threshold_mins=$((90*5))
-elif [[ $schema_id == 112 ]] || [[ $schema_id == 61 ]] || [[ $schema_id == 130 ]] || [[ $schema_id == 124 ]] || [[ $schema_id == 47 ]] || [[ $schema_id == 36 ]] || [[ $schema_id == 106 ]] || [[ $schema_id == 139 ]];then
-  t_delta_threshold_mins=$((90*4))
-elif [[ $schema_id == 57 ]] || [[ $schema_id == 103 ]] || [[ $schema_id == 26 ]] || [[ $schema_id == 119 ]] || [[ $schema_id == 28 ]] || [[ $schema_id == 60 ]] || [[ $schema_id == 24 ]] || [[ $schema_id == 22 ]] || [[ $schema_id == 29 ]];then
-  t_delta_threshold_mins=$((90*3))
-elif [[ $schema_id == 8 ]] || [[ $schema_id == 138 ]] || [[ $schema_id == 111 ]] || [[ $schema_id == 96 ]] || [[ $schema_id == 30 ]] || [[ $schema_id == 21 ]] || [[ $schema_id == 10 ]] || [[ $schema_id == 5 ]] || [[ $schema_id == 12 ]] || [[ $schema_id == 14 ]] || [[ $schema_id == 65 ]];then
-  t_delta_threshold_mins=$((90*2))
-fi
-
-t_delta_threshold_secs=$(($t_delta_threshold_mins*60)) # 90mins is 5400secs
-
-if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
-
-if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
-fi
-
-fi
-
+  if [[ `echo $earliest_unprocessed` ]] || [[ `echo $latest_processing` ]];then
+    if [[ $t_delta_secs_unprocessed -gt $t_delta_threshold_secs ]] || [[ $t_delta_secs_processing -gt $t_delta_threshold_secs ]];then
+      echo "$(date_msg),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+      ##echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,warn" >> $OUTFILE
+    else
+      echo "$(date_msg),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+      ##echo "$(date "+%d/%m/%Y %T"),AZDB_update_processing_backlog${schema_id},${t_delta_threshold_mins}minsStaleness,$earliest_unprocessed,$latest_complete,$latest_processing,ok" >> $OUTFILE
+    fi
+  fi
 done < ${OPDIR}6AZUREDB_AMD_update_processing_backlog.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #6 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #6 complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 7
 echo "[Check #7: Max Daily Update Counts by SchemaId]" >> $OUTFILE
 echo "DateTime,CheckNameSchemaID,count_updates,sum_number_of_table_updates,max_number_of_table_updates,BundledPrintThreshold,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #7" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #7" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/7AZUREDB_AMD_max_daily_update_counts_by_schemaid.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #7 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #7 has been run" >> $OUTFILE_LOG
 bundled_print_threshold=98000 # 92513 seen 12:00 24/10/2024 || 97648 seen 11:13 10/04/2025
 
 head -10 ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.csv > ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.tmp
 
 while read -r line;do
 
-schema_id=`echo $line | awk -F"," '{print $1}'`
-count_updates=`echo $line | awk -F"," '{print $2}'`
-sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
-max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
+  schema_id=`echo $line | awk -F"," '{print $1}'`
+  count_updates=`echo $line | awk -F"," '{print $2}'`
+  sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
+  max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
-if [[ $max_number_of_table_updates -gt $bundled_print_threshold ]];then
-echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE
-else
-echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
-fi
+  if [[ $max_number_of_table_updates -gt $bundled_print_threshold ]];then
+    echo "$(date_msg),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,warn" >> $OUTFILE
+  else
+    echo "$(date_msg),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_max_updates${schema_id},$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,$bundled_print_threshold,ok" >> $OUTFILE
+  fi
 
 done < ${OPDIR}7AZUREDB_AMD_max_daily_update_counts_by_schemaid.tmp
 
-echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #7 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #7 complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 8
 echo "[Check #8: Today's Hourly Update Counts]" >> $OUTFILE
 echo "DateTime,CheckName,TimeBucket,count_updates,sum_number_of_table_updates,max_number_of_table_updates,Result" >> $OUTFILE
-echo "$(date "+%d/%m/%Y %T") Starting Check #8" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #8" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #8" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/8AZUREDB_AMD_todays_hourly_update_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #8 has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #8 has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #8 has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-schema_id=`echo $line | awk -F"," '{print $1}'`
-count_updates=`echo $line | awk -F"," '{print $2}'`
-sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
-max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
+  schema_id=`echo $line | awk -F"," '{print $1}'`
+  count_updates=`echo $line | awk -F"," '{print $2}'`
+  sum_number_of_table_updates=`echo $line | awk -F"," '{print $3}'`
+  max_number_of_table_updates=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
+  echo "$(date_msg),AZDB_hourly_updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_updates,$schema_id,$count_updates,$sum_number_of_table_updates,$max_number_of_table_updates,ok" >> $OUTFILE
 
 done < ${OPDIR}8AZUREDB_AMD_todays_hourly_update_counts.csv
 
-echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #8 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #8 complete" >> $OUTFILE_LOG
+
 ####################################################### CHECK 9
 echo "[Check #9: Azure Recon (ORA Recon check is on AMD Database INFO tab)]" >> $OUTFILE
 #echo "[Check #9b: Themis Azure Reconciliation" >> $OUTFILE
