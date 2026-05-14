@@ -991,300 +991,362 @@ else
   ##echo "$(date "+%d/%m/%Y %T"),AZDB_table_updates_row_count,$rowcount_table_updates,$threshold_count_table_updates,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Starting Check #11c" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #11c" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #11c" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/11cAZUREDB_AMD_row_counts_message_log.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #11c has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #11c has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #11c has been run" >> $OUTFILE_LOG
 
 rowcount_message_log=`cat ${OPDIR}11cAZUREDB_AMD_row_counts_message_log.csv`
 
 if [[ $rowcount_message_log -gt $threshold_count_message_log ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,warn" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,warn" >> $OUTFILE 
+  echo "$(date "+%d/%m/%Y %T"),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,warn" >> $OUTFILE
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,ok" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_message_log_row_count,$rowcount_message_log,$threshold_count_message_log,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Starting Check #11d" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #11d" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #11d" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11dAZUREDB_AMD_row_counts_DAC_message_audit.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #11d has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #11d has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #11d has been run" >> $OUTFILE_LOG
 
 rowcount_dac_audit=`cat ${OPDIR}11dAZUREDB_AMD_row_counts_DAC_message_audit.csv`
 
 if [[ $rowcount_dac_audit -gt $threshold_count_dac_audit ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,warn" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,warn" >> $OUTFILE
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_dac_audit_row_count,$rowcount_dac_audit,$threshold_count_dac_audit,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Starting Check #11e" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+echo "$(date_msg) Starting Check #11e" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Starting Check #11e" >> $OUTFILE_LOG
+echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
 psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/11eAZUREDB_AMD_row_counts_GW_message_audit.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #11e has been run" >> $OUTFILE_LOG
+echo "$(date_msg) SQL for Check #11e has been run" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") SQL for Check #11e has been run" >> $OUTFILE_LOG
 
 rowcount_gateway_audit=`cat ${OPDIR}11eAZUREDB_AMD_row_counts_GW_message_audit.csv`
 
 if [[ $rowcount_gateway_audit -gt $threshold_count_gateway_audit ]];then
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,warn" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,warn" >> $OUTFILE 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,warn" >> $OUTFILE
 else
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,ok" >> $OUTFILE
-
+  echo "$(date_msg),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,ok" >> $OUTFILE
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_gateway_audit_row_count,$rowcount_gateway_audit,$threshold_count_gateway_audit,ok" >> $OUTFILE
 fi
 
-echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
+echo "$(date_msg) Check #11 complete" >> $OUTFILE_LOG
+##echo "$(date "+%d/%m/%Y %T") Check #11 complete" >> $OUTFILE_LOG
 
 if [[ 0 == 1 ]];then
 ####################################################### CHECK 12d - 12r, remaining stats
-echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12d" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12d has been run" >> $OUTFILE_LOG
+  echo "[Check #12d: Daily AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12d" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12d" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.sql
+  echo "$(date_msg) SQL for Check #12d has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12d has been run" >> $OUTFILE_LOG
+
+  while read -r line;do
+
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgDailyRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
+
+    echo "$(date_msg),AZDB_dacaudit_db_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+
+  done < ${OPDIR}12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12e: Daily AVG DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12e" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12e" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.sql
+  echo "$(date_msg) SQL for Check #12e has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12e has been run" >> $OUTFILE_LOG
+
+  while read -r line;do
+
+  dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+  avgDailyRT=`echo $line | awk -F"," '{print $2}'`
+  total_workload=`echo $line | awk -F"," '{print $3}'`
+  records=`echo $line | awk -F"," '{print $4}'`
+
+  echo "$(date_msg),AZDB_dacaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+
+  done < ${OPDIR}12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
+  ######################################################################################################################################################################################################
+
+  echo "[Check #12f: Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12f" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12f" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.sql
+  echo "$(date_msg) SQL for Check #12f has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12f has been run" >> $OUTFILE_LOG
 
 while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgDailyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+  dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+  avgDailyRT=`echo $line | awk -F"," '{print $2}'`
+  total_workload=`echo $line | awk -F"," '{print $3}'`
+  records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+  echo "$(date_msg),AZDB_gwaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+  ##echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12dAZUREDB_AMD_dacaudit_DBstep13-12_avgDailyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12e: Daily AVG DACAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12e" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12e has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12g: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12g" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12g" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.sql
+  echo "$(date_msg) SQL for Check #12g has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12g has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgDailyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12eAZUREDB_AMD_dacaudit_step10-1_avgDailyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12f: Daily AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgDailyRT in Millisecs,TotalWorkload in Hours,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12f" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12f has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
+  
+  ######################################################################################################################################################################################################
+  echo "[Check #12h: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12h" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12h" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.sql
+  echo "$(date_msg) SQL for Check #12h has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12h has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgDailyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgDailyRT,$dateddmmyyyy,$avgDailyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12fAZUREDB_AMD_gwaudit_step10-1_avgDailyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12g: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12g" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12g has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12i: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12i" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12i" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.sql
+  echo "$(date_msg) SQL for Check #12i has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12i has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12gAZUREDB_AMD_dacaudit_DBstep13-12_avgHourlyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12h: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 13-12]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12h" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12h has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12j: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12j" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12j" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.sql
+  echo "$(date_msg) SQL for Check #12j has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12j has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12hAZUREDB_AMD_dacaudit_DBstep13-12_avgMinuteRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12i: 48 Hourly AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12i" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12i has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12k: 48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12k" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12k" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.sql
+  echo "$(date_msg) SQL for Check #12k has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12k has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_gwaudit_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12iAZUREDB_AMD_dacaudit_DBstep10-1_avgHourlyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12j: 60 Minute AVG DACAudit DB Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Secs,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12j" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12j has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12l: 60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12l" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12l" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $postgres_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.sql
+  echo "$(date_msg) SQL for Check #12l has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12l has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
+    total_workload=`echo $line | awk -F"," '{print $3}'`
+    records=`echo $line | awk -F"," '{print $4}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_dacaudit_db_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_gwaudit_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12jAZUREDB_AMD_dacaudit_DBstep10-1_avgMinuteRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12k: 48 Hourly AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgHourlyRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12k" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12k has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12m: Daily Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12m" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12m" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12mAZUREDB_AMD_daily_completed_update_request_counts.sql
+  echo "$(date_msg) SQL for Check #12m has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12m has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgHourlyRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgHourlyRT,$dateddmmyyyy,$avgHourlyRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_daily_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_daily_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12kAZUREDB_AMD_gwaudit_step10-1_avgHourlyRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12l: 60 Minute AVG GatewayAudit Full Roundtrip Deltas Step 10-1]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,avgMinuteRT in Millisecs,TotalWorkload in Mins,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12l" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $postgres_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${postgres_host} dbname=${postgres_db} port=${postgres_port} user=${postgres_username} password=${postgres_password}" --file=/sql/12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12l has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12mAZUREDB_AMD_daily_completed_update_request_counts.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12n: Daily Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12n" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12n" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12nAZUREDB_AMD_daily_completed_table_updates_counts.sql
+  echo "$(date_msg) SQL for Check #12n has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12n has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-avgMinuteRT=`echo $line | awk -F"," '{print $2}'`
-total_workload=`echo $line | awk -F"," '{print $3}'`
-records=`echo $line | awk -F"," '{print $4}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_gwaudit_avgMinuteRT,$dateddmmyyyy,$avgMinuteRT,$total_workload,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_daily_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_daily_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12lAZUREDB_AMD_gwaudit_step10-1_avgMinuteRT.csv
-######################################################################################################################################################################################################
-echo "[Check #12m: Daily Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12m" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12mAZUREDB_AMD_daily_completed_update_request_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12m has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12o" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12o" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12oAZUREDB_AMD_hourly_completed_update_request_counts.sql
+  echo "$(date_msg) SQL for Check #12o has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12o has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_daily_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_hourly_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12mAZUREDB_AMD_daily_completed_update_request_counts.csv
-######################################################################################################################################################################################################
-echo "[Check #12n: Daily Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12n" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12nAZUREDB_AMD_daily_completed_table_updates_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12n has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12p" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12p" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12pAZUREDB_AMD_hourly_completed_table_updates_counts.sql
+  echo "$(date_msg) SQL for Check #12p has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12p has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_daily_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_hourly_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
-done < ${OPDIR}12nAZUREDB_AMD_daily_completed_table_updates_counts.csv
-######################################################################################################################################################################################################
-echo "[Check #12o: Hourly Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12o" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12oAZUREDB_AMD_hourly_completed_update_request_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12o has been run" >> $OUTFILE_LOG
+  done < ${OPDIR}12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
+  ######################################################################################################################################################################################################
+  echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
+  echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
+  echo "$(date_msg) Starting Check #12q" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Starting Check #12q" >> $OUTFILE_LOG
+  echo "$(date_msg) Connecting to $event_db database" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
+  psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12qAZUREDB_AMD_minute_completed_update_request_counts.sql
+  echo "$(date_msg) SQL for Check #12q has been run" >> $OUTFILE_LOG
+  ##echo "$(date "+%d/%m/%Y %T") SQL for Check #12q has been run" >> $OUTFILE_LOG
 
-while read -r line;do
+  while read -r line;do
 
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
+    dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
+    records=`echo $line | awk -F"," '{print $2}'`
 
-echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
-
-done < ${OPDIR}12oAZUREDB_AMD_hourly_completed_update_request_counts.csv
-######################################################################################################################################################################################################
-echo "[Check #12p: Hourly Completed TABLE_UPDATES Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12p" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12pAZUREDB_AMD_hourly_completed_table_updates_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12p has been run" >> $OUTFILE_LOG
-
-while read -r line;do
-
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_hourly_completed_table_updates,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
-
-done < ${OPDIR}12pAZUREDB_AMD_hourly_completed_table_updates_counts.csv
-######################################################################################################################################################################################################
-echo "[Check #12q: Minute Completed UPDATE_REQUESTS Counts]" >> $OUTFILE_STATS
-echo "DateTime,CheckName,DTbucket,RecordCount,Result" >> $OUTFILE_STATS
-echo "$(date "+%d/%m/%Y %T") Starting Check #12q" >> $OUTFILE_LOG
-echo "$(date "+%d/%m/%Y %T") Connecting to $event_db database" >> $OUTFILE_LOG
-psql "sslmode=require host=${event_host} dbname=${event_db} port=${event_port} user=${event_username} password=${event_password}" --file=/sql/12qAZUREDB_AMD_minute_completed_update_request_counts.sql
-echo "$(date "+%d/%m/%Y %T") SQL for Check #12q has been run" >> $OUTFILE_LOG
-
-while read -r line;do
-
-dateddmmyyyy=`echo $line | awk -F"," '{print $1}'`
-records=`echo $line | awk -F"," '{print $2}'`
-
-echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
+    echo "$(date_msg),AZDB_minute_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS 
+    ##echo "$(date "+%d/%m/%Y %T"),AZDB_minute_completed_update_requests,$dateddmmyyyy,$records,ok" >> $OUTFILE_STATS
 
 done < ${OPDIR}12qAZUREDB_AMD_minute_completed_update_request_counts.csv
 ######################################################################################################################################################################################################
