@@ -1462,7 +1462,8 @@ while read -r line;do
   #if [[ $sequence_number -eq $previous_sequence_number ]] && [[ $insert_type = I ]];then
   if [[ $sequence_number -eq $previous_sequence_number ]];then
     #echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE
-    echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE 
+    ##echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,warn" >> $OUTFILE 
+    echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date Please Check if aged,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE 
     ##echo "$(date "+%d/%m/%Y %T"),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
   else
     echo "$(date_msg),AZDB_ora_rowscn_bug$schema_id,$update_request_id,$update_type,$created_date,$sequence_number,$previous_sequence_number,ok" >> $OUTFILE
