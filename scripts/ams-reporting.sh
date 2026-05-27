@@ -324,7 +324,7 @@ echo "$(date_msg) SQL for Check #3 has been run" >> $OUTFILE_LOG
 backlog_threshold=850000 # 50K allowable backlog at 17:xx, but all hourly thresholds have now been doubled-up for MET77 as biggest hitter
 
 if [[ $op_env == prod ]];then
-  roundtrip_threshold=2000
+  roundtrip_threshold=2400
 else
   roundtrip_threshold=4000
 fi
