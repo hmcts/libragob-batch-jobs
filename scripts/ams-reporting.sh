@@ -207,7 +207,7 @@ if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
     echo "IH endpoint check if loop" >> $OUTFILE_LOG
     echo "pod_hash=$pod_hash" >> $OUTFILE_LOG
-    kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl%22 > ${OPDIR}onpremise_endpoint_check
+    kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
     echo "cat of ${OPDIR}onpremise_endpoint_check" >> $OUTFILE_LOG
     cat ${OPDIR}onpremise_endpoint_check >> $OUTFILE_LOG
     onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Transport Level Reconciliation request"`
