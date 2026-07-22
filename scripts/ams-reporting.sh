@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ############################################################### This is the AMD AzureDB HealthCheck script, and the associated documentation is in Ensemble under the "Libra System Admin Documents" area:
 ############################################################### "GoB Phase 1 - Oracle_Postgres DB Checks_v11.9_MAP.docx" is the latest version as of 27/02/2025
-echo "Script Version 29.4: TEST update RT"
+echo "Script Version 29.5: wget test"
 echo "Designed by Mark A. Porter -- "
 # arbitrary script change to test if build action/checks trigger
 
@@ -205,9 +205,13 @@ fi
 
 if [[ $pod_running == 1 ]];then
   if [[ $op_env == test ]];then
-  echo "proxy on"
-    kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
+    echo "IH endpoint check if loop" >> $OUTFILE_LOG
+    echo "pod_hash=$pod_hash" >> $OUTFILE_LOG
+    kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.staging.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl%22 > ${OPDIR}onpremise_endpoint_check
+    echo "cat of ${OPDIR}onpremise_endpoint_check" >> $OUTFILE_LOG
+    cat ${OPDIR}onpremise_endpoint_check >> $OUTFILE_LOG
     onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Transport Level Reconciliation request"`
+    echo "onpremise_endpoint_check=$onpremise_endpoint_check" >> $OUTFILE_LOG
   else
     kubectl -n met -it exec $pod_hash -- wget -Y on -O- "https://libra-onpremise-gob-gateway.prod.internal.hmcts.net/themisgateway/service/themissoapgatewayapi?wsdl" > ${OPDIR}onpremise_endpoint_check
     onpremise_endpoint_check=`cat ${OPDIR}onpremise_endpoint_check | grep "added Resend"`
