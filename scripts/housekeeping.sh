@@ -20,7 +20,8 @@ event_username=$(cat /mnt/secrets/$KV_NAME/event-datasource-username)
 event_password=$(cat /mnt/secrets/$KV_NAME/event-datasource-password)
 event_url=$(cat /mnt/secrets/$KV_NAME/event-datasource-url)
 
-runSQL $event_username $event_password $event_url ./sql/public_update_tables_housekeeping.sql
+# 20/11/26 - public_update_tables_housekeeping.sql disabled while schemas are not up to date to keep requests in table_updates and update_requests so they can be processed.
+#runSQL $event_username $event_password $event_url ./sql/public_update_tables_housekeeping.sql
 
 themis_gateway_username=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbusername)
 themis_gateway_password=$(cat /mnt/secrets/$KV_NAME/themis-gateway-dbpassword)
