@@ -15,8 +15,8 @@ OUTFILE_LOG="${OPDIR}ThemisAZ.log"
 date_msg() 
 {
   ### BST Fix below 
-  ##date "+%d/%m/%Y %T"
-  date "+%d/%m/%Y %T" -d "+1 hours"
+  date "+%d/%m/%Y %T"
+  ##date "+%d/%m/%Y %T" -d "+1 hours"
 }
 
 echo "$(date_msg)"
