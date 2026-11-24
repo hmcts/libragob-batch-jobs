@@ -1583,6 +1583,7 @@ echo "06/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "19/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "23/11/2026.*AZDB_fines_recon_status.*" >> $override_file
+echo "24/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 
 
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
