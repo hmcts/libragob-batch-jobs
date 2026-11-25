@@ -1531,14 +1531,8 @@ echo "08/10/2025.*recon_status" >> $override_file_test
 
 else
 
-echo "10/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/03/2026.*AZDB_message_audit_id_INT_out_of_range.*DAC" >> $override_file
 echo "11/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "12/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "13/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "16/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "17/03/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "18/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "19/03/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "19/03/2026.*AZDB_schema_lock.*92" >> $override_file
 echo "19/03/2026.*AZDB_db_message_log_error92.*ANMD-0003.*NM_FINES_DB.*Reconciliation" >> $override_file 
@@ -1559,16 +1553,11 @@ echo "01/05/2026.*AZDB_db_message_log.*" >> $override_file
 echo "01/05/2026.*AZDB_update_processing_backlog.*" >> $override_file
 echo "29/05/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/06/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "10/06/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "19/06/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "22/06/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "23/06/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "24/06/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "25/06/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "06/07/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "21/07/2026.*AZDB_onpremise_endpoint_check.*" >> $override_file
-echo "22/07/2026.*AZDB_onpremise_endpoint_check.*" >> $override_file
-echo "23/07/2026.*AZDB_onpremise_endpoint_check.*" >> $override_file
 echo "24/07/2026.*AZDB_onpremise_endpoint_check.*" >> $override_file
 echo "02/09/2026.*AZDB_update_processing_backlog77" >> $override_file
 echo "02/10/2026.*AZDB_update_processing_backlog21" >> $override_file
@@ -1583,7 +1572,7 @@ echo "06/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "10/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "19/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 echo "23/11/2026.*AZDB_fines_recon_status.*" >> $override_file
-echo "24/11/2026.*AZDB_fines_recon_status.*" >> $override_file
+echo "25/11/2026.*AZDB_fines_recon_status.*" >> $override_file
 
 
 ######### MONTHEND - remove METs as required based on those METs that still have incomplete updates for previous month just gone as per results of: select met_id from month_end_mets where update_request_id is null; #########
